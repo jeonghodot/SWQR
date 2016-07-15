@@ -1,0 +1,8 @@
+﻿<Application x:Class="Fault_Localization_SE_Lab.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="FaultLocalization.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
