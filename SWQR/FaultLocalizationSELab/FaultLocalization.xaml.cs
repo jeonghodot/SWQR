@@ -31,8 +31,6 @@ namespace Fault_Localization_SE_Lab
     {
         DataSet dsTestCase = new DataSet();
         DataSet dsSourceCode = new DataSet();
-        //DataSet dsFSourceCode = new DataSet();
-        //DataSet dsPSourceCode = new DataSet();
         DataSet dsResult = new DataSet();
         DataSet PdsResult = new DataSet();
 
@@ -64,10 +62,6 @@ namespace Fault_Localization_SE_Lab
             //dsPSourceCode.Tables.Add("PSourceCode");
             dsSourceCode.Tables["SourceCode"].Columns.Add("Line", typeof(Int32));
             dsSourceCode.Tables["SourceCode"].Columns.Add("SourceCode", typeof(string));
-            //dsFSourceCode.Tables["FSourceCode"].Columns.Add("Line", typeof(Int32));
-            //dsFSourceCode.Tables["FSourceCode"].Columns.Add("SourceCode", typeof(string));
-            //dsPSourceCode.Tables["PSourceCode"].Columns.Add("Line", typeof(Int32));
-            //dsPSourceCode.Tables["PSourceCode"].Columns.Add("SourceCode", typeof(string));
 
 
             TestInfo.strResultPath = Environment.CurrentDirectory + "\\Result\\";
@@ -8830,392 +8824,9 @@ namespace Fault_Localization_SE_Lab
                         ds.Tables["SourceCode"].Rows[row]["Reinforce"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
 
                 }
-
             }
 
-
         }
-
-
-
-
-
-        /*
-
-                    for (int row = 1; row < row_last - 1; row++)
-                    {
-                        d = b = c = a = Nf = Ns = Nf1=Nf2=Nf3=Ns1=Ns2=Ns3= blank= 0;
-                        //Logger.WriteLine("Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                        //Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
-                        //Logger.WriteLine("d : " + d + "  b : " + b + "  c : " + c + "  a : " + a);
-
-                        ScaleFactor = SumOfFailGroup = SumOfPassGroup = 0.0f;
-                        for (int col = col_TC_ID; col < col_last; col++)
-                        {
-                            mark = ds.Tables["SourceCode"].Rows[row][col].ToString();
-                            result = ds.Tables["SourceCode"].Rows[row_last - 1][col].ToString();
-
-                            if (result.Equals("PASS"))
-                            {
-                                if (mark.Equals(@"1")) //●
-                                    c++;
-                                else if (mark.Equals(@"0"))
-                                    d++;
-                                else
-                                    blank++;
-                            }
-                            else if (result.Equals("FAIL"))
-                            {
-                                if (mark.Equals(@"1")) //●
-                                    a++;
-                                else if (mark.Equals(@"0"))
-                                    b++;
-                                else
-                                    blank++;
-                            }
-                        }
-                        // add d,c,b,a
-                        ds.Tables["SourceCode"].Rows[row]["d"] = d;
-                        ds.Tables["SourceCode"].Rows[row]["b"] = b;
-                        ds.Tables["SourceCode"].Rows[row]["c"] = c;
-                        ds.Tables["SourceCode"].Rows[row]["a"] = a;
-
-                        Nf = a;
-                        Ns = c;
-
-                        RatioFailPass = (double)(b + a) / (double)(d + c);
-
-
-                        if (d == 0 && b == 0 && c == 0 && a == 0)
-                        {
-                            ds.Tables["SourceCode"].Rows[row]["unnecessary"] = 1;
-                        }
-
-                        if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() != "1")
-                        {
-                            // first fail group
-                            if (Nf == 0)
-                                Nf1 = 0;
-                            else if (Nf == 1)
-                                Nf1 = 1;
-                            else if (Nf >= 2)
-                                Nf1 = 2;
-                            else
-                            {
-                                Logger.WriteLine("Hueristic(c) Error >> Unknown Nf1 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                                Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
-                                Logger.WriteLine("d : " + d + "  b : " + b + "  c : " + c + "  a : " + a);
-                                //System.Windows.Forms.MessageBox.Show("Unknown Nf1 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                            }
-                            // second fail group
-                            if (Nf <= 2)
-                                Nf2 = 0;
-                            else if (3 <= Nf && Nf <= 6)
-                                Nf2 = Nf - 2;
-                            else if (Nf > 6)
-                                Nf2 = 4;
-                            else
-                            {
-                                Logger.WriteLine("Hueristic(c) Error >> Unknown Nf2 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                                Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
-                                Logger.WriteLine("d : " + d + "  b : " + b + "  c : " + c + "  a : " + a);
-                                //System.Windows.Forms.MessageBox.Show("Unknown Nf2 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                            }
-
-                            // third fail group
-                            if (Nf <= 6)
-                                Nf3 = 0;
-                            else if (Nf > 6)
-                                Nf3 = Nf - 6;
-                            else
-                            {
-                                Logger.WriteLine("Hueristic(c) Error >> Unknown Nf3 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                                Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
-                                Logger.WriteLine("d : " + d + "  b : " + b + "  c : " + c + "  a : " + a);
-                                //System.Windows.Forms.MessageBox.Show("Unknown Nf3 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                            }
-
-                            // first pass group
-                            if (Nf1 ==0 || Nf1==1)
-                                Ns1 = 0;
-                            else if (Nf1 == 2 && Ns >= 1)
-                                Ns1 = 1;
-                            else
-                            {
-                                Logger.WriteLine("Hueristic(c) Error >> Unknown Ns1 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                                Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
-                                Logger.WriteLine("d : " + d + "  b : " + b + "  c : " + c + "  a : " + a);
-                                //System.Windows.Forms.MessageBox.Show("Unknown Ns1 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                            }
-
-                            // second pass group
-                            if (Ns <= Ns1)
-                                Ns2 = 0;
-                            else if (Ns1 < Ns && Ns < Nf2 + Ns1)
-                                Ns2 = Ns - Ns1;
-                            else if (Ns >= Nf2 + Ns1)
-                                Ns2 = Nf2;
-                            else
-                            {
-                                Logger.WriteLine("Hueristic(c) Error >> Unknown Ns2 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                                Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
-                                Logger.WriteLine("d : " + d + "  b : " + b + "  c : " + c + "  a : " + a);
-                                //System.Windows.Forms.MessageBox.Show("Unknown Ns2 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                            }
-                            // thrid pass group
-                            if (Ns < Ns1 + Ns2)
-                                Ns3 = 0;
-                            else if (Ns >= Ns1 + Ns2)
-                                Ns3 = Ns - Ns1 - Ns2;
-                            else
-                            {
-                                Logger.WriteLine("Hueristic(c) Error >> Unknown Ns3 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                                Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
-                                Logger.WriteLine("d : " + d + "  b : " + b + "  c : " + c + "  a : " + a);
-                                //System.Windows.Forms.MessageBox.Show("Unknown Ns3 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
-                            }
-
-
-                        }
-
-
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (algorithm.Contains("Reinforce"))
-                        {
-                            try
-                            {
-
-
-
-
-                                /*      
-                                       if (result.Equals("PASS"))
-                                       {
-                                           if (mark.Equals(@"1")) //●
-                                               c++;
-                                           else if (mark.Equals(@"0"))
-                                               d++;
-                                           else
-                                               blank++;
-                                       }
-                                       else if (result.Equals("FAIL"))
-                                       {
-                                           if (mark.Equals(@"1")) //●
-                                               a++;
-                                           else if (mark.Equals(@"0"))
-                                               b++;
-                                           else
-                                               blank++;
-                                       }
-                                  */
-
-        //  Console.WriteLine(VisualChildrenCount.Equals("FAIL"));
-
-        /*     if (result.Equals("FAIL"))
-             {
-                 Console.WriteLine("print");
-             }
-         */
-
-        /*
-                                if ((a + b) == 0)
-                                    Ldenominator = numerator = 0.0f;
-                                else
-                                    Ldenominator = numerator = (double)a / (a + b);
-                                if ((c + d) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = (double)c / (c + d);
-
-                                if ((Ldenominator + Rdenominator) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (double)numerator / (Ldenominator + Rdenominator);
-
-
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["Reinforce"] = " ";
-                            else
-
-                                ds.Tables["SourceCode"].Rows[row]["Reinforce"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        }
-
-
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (algorithm.Contains("Tarantula"))
-                        {
-                            try
-                            {
-                                if ((a + b) == 0)
-                                    Ldenominator = numerator = 0.0f;
-                                else
-                                    Ldenominator = numerator = (double)a / (a + b);
-                                if ((c + d) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = (double)c / (c + d);
-
-                                if ((Ldenominator + Rdenominator) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (double)numerator / (Ldenominator + Rdenominator);
-
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString()=="1")
-                                ds.Tables["SourceCode"].Rows[row]["Tarantula"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["Tarantula"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        }
-
-                        if (algorithm.Contains("MRI"))
-                        {
-                            try
-                            {
-                                if ((a + b) == 0)
-                                    Ldenominator = numerator = 0.0f;
-                                else
-                                    Ldenominator = numerator = (double)a / (a + b);
-                                if ((c + d) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = (double)c / (c + d);
-
-                                if ((Ldenominator + Rdenominator) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (double)numerator / (Ldenominator + Rdenominator);
-
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["MRI"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["MRI"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        }
-
-                        if (algorithm.Contains("AMPLE"))
-                        {
-                            try
-                            {
-                                if ((b + a) == 0)
-                                    Ldenominator =  0.0f;
-                                else
-                                    Ldenominator = (double)a / (b + a);
-                                if ((d + c) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = (double)c / (d + c);
-
-                                folumla = Math.Abs(Ldenominator - Rdenominator);
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["AMPLE"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["AMPLE"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        }
-
-                        if (algorithm.Contains("Jaccard"))
-                        {
-                            try
-                            {
-                                if ((a + b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (double)a / (a + b + c);
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["Jaccard"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["Jaccard"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        }
-
-                        if (algorithm.Contains("Heuristic3_c_"))
-                        {
-                            //ScaleFactor = 0.01; // a
-                            ScaleFactor = 0.0001; // c
-
-                            try
-                            {
-                                SumOfFailGroup = 1.0f * (double)Nf1 + 0.1f * (double)Nf2 + 0.01f * (double)Nf3;
-                                SumOfPassGroup = 1.0f * (double)Ns1 + 0.1f * (double)Ns2 + ScaleFactor*RatioFailPass*(double)Ns3;
-                                folumla = SumOfFailGroup - SumOfPassGroup;
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["Heuristic3_c_"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["Heuristic3_c_"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-
-                        }
-
-
-                        if (algorithm.Contains("Hybrid"))
-                        {
-                            try
-                            {
-                                if (ds.Tables["SourceCode"].Rows[row]["AMPLE"].ToString().Equals("0"))
-                                {
-                                    folumla = 0.0f;
-                                }
-                                else
-                                {
-                                    folumla = double.Parse(ds.Tables["SourceCode"].Rows[row]["Tarantula"].ToString()) + double.Parse(ds.Tables["SourceCode"].Rows[row]["Jaccard"].ToString());
-                                }
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["Hybrid"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["Hybrid"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        }
-
-                    }
-
-                   */
-
-
 
 
 
@@ -9388,7 +8999,6 @@ namespace Fault_Localization_SE_Lab
                 strTestResultFilename = TestInfo.strResultPath + @"TestResult_" + strSourceCodeFilename + "_" + strTestSuiteFilename + "_" + strProgramName + "_" + TestInfo.strFaultyVersion + "_" + strAnswerSheet + ".xlsx";
             }
 
-
             if (File.Exists(strTestResultFilename))
                 File.Delete(strTestResultFilename);
 
@@ -9399,11 +9009,6 @@ namespace Fault_Localization_SE_Lab
                 //    WriteToExcelSheet(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsDistinct.Tables[0], null);
                 //}
                 //else
-
-
-
-
-
 
                 //WriteToExcelSheet(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsFSourceCode.Tables["FSourceCode"], dsPSourceCode.Tables["PSourceCode"], dsDistinct.Tables[0], dsResult.Tables[0]);
                 WriteToExcelSheet2(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsResult.Tables[0]);
@@ -9565,18 +9170,11 @@ namespace Fault_Localization_SE_Lab
                     ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("SourceCode");
                     wsSourceCode.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
 
-
-
-
-
                     ExcelWorksheet wsFSourceCode = xlPackage.Workbook.Worksheets.Add("FSourceCode");
                     wsFSourceCode.Cells["A1"].LoadFromDataTable(dtFSourceCode, true);
 
                     ExcelWorksheet wsPSourceCode = xlPackage.Workbook.Worksheets.Add("PSourceCode");
                     wsPSourceCode.Cells["A1"].LoadFromDataTable(dtPSourceCode, true);
-
-
-
 
                     //   ExcelWorksheet wsSourceCode2 = xlPackage.Workbook.Worksheets.Add("Distinct");
                     //    wsSourceCode2.Cells["A1"].LoadFromDataTable(dtDistinct, true);
@@ -9625,20 +9223,11 @@ namespace Fault_Localization_SE_Lab
 
                     //ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("SourceCode");
                     //wsSourceCode.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
-
-
-
-
-
                     //ExcelWorksheet wsFSourceCode = xlPackage.Workbook.Worksheets.Add("FSourceCode");
                     //wsFSourceCode.Cells["A1"].LoadFromDataTable(dtFSourceCode, true);
 
                     //ExcelWorksheet wsPSourceCode = xlPackage.Workbook.Worksheets.Add("PSourceCode");
                     //wsPSourceCode.Cells["A1"].LoadFromDataTable(dtPSourceCode, true);
-
-
-
-
                     //   ExcelWorksheet wsSourceCode2 = xlPackage.Workbook.Worksheets.Add("Distinct");
                     //    wsSourceCode2.Cells["A1"].LoadFromDataTable(dtDistinct, true);
 
@@ -9831,124 +9420,4 @@ namespace Fault_Localization_SE_Lab
 
     }
 }
-//Jaccard
-//SEM1
-//SEM2
-//SEM3
-//Naish
-//Ochiai
-//Zoltar
-//Kulczynski2
-//Anderberg
-//M2
-//Dice
-//PS
-//Wong3
-//GP08
-//GP10
-//GP11
-//GP13
-//GP20
-//GP26
 
-//SorensenDice
-//Wong1
-//SimpleMatching
-//Sokal
-//RogersTanimoto
-//Goodman
-//Hammingetc
-//Euclid
-//M1
-//Hamann
-//Wong2
-//RussellandRao
-//Cohen
-//GeometricMean
-//HarmonicMean
-//ArithmeticMean
-//Rogot1
-
-
-
-
-
-
-
-
-
-//TARANTULA
-//AMPLE
-//Jaccard
-//Dice
-//CZEKANOWSKI
-//_3WJACCARD
-//NEIandLI
-//SOKALandSNEATH_1
-//SOKALandMICHENER
-//SOKALandSNEATH2
-//ROGERandTANIMOTO
-//FAITH
-//GOWERandLEGENDRE
-//INTERSECTION
-//INNERPRODUCT
-//RUSSELLandRAO
-//HAMMING
-//EUCLID
-//SQUARED_EUCLID
-//CANBERRA
-//MANHATTAN
-//MEAN_MANHATTAN
-//CITYBLOCK
-//MINKOWSK
-//VARI
-//SIZEDIFFERENCE
-//SHAPEDIFFERENCE
-//PATTERNDIFFERENCE
-//LANCEandWILLIAMS
-//BRAYandCURTIS
-//HELLINGER
-//CHORD
-//COSINE
-//GILBERTandWELLS
-//OCHIAI1
-//FORBESI
-//FOSSUM
-//SORGENFREI
-//MOUNTFORD
-//OTSUKA
-//MCCONNAUGHEY
-//TARWID
-//KULCZYNSK2
-//DRIVERandKROEBER
-//JOHNSON
-//DENNIS
-//SIMPSON
-//BRAUNandBANQUET
-//FAGERandMCGOWAN
-//FORBES2
-//SOKALandSNEATH4
-//GOWER
-//PEARSON1
-//PEARSON2
-//PEARSON3
-//PEARSONandHERON1
-//PEARSONandHERON2
-//SOKALandSNEATH3
-//SOKALandSNEATH5
-//COLE
-//STILES
-//OCHIAI2
-//YULEQ
-//YULEw
-//KULCZYNSKI1
-//TANIMOTO
-//DISPERSON
-//HAMANN
-//MICHAEL
-//GOODMANandKRUSKAL
-//ANDERBERG
-//BARONI_URBANIandBUSER1
-//BARONI_URBANIandBUSER2
-//PEIRCE
-//EYRAUD
