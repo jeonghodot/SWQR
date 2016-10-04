@@ -31,6 +31,8 @@ namespace Fault_Localization_SE_Lab
     {
         DataSet dsTestCase = new DataSet();
         DataSet dsSourceCode = new DataSet();
+        DataSet dsFSourceCode = new DataSet();
+        DataSet dsPSourceCode = new DataSet();
         DataSet dsResult = new DataSet();
         DataSet PdsResult = new DataSet();
 
@@ -58,10 +60,14 @@ namespace Fault_Localization_SE_Lab
             dgvMain.CurrentCellDirtyStateChanged += new EventHandler(dgvMain_CurrentCellDirtyStateChanged);
 
             dsSourceCode.Tables.Add("SourceCode");
-            //dsFSourceCode.Tables.Add("FSourceCode");
-            //dsPSourceCode.Tables.Add("PSourceCode");
+            dsFSourceCode.Tables.Add("FSourceCode");
+            dsPSourceCode.Tables.Add("PSourceCode");
             dsSourceCode.Tables["SourceCode"].Columns.Add("Line", typeof(Int32));
             dsSourceCode.Tables["SourceCode"].Columns.Add("SourceCode", typeof(string));
+            dsFSourceCode.Tables["FSourceCode"].Columns.Add("Line", typeof(Int32));
+            dsFSourceCode.Tables["FSourceCode"].Columns.Add("SourceCode", typeof(string));
+            dsPSourceCode.Tables["PSourceCode"].Columns.Add("Line", typeof(Int32));
+            dsPSourceCode.Tables["PSourceCode"].Columns.Add("SourceCode", typeof(string));
 
 
             TestInfo.strResultPath = Environment.CurrentDirectory + "\\Result\\";
@@ -135,615 +141,384 @@ namespace Fault_Localization_SE_Lab
             itemSource.Add(TARANTULA);
             cmbAlgorithm.ItemsSource = itemSource;
 
-            //Node AMPLE = new Node("AMPLE");
-            //AMPLE.IsSelected = true;
-            //itemSource.Add(AMPLE);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Jaccard = new Node("Jaccard");
-            //Jaccard.IsSelected = true;
-            //itemSource.Add(Jaccard);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Dice = new Node("Dice");
-            //Dice.IsSelected = true;
-            //itemSource.Add(Dice);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node CZEKANOWSKI = new Node("CZEKANOWSKI");
-            //CZEKANOWSKI.IsSelected = true;
-            //itemSource.Add(CZEKANOWSKI);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node _3WJACCARD = new Node("_3WJACCARD");
-            //_3WJACCARD.IsSelected = true;
-            //itemSource.Add(_3WJACCARD);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node NEIandLI = new Node("NEIandLI");
-            //NEIandLI.IsSelected = true;
-            //itemSource.Add(NEIandLI);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SOKALandSNEATH_1 = new Node("SOKALandSNEATH_1");
-            //SOKALandSNEATH_1.IsSelected = true;
-            //itemSource.Add(SOKALandSNEATH_1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SOKALandMICHENER = new Node("SOKALandMICHENER");
-            //SOKALandMICHENER.IsSelected = true;
-            //itemSource.Add(SOKALandMICHENER);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SOKALandSNEATH2 = new Node("SOKALandSNEATH2");
-            //SOKALandSNEATH2.IsSelected = true;
-            //itemSource.Add(SOKALandSNEATH2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node ROGERandTANIMOTO = new Node("ROGERandTANIMOTO");
-            //ROGERandTANIMOTO.IsSelected = true;
-            //itemSource.Add(ROGERandTANIMOTO);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-
-            //Node FAITH = new Node("FAITH");
-            //FAITH.IsSelected = true;
-            //itemSource.Add(FAITH);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GOWERandLEGENDRE = new Node("GOWERandLEGENDRE");
-            //GOWERandLEGENDRE.IsSelected = true;
-            //itemSource.Add(GOWERandLEGENDRE);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node INTERSECTION = new Node("INTERSECTION");
-            //INTERSECTION.IsSelected = true;
-            //itemSource.Add(INTERSECTION);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node INNERPRODUCT = new Node("INNERPRODUCT");
-            //INNERPRODUCT.IsSelected = true;
-            //itemSource.Add(INNERPRODUCT);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-
-            //Node RUSSELLandRAO = new Node("RUSSELLandRAO");
-            //RUSSELLandRAO.IsSelected = true;
-            //itemSource.Add(RUSSELLandRAO);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node HAMMING = new Node("HAMMING");
-            //HAMMING.IsSelected = true;
-            //itemSource.Add(HAMMING);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node EUCLID = new Node("EUCLID");
-            //EUCLID.IsSelected = true;
-            //itemSource.Add(EUCLID);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SQUARED_EUCLID = new Node("SQUARED_EUCLID");
-            //SQUARED_EUCLID.IsSelected = true;
-            //itemSource.Add(SQUARED_EUCLID);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-
-
-            //Node CANBERRA = new Node("CANBERRA");
-            //CANBERRA.IsSelected = true;
-            //itemSource.Add(CANBERRA);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node MANHATTAN = new Node("MANHATTAN");
-            //MANHATTAN.IsSelected = true;
-            //itemSource.Add(MANHATTAN);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node MEAN_MANHATTAN = new Node("MEAN_MANHATTAN");
-            //MEAN_MANHATTAN.IsSelected = true;
-            //itemSource.Add(MEAN_MANHATTAN);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node CITYBLOCK = new Node("CITYBLOCK");
-            //CITYBLOCK.IsSelected = true;
-            //itemSource.Add(CITYBLOCK);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node MINKOWSK = new Node("MINKOWSK");
-            //MINKOWSK.IsSelected = true;
-            //itemSource.Add(MINKOWSK);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node VARI = new Node("VARI");
-            //VARI.IsSelected = true;
-            //itemSource.Add(VARI);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SIZEDIFFERENCE = new Node("SIZEDIFFERENCE");
-            //SIZEDIFFERENCE.IsSelected = true;
-            //itemSource.Add(SIZEDIFFERENCE);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SHAPEDIFFERENCE = new Node("SHAPEDIFFERENCE");
-            //SHAPEDIFFERENCE.IsSelected = true;
-            //itemSource.Add(SHAPEDIFFERENCE);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node PATTERNDIFFERENCE = new Node("PATTERNDIFFERENCE");
-            //PATTERNDIFFERENCE.IsSelected = true;
-            //itemSource.Add(PATTERNDIFFERENCE);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node LANCEandWILLIAMS = new Node("LANCEandWILLIAMS");
-            //LANCEandWILLIAMS.IsSelected = true;
-            //itemSource.Add(LANCEandWILLIAMS);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node BRAYandCURTIS = new Node("BRAYandCURTIS");
-            //BRAYandCURTIS.IsSelected = true;
-            //itemSource.Add(BRAYandCURTIS);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node HELLINGER = new Node("HELLINGER");
-            //HELLINGER.IsSelected = true;
-            //itemSource.Add(HELLINGER);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node CHORD = new Node("CHORD");
-            //CHORD.IsSelected = true;
-            //itemSource.Add(CHORD);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node COSINE = new Node("COSINE");
-            //COSINE.IsSelected = true;
-            //itemSource.Add(COSINE);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GILBERTandWELLS = new Node("GILBERTandWELLS");
-            //GILBERTandWELLS.IsSelected = true;
-            //itemSource.Add(GILBERTandWELLS);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node OCHIAI1 = new Node("OCHIAI1");
-            //OCHIAI1.IsSelected = true;
-            //itemSource.Add(OCHIAI1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node FORBESI = new Node("FORBESI");
-            //FORBESI.IsSelected = true;
-            //itemSource.Add(FORBESI);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node FOSSUM = new Node("FOSSUM");
-            //FOSSUM.IsSelected = true;
-            //itemSource.Add(FOSSUM);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SORGENFREI = new Node("SORGENFREI");
-            //SORGENFREI.IsSelected = true;
-            //itemSource.Add(SORGENFREI);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node MOUNTFORD = new Node("MOUNTFORD");
-            //MOUNTFORD.IsSelected = true;
-            //itemSource.Add(MOUNTFORD);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node OTSUKA = new Node("OTSUKA");
-            //OTSUKA.IsSelected = true;
-            //itemSource.Add(OTSUKA);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node MCCONNAUGHEY = new Node("MCCONNAUGHEY");
-            //MCCONNAUGHEY.IsSelected = true;
-            //itemSource.Add(MCCONNAUGHEY);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node TARWID = new Node("TARWID");
-            //TARWID.IsSelected = true;
-            //itemSource.Add(TARWID);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node KULCZYNSK2 = new Node("KULCZYNSK2");
-            //KULCZYNSK2.IsSelected = true;
-            //itemSource.Add(KULCZYNSK2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node DRIVERandKROEBER = new Node("DRIVERandKROEBER");
-            //DRIVERandKROEBER.IsSelected = true;
-            //itemSource.Add(DRIVERandKROEBER);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node JOHNSON = new Node("JOHNSON");
-            //JOHNSON.IsSelected = true;
-            //itemSource.Add(JOHNSON);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node DENNIS = new Node("DENNIS");
-            //DENNIS.IsSelected = true;
-            //itemSource.Add(DENNIS);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SIMPSON = new Node("SIMPSON");
-            //SIMPSON.IsSelected = true;
-            //itemSource.Add(SIMPSON);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node BRAUNandBANQUET = new Node("BRAUNandBANQUET");
-            //BRAUNandBANQUET.IsSelected = true;
-            //itemSource.Add(BRAUNandBANQUET);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node FAGERandMCGOWAN = new Node("FAGERandMCGOWAN");
-            //FAGERandMCGOWAN.IsSelected = true;
-            //itemSource.Add(FAGERandMCGOWAN);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node FORBES2 = new Node("FORBES2");
-            //FORBES2.IsSelected = true;
-            //itemSource.Add(FORBES2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SOKALandSNEATH4 = new Node("SOKALandSNEATH4");
-            //SOKALandSNEATH4.IsSelected = true;
-            //itemSource.Add(SOKALandSNEATH4);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GOWER = new Node("GOWER");
-            //GOWER.IsSelected = true;
-            //itemSource.Add(GOWER);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node PEARSON1 = new Node("PEARSON1");
-            //PEARSON1.IsSelected = true;
-            //itemSource.Add(PEARSON1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node PEARSON2 = new Node("PEARSON2");
-            //PEARSON2.IsSelected = true;
-            //itemSource.Add(PEARSON2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node PEARSON3 = new Node("PEARSON3");
-            //PEARSON3.IsSelected = true;
-            //itemSource.Add(PEARSON3);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node PEARSONandHERON1 = new Node("PEARSONandHERON1");
-            //PEARSONandHERON1.IsSelected = true;
-            //itemSource.Add(PEARSONandHERON1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node PEARSONandHERON2 = new Node("PEARSONandHERON2");
-            //PEARSONandHERON2.IsSelected = true;
-            //itemSource.Add(PEARSONandHERON2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SOKALandSNEATH3 = new Node("SOKALandSNEATH3");
-            //SOKALandSNEATH3.IsSelected = true;
-            //itemSource.Add(SOKALandSNEATH3);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SOKALandSNEATH5 = new Node("SOKALandSNEATH5");
-            //SOKALandSNEATH5.IsSelected = true;
-            //itemSource.Add(SOKALandSNEATH5);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node COLE = new Node("COLE");
-            //COLE.IsSelected = true;
-            //itemSource.Add(COLE);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node STILES = new Node("STILES");
-            //STILES.IsSelected = true;
-            //itemSource.Add(STILES);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node OCHIAI2 = new Node("OCHIAI2");
-            //OCHIAI2.IsSelected = true;
-            //itemSource.Add(OCHIAI2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node YULEQ = new Node("YULEQ");
-            //YULEQ.IsSelected = true;
-            //itemSource.Add(YULEQ);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node D_YULEQ = new Node("D_YULEQ");
-            //D_YULEQ.IsSelected = true;
-            //itemSource.Add(D_YULEQ);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node YULEw = new Node("YULEw");
-            //YULEw.IsSelected = true;
-            //itemSource.Add(YULEw);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node KULCZYNSKI1 = new Node("KULCZYNSKI1");
-            //KULCZYNSKI1.IsSelected = true;
-            //itemSource.Add(KULCZYNSKI1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node TANIMOTO = new Node("TANIMOTO");
-            //TANIMOTO.IsSelected = true;
-            //itemSource.Add(TANIMOTO);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node DISPERSON = new Node("DISPERSON");
-            //DISPERSON.IsSelected = true;
-            //itemSource.Add(DISPERSON);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node HAMANN = new Node("HAMANN");
-            //HAMANN.IsSelected = true;
-            //itemSource.Add(HAMANN);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node MICHAEL = new Node("MICHAEL");
-            //MICHAEL.IsSelected = true;
-            //itemSource.Add(MICHAEL);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GOODMANandKRUSKAL = new Node("GOODMANandKRUSKAL");
-            //GOODMANandKRUSKAL.IsSelected = true;
-            //itemSource.Add(GOODMANandKRUSKAL);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node ANDERBERG = new Node("ANDERBERG");
-            //ANDERBERG.IsSelected = true;
-            //itemSource.Add(ANDERBERG);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node BARONI_URBANIandBUSER1 = new Node("BARONI_URBANIandBUSER1");
-            //BARONI_URBANIandBUSER1.IsSelected = true;
-            //itemSource.Add(BARONI_URBANIandBUSER1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node BARONI_URBANIandBUSER2 = new Node("BARONI_URBANIandBUSER2");
-            //BARONI_URBANIandBUSER2.IsSelected = true;
-            //itemSource.Add(BARONI_URBANIandBUSER2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node PEIRCE = new Node("PEIRCE");
-            //PEIRCE.IsSelected = true;
-            //itemSource.Add(PEIRCE);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node EYRAUD = new Node("EYRAUD");
-            //EYRAUD.IsSelected = true;
-            //itemSource.Add(EYRAUD);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-
-            ///////////////////////////////////////////////////////////////////////////////////////
-
-
-            //Node Naish = new Node("Naish");
-            //Naish.IsSelected = true;
-            //itemSource.Add(Naish);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GP08 = new Node("GP08");
-            //GP08.IsSelected = true;
-            //itemSource.Add(GP08);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GP10 = new Node("GP10");
-            //GP10.IsSelected = true;
-            //itemSource.Add(GP10);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GP11 = new Node("GP11");
-            //GP11.IsSelected = true;
-            //itemSource.Add(GP11);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GP13 = new Node("GP13");
-            //GP13.IsSelected = true;
-            //itemSource.Add(GP13);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GP20 = new Node("GP20");
-            //GP20.IsSelected = true;
-            //itemSource.Add(GP20);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GP26 = new Node("GP26");
-            //GP26.IsSelected = true;
-            //itemSource.Add(GP26);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SEM1 = new Node("SEM1");
-            //SEM1.IsSelected = true;
-            //itemSource.Add(SEM1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SEM2 = new Node("SEM2");
-            //SEM2.IsSelected = true;
-            //itemSource.Add(SEM2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SEM3 = new Node("SEM3");
-            //SEM3.IsSelected = true;
-            //itemSource.Add(SEM3);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Wong2 = new Node("Wong2");
-            //Wong2.IsSelected = true;
-            //itemSource.Add(Wong2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Wong3 = new Node("Wong3");
-            //Wong3.IsSelected = true;
-            //itemSource.Add(Wong3);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-
-            ///////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //Node Tarantula = new Node("Tarantula");
-            //Tarantula.IsSelected = true;
-            //itemSource.Add(Tarantula);
-
-            //Node AMPLE = new Node("AMPLE");
-            //AMPLE.IsSelected = true;
-            //itemSource.Add(AMPLE);
-
-            //Node Jaccard = new Node("Jaccard");
-            //Jaccard.IsSelected = true;
-            //itemSource.Add(Jaccard);
-
-            //Node Ochiai = new Node("Ochiai");
-            //Ochiai.IsSelected = true;
-            //itemSource.Add(Ochiai);
-
-            //Node Heuristic3 = new Node("Heuristic3_c_");
-            //Heuristic3.IsSelected = false;
-            //itemSource.Add(Heuristic3);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Hybrid = new Node("Hybrid");
-            //Hybrid.IsSelected = false;
-            //itemSource.Add(Hybrid);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-
-
-
-            //Node Zoltar = new Node("Zoltar");
-            //Zoltar.IsSelected = true;
-            //itemSource.Add(Zoltar);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Kulczynski2 = new Node("Kulczynski2");
-            //Kulczynski2.IsSelected = true;
-            //itemSource.Add(Kulczynski2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Anderberg = new Node("Anderberg");
-            //Anderberg.IsSelected = true;
-            //itemSource.Add(Anderberg);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node M2 = new Node("M2");
-            //M2.IsSelected = true;
-            //itemSource.Add(M2);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Dice = new Node("Dice");
-            //Dice.IsSelected = true;
-            //itemSource.Add(Dice);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node PS = new Node("PS");
-            //PS.IsSelected = false;
-            //itemSource.Add(PS);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-
-
-
-            //Node SorensenDice = new Node("SorensenDice");
-            //SorensenDice.IsSelected = true;
-            //itemSource.Add(SorensenDice);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Wong1 = new Node("Wong1");
-            //Wong1.IsSelected = true;
-            //itemSource.Add(Wong1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node SimpleMatching = new Node("SimpleMatching");
-            //SimpleMatching.IsSelected = true;
-            //itemSource.Add(SimpleMatching);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Sokal = new Node("Sokal");
-            //Sokal.IsSelected = true;
-            //itemSource.Add(Sokal);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node RogersTanimoto = new Node("RogersTanimoto");
-            //RogersTanimoto.IsSelected = true;
-            //itemSource.Add(RogersTanimoto);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Goodman = new Node("Goodman");
-            //Goodman.IsSelected = true;
-            //itemSource.Add(Goodman);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Hammingetc = new Node("Hammingetc");
-            //Hammingetc.IsSelected = true;
-            //itemSource.Add(Hammingetc);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Euclid = new Node("Euclid");
-            //Euclid.IsSelected = true;
-            //itemSource.Add(Euclid);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node M1 = new Node("M1");
-            //M1.IsSelected = true;
-            //itemSource.Add(M1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Hamann = new Node("Hamann");
-            //Hamann.IsSelected = true;
-            //itemSource.Add(Hamann);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-
-
-            //Node RussellandRao = new Node("RussellandRao");
-            //RussellandRao.IsSelected = true;
-            //itemSource.Add(RussellandRao);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Cohen = new Node("Cohen");
-            //Cohen.IsSelected = true;
-            //itemSource.Add(Cohen);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node GeometricMean = new Node("GeometricMean");
-            //GeometricMean.IsSelected = true;
-            //itemSource.Add(GeometricMean);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node HarmonicMean = new Node("HarmonicMean");
-            //HarmonicMean.IsSelected = true;
-            //itemSource.Add(HarmonicMean);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node ArithmeticMean = new Node("ArithmeticMean");
-            //ArithmeticMean.IsSelected = true;
-            //itemSource.Add(ArithmeticMean);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-            //Node Rogot1 = new Node("Rogot1");
-            //Rogot1.IsSelected = true;
-            //itemSource.Add(Rogot1);
-            //cmbAlgorithm.ItemsSource = itemSource;
-
-
-
-
-
+            Node AMPLE = new Node("AMPLE");
+            AMPLE.IsSelected = false;
+            itemSource.Add(AMPLE);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node Jaccard = new Node("Jaccard");
+            Jaccard.IsSelected = false;
+            itemSource.Add(Jaccard);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node Dice = new Node("Dice");
+            Dice.IsSelected = false;
+            itemSource.Add(Dice);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node CZEKANOWSKI = new Node("CZEKANOWSKI");
+            CZEKANOWSKI.IsSelected = false;
+            itemSource.Add(CZEKANOWSKI);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node _3WJACCARD = new Node("_3WJACCARD");
+            _3WJACCARD.IsSelected = false;
+            itemSource.Add(_3WJACCARD);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node NEIandLI = new Node("NEIandLI");
+            NEIandLI.IsSelected = false;
+            itemSource.Add(NEIandLI);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SOKALandSNEATH_1 = new Node("SOKALandSNEATH_1");
+            SOKALandSNEATH_1.IsSelected = false;
+            itemSource.Add(SOKALandSNEATH_1);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SOKALandMICHENER = new Node("SOKALandMICHENER");
+            SOKALandMICHENER.IsSelected = false;
+            itemSource.Add(SOKALandMICHENER);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SOKALandSNEATH2 = new Node("SOKALandSNEATH2");
+            SOKALandSNEATH2.IsSelected = false;
+            itemSource.Add(SOKALandSNEATH2);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node ROGERandTANIMOTO = new Node("ROGERandTANIMOTO");
+            ROGERandTANIMOTO.IsSelected = false;
+            itemSource.Add(ROGERandTANIMOTO);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+
+            Node FAITH = new Node("FAITH");
+            FAITH.IsSelected = false;
+            itemSource.Add(FAITH);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node GOWERandLEGENDRE = new Node("GOWERandLEGENDRE");
+            GOWERandLEGENDRE.IsSelected = false;
+            itemSource.Add(GOWERandLEGENDRE);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node INTERSECTION = new Node("INTERSECTION");
+            INTERSECTION.IsSelected = false;
+            itemSource.Add(INTERSECTION);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node INNERPRODUCT = new Node("INNERPRODUCT");
+            INNERPRODUCT.IsSelected = false;
+            itemSource.Add(INNERPRODUCT);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+
+            Node RUSSELLandRAO = new Node("RUSSELLandRAO");
+            RUSSELLandRAO.IsSelected = false;
+            itemSource.Add(RUSSELLandRAO);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node HAMMING = new Node("HAMMING");
+            HAMMING.IsSelected = false;
+            itemSource.Add(HAMMING);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node EUCLID = new Node("EUCLID");
+            EUCLID.IsSelected = false;
+            itemSource.Add(EUCLID);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SQUARED_EUCLID = new Node("SQUARED_EUCLID");
+            SQUARED_EUCLID.IsSelected = false;
+            itemSource.Add(SQUARED_EUCLID);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+
+
+            Node CANBERRA = new Node("CANBERRA");
+            CANBERRA.IsSelected = false;
+            itemSource.Add(CANBERRA);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node MANHATTAN = new Node("MANHATTAN");
+            MANHATTAN.IsSelected = false;
+            itemSource.Add(MANHATTAN);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node MEAN_MANHATTAN = new Node("MEAN_MANHATTAN");
+            MEAN_MANHATTAN.IsSelected = false;
+            itemSource.Add(MEAN_MANHATTAN);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node CITYBLOCK = new Node("CITYBLOCK");
+            CITYBLOCK.IsSelected = false;
+            itemSource.Add(CITYBLOCK);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node MINKOWSK = new Node("MINKOWSK");
+            MINKOWSK.IsSelected = false;
+            itemSource.Add(MINKOWSK);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node VARI = new Node("VARI");
+            VARI.IsSelected = false;
+            itemSource.Add(VARI);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SIZEDIFFERENCE = new Node("SIZEDIFFERENCE");
+            SIZEDIFFERENCE.IsSelected = false;
+            itemSource.Add(SIZEDIFFERENCE);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SHAPEDIFFERENCE = new Node("SHAPEDIFFERENCE");
+            SHAPEDIFFERENCE.IsSelected = false;
+            itemSource.Add(SHAPEDIFFERENCE);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node PATTERNDIFFERENCE = new Node("PATTERNDIFFERENCE");
+            PATTERNDIFFERENCE.IsSelected = false;
+            itemSource.Add(PATTERNDIFFERENCE);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node LANCEandWILLIAMS = new Node("LANCEandWILLIAMS");
+            LANCEandWILLIAMS.IsSelected = false;
+            itemSource.Add(LANCEandWILLIAMS);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node BRAYandCURTIS = new Node("BRAYandCURTIS");
+            BRAYandCURTIS.IsSelected = false;
+            itemSource.Add(BRAYandCURTIS);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node HELLINGER = new Node("HELLINGER");
+            HELLINGER.IsSelected = false;
+            itemSource.Add(HELLINGER);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node CHORD = new Node("CHORD");
+            CHORD.IsSelected = false;
+            itemSource.Add(CHORD);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node COSINE = new Node("COSINE");
+            COSINE.IsSelected = false;
+            itemSource.Add(COSINE);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node GILBERTandWELLS = new Node("GILBERTandWELLS");
+            GILBERTandWELLS.IsSelected = false;
+            itemSource.Add(GILBERTandWELLS);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node OCHIAI1 = new Node("OCHIAI1");
+            OCHIAI1.IsSelected = false;
+            itemSource.Add(OCHIAI1);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node FORBESI = new Node("FORBESI");
+            FORBESI.IsSelected = false;
+            itemSource.Add(FORBESI);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node FOSSUM = new Node("FOSSUM");
+            FOSSUM.IsSelected = false;
+            itemSource.Add(FOSSUM);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SORGENFREI = new Node("SORGENFREI");
+            SORGENFREI.IsSelected = false;
+            itemSource.Add(SORGENFREI);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node MOUNTFORD = new Node("MOUNTFORD");
+            MOUNTFORD.IsSelected = false;
+            itemSource.Add(MOUNTFORD);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node OTSUKA = new Node("OTSUKA");
+            OTSUKA.IsSelected = false;
+            itemSource.Add(OTSUKA);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node MCCONNAUGHEY = new Node("MCCONNAUGHEY");
+            MCCONNAUGHEY.IsSelected = false;
+            itemSource.Add(MCCONNAUGHEY);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node TARWID = new Node("TARWID");
+            TARWID.IsSelected = false;
+            itemSource.Add(TARWID);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node KULCZYNSK2 = new Node("KULCZYNSK2");
+            KULCZYNSK2.IsSelected = false;
+            itemSource.Add(KULCZYNSK2);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node DRIVERandKROEBER = new Node("DRIVERandKROEBER");
+            DRIVERandKROEBER.IsSelected = false;
+            itemSource.Add(DRIVERandKROEBER);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node JOHNSON = new Node("JOHNSON");
+            JOHNSON.IsSelected = false;
+            itemSource.Add(JOHNSON);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node DENNIS = new Node("DENNIS");
+            DENNIS.IsSelected = false;
+            itemSource.Add(DENNIS);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SIMPSON = new Node("SIMPSON");
+            SIMPSON.IsSelected = false;
+            itemSource.Add(SIMPSON);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node BRAUNandBANQUET = new Node("BRAUNandBANQUET");
+            BRAUNandBANQUET.IsSelected = false;
+            itemSource.Add(BRAUNandBANQUET);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node FAGERandMCGOWAN = new Node("FAGERandMCGOWAN");
+            FAGERandMCGOWAN.IsSelected = false;
+            itemSource.Add(FAGERandMCGOWAN);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node FORBES2 = new Node("FORBES2");
+            FORBES2.IsSelected = false;
+            itemSource.Add(FORBES2);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SOKALandSNEATH4 = new Node("SOKALandSNEATH4");
+            SOKALandSNEATH4.IsSelected = false;
+            itemSource.Add(SOKALandSNEATH4);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node GOWER = new Node("GOWER");
+            GOWER.IsSelected = false;
+            itemSource.Add(GOWER);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node PEARSON1 = new Node("PEARSON1");
+            PEARSON1.IsSelected = false;
+            itemSource.Add(PEARSON1);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node PEARSON2 = new Node("PEARSON2");
+            PEARSON2.IsSelected = false;
+            itemSource.Add(PEARSON2);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node PEARSON3 = new Node("PEARSON3");
+            PEARSON3.IsSelected = false;
+            itemSource.Add(PEARSON3);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node PEARSONandHERON1 = new Node("PEARSONandHERON1");
+            PEARSONandHERON1.IsSelected = false;
+            itemSource.Add(PEARSONandHERON1);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node PEARSONandHERON2 = new Node("PEARSONandHERON2");
+            PEARSONandHERON2.IsSelected = false;
+            itemSource.Add(PEARSONandHERON2);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SOKALandSNEATH3 = new Node("SOKALandSNEATH3");
+            SOKALandSNEATH3.IsSelected = false;
+            itemSource.Add(SOKALandSNEATH3);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node SOKALandSNEATH5 = new Node("SOKALandSNEATH5");
+            SOKALandSNEATH5.IsSelected = false;
+            itemSource.Add(SOKALandSNEATH5);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node COLE = new Node("COLE");
+            COLE.IsSelected = false;
+            itemSource.Add(COLE);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node STILES = new Node("STILES");
+            STILES.IsSelected = false;
+            itemSource.Add(STILES);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node OCHIAI2 = new Node("OCHIAI2");
+            OCHIAI2.IsSelected = false;
+            itemSource.Add(OCHIAI2);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node YULEQ = new Node("YULEQ");
+            YULEQ.IsSelected = false;
+            itemSource.Add(YULEQ);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node D_YULEQ = new Node("D_YULEQ");
+            D_YULEQ.IsSelected = false;
+            itemSource.Add(D_YULEQ);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node YULEw = new Node("YULEw");
+            YULEw.IsSelected = false;
+            itemSource.Add(YULEw);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node KULCZYNSKI1 = new Node("KULCZYNSKI1");
+            KULCZYNSKI1.IsSelected = false;
+            itemSource.Add(KULCZYNSKI1);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node TANIMOTO = new Node("TANIMOTO");
+            TANIMOTO.IsSelected = false;
+            itemSource.Add(TANIMOTO);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node DISPERSON = new Node("DISPERSON");
+            DISPERSON.IsSelected = false;
+            itemSource.Add(DISPERSON);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node HAMANN = new Node("HAMANN");
+            HAMANN.IsSelected = false;
+            itemSource.Add(HAMANN);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node MICHAEL = new Node("MICHAEL");
+            MICHAEL.IsSelected = false;
+            itemSource.Add(MICHAEL);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node GOODMANandKRUSKAL = new Node("GOODMANandKRUSKAL");
+            GOODMANandKRUSKAL.IsSelected = false;
+            itemSource.Add(GOODMANandKRUSKAL);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node ANDERBERG = new Node("ANDERBERG");
+            ANDERBERG.IsSelected = false;
+            itemSource.Add(ANDERBERG);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node BARONI_URBANIandBUSER1 = new Node("BARONI_URBANIandBUSER1");
+            BARONI_URBANIandBUSER1.IsSelected = false;
+            itemSource.Add(BARONI_URBANIandBUSER1);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node BARONI_URBANIandBUSER2 = new Node("BARONI_URBANIandBUSER2");
+            BARONI_URBANIandBUSER2.IsSelected = false;
+            itemSource.Add(BARONI_URBANIandBUSER2);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node PEIRCE = new Node("PEIRCE");
+            PEIRCE.IsSelected = false;
+            itemSource.Add(PEIRCE);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node EYRAUD = new Node("EYRAUD");
+            EYRAUD.IsSelected = false;
+            itemSource.Add(EYRAUD);
+            cmbAlgorithm.ItemsSource = itemSource;
 
 
             this.Title = this.Title + " " + IniFile.GetIniValue("Info", "Version", Environment.CurrentDirectory + @"\Setting.ini");
@@ -821,8 +596,8 @@ namespace Fault_Localization_SE_Lab
 
                 dsTestCase.Clear();
                 dsSourceCode.Clear();
-                //dsFSourceCode.Clear();
-                //dsPSourceCode.Clear();
+                dsFSourceCode.Clear();
+                dsPSourceCode.Clear();
                 dsDistinct.Clear();
                 int col_TC_ID = dsSourceCode.Tables["SourceCode"].Columns["SourceCode"].Ordinal + 1;
                 for (int i = col_TC_ID; i < dsSourceCode.Tables["SourceCode"].Columns.Count; i++)
@@ -831,21 +606,21 @@ namespace Fault_Localization_SE_Lab
 
                 }
 
-                //int Fcol_TC_ID = dsFSourceCode.Tables["FSourceCode"].Columns["SourceCode"].Ordinal + 1;
-                //for (int i = Fcol_TC_ID; i < dsFSourceCode.Tables["FSourceCode"].Columns.Count; i++)
-                //{
+                int Fcol_TC_ID = dsFSourceCode.Tables["FSourceCode"].Columns["SourceCode"].Ordinal + 1;
+                for (int i = Fcol_TC_ID; i < dsFSourceCode.Tables["FSourceCode"].Columns.Count; i++)
+                {
 
-                //    dsFSourceCode.Tables["FSourceCode"].Columns.RemoveAt(Fcol_TC_ID);
+                    dsFSourceCode.Tables["FSourceCode"].Columns.RemoveAt(Fcol_TC_ID);
 
-                //}
+                }
 
-                //int Pcol_TC_ID = dsPSourceCode.Tables["PSourceCode"].Columns["SourceCode"].Ordinal + 1;
-                //for (int i = Pcol_TC_ID; i < dsPSourceCode.Tables["PSourceCode"].Columns.Count; i++)
-                //{
+                int Pcol_TC_ID = dsPSourceCode.Tables["PSourceCode"].Columns["SourceCode"].Ordinal + 1;
+                for (int i = Pcol_TC_ID; i < dsPSourceCode.Tables["PSourceCode"].Columns.Count; i++)
+                {
 
 
-                //    dsPSourceCode.Tables["PSourceCode"].Columns.RemoveAt(Pcol_TC_ID);
-                //}
+                    dsPSourceCode.Tables["PSourceCode"].Columns.RemoveAt(Pcol_TC_ID);
+                }
                 /*
                                 int Fcol_TC_ID = dsFSourceCode.Tables["FSourceCode"].Columns["FSourceCode"].Ordinal + 1;
                                 for (int i = Fcol_TC_ID; i < dsFSourceCode.Tables["FSourceCode"].Columns.Count; i++)
@@ -910,7 +685,7 @@ namespace Fault_Localization_SE_Lab
                     File.Copy(tbSourceCode.Text, TestInfo.strOriginalSourceFile, true);
                     //File.Copy(Environment.CurrentDirectory + @"\Tools\" + TestInfo.strInstrumentEditor, TestInfo.strResultPath + TestInfo.strInstrumentEditor, true);
 
-                    TestInfo.strInstrumentedSourceFile = inst.GenInstrumentedCode(TestInfo.strOriginalSourceFile, dsSourceCode,  fileExtension);
+                    TestInfo.strInstrumentedSourceFile = inst.GenInstrumentedCode(TestInfo.strOriginalSourceFile, dsSourceCode, dsFSourceCode, dsPSourceCode, fileExtension);
 
                     inst.GetReflectionInfo(TestInfo.strOriginalSourceFile);
                 }
@@ -926,7 +701,7 @@ namespace Fault_Localization_SE_Lab
                     File.Copy(Environment.CurrentDirectory + @"\Tools\" + TestInfo.strInstrumentEditor, TestInfo.strResultPath + TestInfo.strInstrumentEditor, true);
                     File.Copy(Environment.CurrentDirectory + @"\Tools\" + TestInfo.strInstrumentEditorCpp, TestInfo.strResultPath + TestInfo.strInstrumentEditorCpp, true);
 
-                    TestInfo.strInstrumentedSourceFile = inst.GenInstrumentedCode(TestInfo.strOriginalSourceFile, dsSourceCode, fileExtension);
+                    TestInfo.strInstrumentedSourceFile = inst.GenInstrumentedCode(TestInfo.strOriginalSourceFile, dsSourceCode, dsFSourceCode, dsPSourceCode, fileExtension);
 
                     //inst.GetReflectionInfo(TestInfo.strOriginalSourceFile);
                 }
@@ -948,8 +723,8 @@ namespace Fault_Localization_SE_Lab
             try
             {
                 dsSourceCode.Tables["SourceCode"].Columns.Add(TC_ID, typeof(string));
-                //dsFSourceCode.Tables["FSourceCode"].Columns.Add(TC_ID, typeof(string));
-                //dsPSourceCode.Tables["PSourceCode"].Columns.Add(TC_ID, typeof(string));
+                dsFSourceCode.Tables["FSourceCode"].Columns.Add(TC_ID, typeof(string));
+                dsPSourceCode.Tables["PSourceCode"].Columns.Add(TC_ID, typeof(string));
                 //DataGridViewTextBoxColumn subTitleColumn = new DataGridViewTextBoxColumn();
 
                 //dsSourceCode.auto
@@ -1218,8 +993,8 @@ namespace Fault_Localization_SE_Lab
 
                     dsTestCase.Clear();
                     dsSourceCode.Clear();
-                    //dsFSourceCode.Clear();
-                    //dsPSourceCode.Clear();
+                    dsFSourceCode.Clear();
+                    dsPSourceCode.Clear();
                     dsDistinct.Clear();
                     dsResult.Clear();
                     PdsResult.Clear();
@@ -1229,11 +1004,11 @@ namespace Fault_Localization_SE_Lab
                     dsSourceCode = NativeMethod.GetDataFromExcel(tbDBFile.Text, TestInfo.strFaultyVersion);
                     dsSourceCode.Tables[TestInfo.strFaultyVersion].TableName = "SourceCode";
 
-                    //dsFSourceCode = NativeMethod.GetDataFromExcel(tbDBFile.Text, TestInfo.strFaultyVersion);
-                    //dsFSourceCode.Tables[TestInfo.strFaultyVersion].TableName = "FSourceCode";
+                    dsFSourceCode = NativeMethod.GetDataFromExcel(tbDBFile.Text, TestInfo.strFaultyVersion);
+                    dsFSourceCode.Tables[TestInfo.strFaultyVersion].TableName = "FSourceCode";
 
-                    //dsPSourceCode = NativeMethod.GetDataFromExcel(tbDBFile.Text, TestInfo.strFaultyVersion);
-                    //dsPSourceCode.Tables[TestInfo.strFaultyVersion].TableName = "PSourceCode";
+                    dsPSourceCode = NativeMethod.GetDataFromExcel(tbDBFile.Text, TestInfo.strFaultyVersion);
+                    dsPSourceCode.Tables[TestInfo.strFaultyVersion].TableName = "PSourceCode";
 
                     try
                     {
@@ -1252,33 +1027,33 @@ namespace Fault_Localization_SE_Lab
                         }
 
 
-                        //for (int col = 2; col < dsFSourceCode.Tables["FSourceCode"].Columns.Count; col++)
-                        //{
-                        //    if (dsFSourceCode.Tables["FSourceCode"].Columns[col].ToString().Contains("TC"))
-                        //        continue;
-                        //    else
-                        //        al.Add(dsFSourceCode.Tables["FSourceCode"].Columns[col].ToString());
+                        for (int col = 2; col < dsFSourceCode.Tables["FSourceCode"].Columns.Count; col++)
+                        {
+                            if (dsFSourceCode.Tables["FSourceCode"].Columns[col].ToString().Contains("TC"))
+                                continue;
+                            else
+                                al.Add(dsFSourceCode.Tables["FSourceCode"].Columns[col].ToString());
 
-                        //}
-                        //for (int i = 0; i < al.Count; i++)
-                        //{
-                        //    dsFSourceCode.Tables["FSourceCode"].Columns.Remove(al[i].ToString());
-                        //}
+                        }
+                        for (int i = 0; i < al.Count; i++)
+                        {
+                            dsFSourceCode.Tables["FSourceCode"].Columns.Remove(al[i].ToString());
+                        }
 
 
 
-                        //for (int col = 2; col < dsPSourceCode.Tables["PSourceCode"].Columns.Count; col++)
-                        //{
-                        //    if (dsPSourceCode.Tables["PSourceCode"].Columns[col].ToString().Contains("TC"))
-                        //        continue;
-                        //    else
-                        //        al.Add(dsPSourceCode.Tables["PSourceCode"].Columns[col].ToString());
+                        for (int col = 2; col < dsPSourceCode.Tables["PSourceCode"].Columns.Count; col++)
+                        {
+                            if (dsPSourceCode.Tables["PSourceCode"].Columns[col].ToString().Contains("TC"))
+                                continue;
+                            else
+                                al.Add(dsPSourceCode.Tables["PSourceCode"].Columns[col].ToString());
 
-                        //}
-                        //for (int i = 0; i < al.Count; i++)
-                        //{
-                        //    dsPSourceCode.Tables["PSourceCode"].Columns.Remove(al[i].ToString());
-                        //}
+                        }
+                        for (int i = 0; i < al.Count; i++)
+                        {
+                            dsPSourceCode.Tables["PSourceCode"].Columns.Remove(al[i].ToString());
+                        }
 
 
 
@@ -1348,11 +1123,11 @@ namespace Fault_Localization_SE_Lab
                             if (!RunTestCase(i, TestInfo.TC_ID, dsSourceCode, "SourceCode"))
                                 return;
 
-                            //if (!RunTestCase(i, TestInfo.TC_ID, dsFSourceCode, "FSourceCode"))
-                            //    return;
+                            if (!RunTestCase(i, TestInfo.TC_ID, dsFSourceCode, "FSourceCode"))
+                                return;
 
-                            //if (!RunTestCase(i, TestInfo.TC_ID, dsPSourceCode, "PSourceCode"))
-                            //    return;
+                            if (!RunTestCase(i, TestInfo.TC_ID, dsPSourceCode, "PSourceCode"))
+                                return;
 
 
                             if (File.Exists(TestInfo.strCloverfile))
@@ -1364,12 +1139,12 @@ namespace Fault_Localization_SE_Lab
                                 if (TestInfo.CODE_COVERAGE.Equals("VisualCoverage"))
                                 {
                                     xpCoverage.SetCountInformation(dsSourceCode, TestInfo.TC_ID);
-                                    //FxpCoverage.SetCountInformation(dsFSourceCode, TestInfo.TC_ID);
-                                    //PxpCoverage.SetCountInformation(dsPSourceCode, TestInfo.TC_ID);
+                                    FxpCoverage.SetCountInformation(dsFSourceCode, TestInfo.TC_ID);
+                                    PxpCoverage.SetCountInformation(dsPSourceCode, TestInfo.TC_ID);
                                 }
                                 else if (TestInfo.CODE_COVERAGE.Equals("CodeCoverage"))
                                 {
-                                    xpCoverage.SetCountInformation_CodeCoverage(dsSourceCode, TestInfo.TC_ID);
+                                    xpCoverage.SetCountInformation_CodeCoverage(dsSourceCode, dsFSourceCode, dsPSourceCode, TestInfo.TC_ID);
                                     //xpCoverage.SetCountInformation_CodeCoverage(dsSourceCode, TestInfo.TC_ID);
                                     //FxpCoverage.SetCountInformation_CodeCoverage(dsFSourceCode, TestInfo.TC_ID); 
                                     //PxpCoverage.SetCountInformation_CodeCoverage(dsPSourceCode, TestInfo.TC_ID);
@@ -1377,8 +1152,8 @@ namespace Fault_Localization_SE_Lab
                             }
 
                             col = dsSourceCode.Tables["SourceCode"].Columns[TestInfo.TC_ID].Ordinal;
-                            //Fcol = dsFSourceCode.Tables["FSourceCode"].Columns[TestInfo.TC_ID].Ordinal;
-                            //Pcol = dsPSourceCode.Tables["PSourceCode"].Columns[TestInfo.TC_ID].Ordinal;
+                            Fcol = dsFSourceCode.Tables["FSourceCode"].Columns[TestInfo.TC_ID].Ordinal;
+                            Pcol = dsPSourceCode.Tables["PSourceCode"].Columns[TestInfo.TC_ID].Ordinal;
 
                             string result_value = NativeMethod.GetTestResultFromTXT(TestInfo.strResultPath + TestInfo.strTestResult);
 
@@ -1402,17 +1177,17 @@ namespace Fault_Localization_SE_Lab
                             {
                                 dgvMain.Rows[i].Cells["Test Result"].Value = "PASS";
                                 dsSourceCode.Tables["SourceCode"].Rows[row][col] = "PASS";
-                                //dsPSourceCode.Tables["PSourceCode"].Rows[row][Pcol] = "PASS";
-                                //dsFSourceCode.Tables["FSourceCode"].Rows[row][Pcol] = "PASS";
-                                //passcount++;
+                                dsPSourceCode.Tables["PSourceCode"].Rows[row][Pcol] = "PASS";
+                                dsFSourceCode.Tables["FSourceCode"].Rows[row][Pcol] = "PASS";
+                                passcount++;
                             }
                             else
                             {
                                 dgvMain.Rows[i].Cells["Test Result"].Value = "FAIL";
                                 dsSourceCode.Tables["SourceCode"].Rows[row][col] = "FAIL";
-                                //dsFSourceCode.Tables["FSourceCode"].Rows[row][Fcol] = "FAIL";
-                                //dsPSourceCode.Tables["PSourceCode"].Rows[row][Pcol] = "FAIL";
-                                //failcount++;
+                                dsFSourceCode.Tables["FSourceCode"].Rows[row][Fcol] = "FAIL";
+                                dsPSourceCode.Tables["PSourceCode"].Rows[row][Pcol] = "FAIL";
+                                failcount++;
                             }
                             DataGridViewCheckBoxCell chkbox = new DataGridViewCheckBoxCell();
                             chkbox = (DataGridViewCheckBoxCell)dgvMain.Rows[i].Cells["Select"];
@@ -1424,11 +1199,11 @@ namespace Fault_Localization_SE_Lab
                     }
                 }
 
-                //DataTable dtDistinct = new DataTable("SourceCode");
-                //dtDistinct = MakeDistinctTable(dsSourceCode);
+                DataTable dtDistinct = new DataTable("SourceCode");
+                dtDistinct = MakeDistinctTable(dsSourceCode);
 
-                //dsDistinct.Tables.Add(dtDistinct);
-                //dsDistinct.Tables[0].TableName = "SourceCode";
+                dsDistinct.Tables.Add(dtDistinct);
+                dsDistinct.Tables[0].TableName = "SourceCode";
 
 
 
@@ -1457,10 +1232,10 @@ namespace Fault_Localization_SE_Lab
                     ComputeExamScore(dsSourceCode, dsResult, "SourceCodeExam");
 
 
-                //ComputeSuspiciousValue(dsDistinct);
-                //ComputeRank(dsDistinct, dsResult, "Distinct_CodeCoverage");
-                //if (chkAnswerSheet.IsChecked == true)
-                //    ComputeExamScore(dsDistinct, dsResult, "DistinctExam");
+                ComputeSuspiciousValue(dsDistinct);
+                ComputeRank(dsDistinct, dsResult, "Distinct_CodeCoverage");
+                if (chkAnswerSheet.IsChecked == true)
+                    ComputeExamScore(dsDistinct, dsResult, "DistinctExam");
 
 
 
@@ -1471,9 +1246,9 @@ namespace Fault_Localization_SE_Lab
 
                 //HammingDistance(dsFSourceCode, dsPSourceCode);
 
-                //BrayCurtis(dsFSourceCode, dsPSourceCode);
+                ////BrayCurtis(dsFSourceCode, dsPSourceCode);
 
-                //Preprocess(dsFSourceCode, dsPSourceCode);
+                ////Preprocess(dsFSourceCode, dsPSourceCode);
 
 
                 //ComputeSuspiciousValue3(dsFSourceCode, dsPSourceCode);
@@ -1487,24 +1262,24 @@ namespace Fault_Localization_SE_Lab
 
                 try
                 {
-                    //dgvSourceCode.DataSource = null;
-                    //dgvSourceCode.Columns.Clear();
+                    dgvSourceCode.DataSource = null;
+                    dgvSourceCode.Columns.Clear();
 
-                    //dgvSourceCode.DataSource = dsSourceCode.Tables["SourceCode"];
+                    dgvSourceCode.DataSource = dsSourceCode.Tables["SourceCode"];
 
-                    //dgvSourceCode.Columns["Line"].Width = 50;
-                    //dgvSourceCode.Columns["SourceCode"].Width = 400;
+                    dgvSourceCode.Columns["Line"].Width = 50;
+                    dgvSourceCode.Columns["SourceCode"].Width = 400;
 
-                    //int col_TC_ID = dsSourceCode.Tables["SourceCode"].Columns["SourceCode"].Ordinal + 1;
-                    //for (int i = col_TC_ID; i < dsSourceCode.Tables["SourceCode"].Columns.Count; i++)
-                    //{
-                    //    dgvSourceCode.Columns[i].Width = 60;
-                    //    dgvSourceCode.Columns[i].FillWeight = 1;
-                    //}
+                    int col_TC_ID = dsSourceCode.Tables["SourceCode"].Columns["SourceCode"].Ordinal + 1;
+                    for (int i = col_TC_ID; i < dsSourceCode.Tables["SourceCode"].Columns.Count; i++)
+                    {
+                        dgvSourceCode.Columns[i].Width = 60;
+                        dgvSourceCode.Columns[i].FillWeight = 1;
+                    }
 
-                    //ColoringBySuspicious(dsSourceCode, 0.8f, 1.0f);
-                    //SourceCodeTabItem.IsSelected = true;
-                    //chkShowTC.IsChecked = false;
+                    ColoringBySuspicious(dsSourceCode, 0.8f, 1.0f);
+                    SourceCodeTabItem.IsSelected = true;
+                    chkShowTC.IsChecked = false;
                 }
                 catch (Exception error)
                 {
@@ -2314,8 +2089,13 @@ namespace Fault_Localization_SE_Lab
                     dsAnswerSheet = NativeMethod.GetDataFromExcel(tbAnswerSheet.Text);
 
                     string strProgramName = System.IO.Path.GetFileNameWithoutExtension(TestInfo.strProgramFilename);
+
                     //query = @"(ProgramName = 'printtokens') AND (FaultyVersion = 'v1')";
-                    query = @"(ProgramName = '" + strProgramName + @"') AND (FaultyVersion = '" + TestInfo.strFaultyVersion + @"')";
+                    strProgramName = "schedule";
+                    TestInfo.strFaultyVersion = "v1";
+
+                    query = @"(ProgramName = '" + strProgramName + @"') AND (FaultyVersion = '" + "v1" + @"')";
+
                     DataTable dtAnswerSheet = dsAnswerSheet.Tables[0].Select(query).CopyToDataTable();
 
                     string strFaultyLine = dtAnswerSheet.Rows[0]["FaultyLine"].ToString();
@@ -2330,12 +2110,6 @@ namespace Fault_Localization_SE_Lab
 
                     double TBestExamScore = (double)TBest * 100 / (double)TotalLines;
                     double TWorstExamScore = (double)TWorst * 100 / (double)TotalLines;
-
-
-                    Logger.WriteLine2(strProgramName+ "/"+ TestInfo.strFaultyVersion+"/"+TBest.ToString() + "/" +TWorst.ToString()+"/"+ TotalLines);
-                        
-
-
 
                     string strFaultyVersion = System.IO.Path.GetFileNameWithoutExtension(TestInfo.strFaultyVersion);
 
@@ -2725,7 +2499,7 @@ namespace Fault_Localization_SE_Lab
                 if (Pcol_last > 10)
                 {
                     PassTCcount = 0;
-                    for (int col = Pcol_last - 1; col > ((Pcol_last - 1) * 0.3); col--)
+                    for (int col = Pcol_last - 1; col > ((Pcol_last - 1) * 0.5); col--)
                     {
                         mark = dsP.Tables["PSourceCode"].Rows[row][col].ToString();
                         result = dsP.Tables["PSourceCode"].Rows[Prow_last - 1][col].ToString();
@@ -4628,86 +4402,86 @@ namespace Fault_Localization_SE_Lab
                         }
                         //실험 대상 기법2
 
+
                         dsP.Tables["PSourceCode"].Rows[row]["TARANTULA"] = Math.Round(TARANTULA, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["AMPLE"] = Math.Round(AMPLE, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["Jaccard"] = Math.Round(Jaccard, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["Dice"] = Math.Round(Dice, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["CZEKANOWSKI"] = Math.Round(CZEKANOWSKI, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["_3WJACCARD"] = Math.Round(_3WJACCARD, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["NEIandLI"] = Math.Round(NEIandLI, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH_1"] = Math.Round(SOKALandSNEATH_1, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SOKALandMICHENER"] = Math.Round(SOKALandMICHENER, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH2"] = Math.Round(SOKALandSNEATH2, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["ROGERandTANIMOTO"] = Math.Round(ROGERandTANIMOTO, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["FAITH"] = Math.Round(FAITH, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["GOWERandLEGENDRE"] = Math.Round(GOWERandLEGENDRE, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["INTERSECTION"] = Math.Round(INTERSECTION, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["INNERPRODUCT"] = Math.Round(INNERPRODUCT, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["AMPLE"] = Math.Round(AMPLE, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["Jaccard"] = Math.Round(Jaccard, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["Dice"] = Math.Round(Dice, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["CZEKANOWSKI"] = Math.Round(CZEKANOWSKI, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["_3WJACCARD"] = Math.Round(_3WJACCARD, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["NEIandLI"] = Math.Round(NEIandLI, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH_1"] = Math.Round(SOKALandSNEATH_1, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SOKALandMICHENER"] = Math.Round(SOKALandMICHENER, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH2"] = Math.Round(SOKALandSNEATH2, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["ROGERandTANIMOTO"] = Math.Round(ROGERandTANIMOTO, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["FAITH"] = Math.Round(FAITH, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["GOWERandLEGENDRE"] = Math.Round(GOWERandLEGENDRE, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["INTERSECTION"] = Math.Round(INTERSECTION, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["INNERPRODUCT"] = Math.Round(INNERPRODUCT, 5);
 
 
 
-                        dsP.Tables["PSourceCode"].Rows[row]["RUSSELLandRAO"] = Math.Round(RUSSELLandRAO, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["HAMMING"] = Math.Round(-HAMMING, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["EUCLID"] = Math.Round(-EUCLID, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SQUARED_EUCLID"] = Math.Round(-SQUARED_EUCLID, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["CANBERRA"] = Math.Round(-CANBERRA, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["MANHATTAN"] = Math.Round(-MANHATTAN, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["MEAN_MANHATTAN"] = Math.Round(-MEAN_MANHATTAN, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["CITYBLOCK"] = Math.Round(-CITYBLOCK, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["MINKOWSK"] = Math.Round(-MINKOWSK, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["VARI"] = Math.Round(-VARI, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SIZEDIFFERENCE"] = Math.Round(-SIZEDIFFERENCE, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SHAPEDIFFERENCE"] = Math.Round(-SHAPEDIFFERENCE, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["PATTERNDIFFERENCE"] = Math.Round(-PATTERNDIFFERENCE, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["LANCEandWILLIAMS"] = Math.Round(-LANCEandWILLIAMS, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["BRAYandCURTIS"] = Math.Round(-BRAYandCURTIS, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["HELLINGER"] = Math.Round(-HELLINGER, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["CHORD"] = Math.Round(-CHORD, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["COSINE"] = Math.Round(COSINE, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["GILBERTandWELLS"] = Math.Round(GILBERTandWELLS, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["OCHIAI1"] = Math.Round(OCHIAI1, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["FORBESI"] = Math.Round(FORBESI, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["FOSSUM"] = Math.Round(FOSSUM, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SORGENFREI"] = Math.Round(SORGENFREI, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["MOUNTFORD"] = Math.Round(MOUNTFORD, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["OTSUKA"] = Math.Round(OTSUKA, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["MCCONNAUGHEY"] = Math.Round(MCCONNAUGHEY, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["TARWID"] = Math.Round(TARWID, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["KULCZYNSK2"] = Math.Round(KULCZYNSK2, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["DRIVERandKROEBER"] = Math.Round(DRIVERandKROEBER, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["JOHNSON"] = Math.Round(JOHNSON, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["DENNIS"] = Math.Round(DENNIS, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SIMPSON"] = Math.Round(SIMPSON, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["BRAUNandBANQUET"] = Math.Round(BRAUNandBANQUET, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["FAGERandMCGOWAN"] = Math.Round(FAGERandMCGOWAN, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["FORBES2"] = Math.Round(FORBES2, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH4"] = Math.Round(SOKALandSNEATH4, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["GOWER"] = Math.Round(GOWER, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["PEARSON1"] = Math.Round(PEARSON1, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["PEARSON2"] = Math.Round(PEARSON2, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["PEARSON3"] = Math.Round(PEARSON3, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["PEARSONandHERON1"] = Math.Round(PEARSONandHERON1, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["PEARSONandHERON2"] = Math.Round(PEARSONandHERON2, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH3"] = Math.Round(SOKALandSNEATH3, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH5"] = Math.Round(SOKALandSNEATH5, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["COLE"] = Math.Round(COLE, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["STILES"] = Math.Round(STILES, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["OCHIAI2"] = Math.Round(OCHIAI2, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["YULEQ"] = Math.Round(YULEQ, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["D_YULEQ"] = Math.Round(-D_YULEQ, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["YULEw"] = Math.Round(YULEw, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["KULCZYNSKI1"] = Math.Round(KULCZYNSKI1, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["TANIMOTO"] = Math.Round(TANIMOTO, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["DISPERSON"] = Math.Round(DISPERSON, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["HAMANN"] = Math.Round(HAMANN, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["MICHAEL"] = Math.Round(MICHAEL, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["GOODMANandKRUSKAL"] = Math.Round(GOODMANandKRUSKAL, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["ANDERBERG"] = Math.Round(ANDERBERG, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["BARONI_URBANIandBUSER1"] = Math.Round(BARONI_URBANIandBUSER1, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["BARONI_URBANIandBUSER2"] = Math.Round(BARONI_URBANIandBUSER2, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["PEIRCE"] = Math.Round(PEIRCE, 5);
-                        dsP.Tables["PSourceCode"].Rows[row]["EYRAUD"] = Math.Round(EYRAUD, 5);
-
+                        //dsP.Tables["PSourceCode"].Rows[row]["RUSSELLandRAO"] = Math.Round(RUSSELLandRAO, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["HAMMING"] = Math.Round(-HAMMING, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["EUCLID"] = Math.Round(-EUCLID, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SQUARED_EUCLID"] = Math.Round(-SQUARED_EUCLID, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["CANBERRA"] = Math.Round(-CANBERRA, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["MANHATTAN"] = Math.Round(-MANHATTAN, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["MEAN_MANHATTAN"] = Math.Round(-MEAN_MANHATTAN, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["CITYBLOCK"] = Math.Round(-CITYBLOCK, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["MINKOWSK"] = Math.Round(-MINKOWSK, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["VARI"] = Math.Round(-VARI, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SIZEDIFFERENCE"] = Math.Round(-SIZEDIFFERENCE, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SHAPEDIFFERENCE"] = Math.Round(-SHAPEDIFFERENCE, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["PATTERNDIFFERENCE"] = Math.Round(-PATTERNDIFFERENCE, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["LANCEandWILLIAMS"] = Math.Round(-LANCEandWILLIAMS, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["BRAYandCURTIS"] = Math.Round(-BRAYandCURTIS, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["HELLINGER"] = Math.Round(-HELLINGER, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["CHORD"] = Math.Round(-CHORD, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["COSINE"] = Math.Round(COSINE, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["GILBERTandWELLS"] = Math.Round(GILBERTandWELLS, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["OCHIAI1"] = Math.Round(OCHIAI1, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["FORBESI"] = Math.Round(FORBESI, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["FOSSUM"] = Math.Round(FOSSUM, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SORGENFREI"] = Math.Round(SORGENFREI, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["MOUNTFORD"] = Math.Round(MOUNTFORD, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["OTSUKA"] = Math.Round(OTSUKA, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["MCCONNAUGHEY"] = Math.Round(MCCONNAUGHEY, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["TARWID"] = Math.Round(TARWID, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["KULCZYNSK2"] = Math.Round(KULCZYNSK2, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["DRIVERandKROEBER"] = Math.Round(DRIVERandKROEBER, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["JOHNSON"] = Math.Round(JOHNSON, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["DENNIS"] = Math.Round(DENNIS, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SIMPSON"] = Math.Round(SIMPSON, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["BRAUNandBANQUET"] = Math.Round(BRAUNandBANQUET, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["FAGERandMCGOWAN"] = Math.Round(FAGERandMCGOWAN, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["FORBES2"] = Math.Round(FORBES2, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH4"] = Math.Round(SOKALandSNEATH4, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["GOWER"] = Math.Round(GOWER, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["PEARSON1"] = Math.Round(PEARSON1, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["PEARSON2"] = Math.Round(PEARSON2, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["PEARSON3"] = Math.Round(PEARSON3, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["PEARSONandHERON1"] = Math.Round(PEARSONandHERON1, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["PEARSONandHERON2"] = Math.Round(PEARSONandHERON2, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH3"] = Math.Round(SOKALandSNEATH3, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["SOKALandSNEATH5"] = Math.Round(SOKALandSNEATH5, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["COLE"] = Math.Round(COLE, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["STILES"] = Math.Round(STILES, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["OCHIAI2"] = Math.Round(OCHIAI2, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["YULEQ"] = Math.Round(YULEQ, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["D_YULEQ"] = Math.Round(-D_YULEQ, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["YULEw"] = Math.Round(YULEw, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["KULCZYNSKI1"] = Math.Round(KULCZYNSKI1, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["TANIMOTO"] = Math.Round(TANIMOTO, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["DISPERSON"] = Math.Round(DISPERSON, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["HAMANN"] = Math.Round(HAMANN, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["MICHAEL"] = Math.Round(MICHAEL, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["GOODMANandKRUSKAL"] = Math.Round(GOODMANandKRUSKAL, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["ANDERBERG"] = Math.Round(ANDERBERG, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["BARONI_URBANIandBUSER1"] = Math.Round(BARONI_URBANIandBUSER1, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["BARONI_URBANIandBUSER2"] = Math.Round(BARONI_URBANIandBUSER2, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["PEIRCE"] = Math.Round(PEIRCE, 5);
+                        //dsP.Tables["PSourceCode"].Rows[row]["EYRAUD"] = Math.Round(EYRAUD, 5);
 
 
 
@@ -5032,88 +4806,6 @@ namespace Fault_Localization_SE_Lab
 
 
 
-
-
-                        //if (ds.Tables["PSourceCode"].Rows[row][al].ToString().Equals(0) || ds.Tables["PSourceCode"].Rows[row][al].ToString().Equals(""))
-                        //{
-                        //    Console.WriteLine(ds.Tables["PSourceCode"].Rows[row][al].ToString());
-                        //    string temp10 = ds.Tables["PSourceCode"].Rows[row][al].ToString();
-                        //    ds.Tables["PSourceCode"].Rows[row][al] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        //}
-                        //else
-                        //{
-                        //    string temp2 = ds.Tables["PSourceCode"].Rows[row][al].ToString();
-                        //    double temp3 = double.Parse(temp2);
-                        //    folumla = folumla + temp3;
-                        //    ds.Tables["PSourceCode"].Rows[row][al] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        // }
-
-
-
-
-
-                        //    if (ds.Tables["PSourceCode"].Rows[row][al].ToString().Equals("0") || ds.Tables["PSourceCode"].Rows[row][al].ToString().Equals(" ") || ds.Tables["PSourceCode"].Rows[row][al].ToString().Equals(""))
-                        //    {
-                        //    }
-                        //    else
-                        //    {
-
-
-                        //        ds.Tables["PSourceCode"].Rows[row][al] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-
-                        //    }
-                        //    if (d == 0 && b == 0 && c == 0 && a == 0)
-                        //    {
-                        //        ds.Tables["PSourceCode"].Rows[row]["unnecessary"] = 1;
-                        //    }
-
-                        //    if (ds.Tables["PSourceCode"].Rows[row]["unnecessary"].ToString() != "1")
-                        //    {
-
-                        //        if (ds.Tables["PSourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //            ds.Tables["PSourceCode"].Rows[row][al] = " ";
-
-                        //        else
-                        //        {
-
-                        //          //  Tarantula_formula = Tarantula_formula / failcount;
-                        //            ds.Tables["PSourceCode"].Rows[row][al] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        //        }
-                        //    }
-
-                        //}
-
-
-                        //if (algorithm.Contains("Tarantula"))
-                        //{
-                        //    try
-                        //    {
-                        //        if ((a + b) == 0)
-                        //            Ldenominator = numerator = 0.0f;
-                        //        else
-                        //            Ldenominator = numerator = (double)a / (a + b);
-                        //        if ((c + d) == 0)
-                        //            Rdenominator = 0.0f;
-                        //        else
-                        //            Rdenominator = (double)c / (c + d);
-
-                        //        if ((Ldenominator + Rdenominator) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)numerator / (Ldenominator + Rdenominator);
-
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Tarantula"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Tarantula"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        //}
 
 
                         if (al == "AMPLE")
@@ -6285,25 +5977,32 @@ namespace Fault_Localization_SE_Lab
                     if (result.Equals("PASS"))
                     {
                         PassTCcount = PassTCcount + 1;
-                        if (mark.Equals(@"1"))
-                        {
+                        if (mark.Equals(@"1")) //●
                             c++;
-                        }
+                        else if (mark.Equals(@""))
+                            d++;
+
                     }
+
+
 
                     else if (result.Equals("FAIL"))
                     {
                         FailTCcount = FailTCcount + 1;
                         if (mark.Equals(@"1")) //●
                             a++;
+                        else if (mark.Equals(@""))
+                            b++;
                     }
-                }
-                d = PassTCcount - c;
-                b = FailTCcount - a;
 
-                if (a == 0 && c == 0)
+                }
+                if (PassTCcount == d && c == 0)
                 {
                     d = 0;
+                }
+
+                if (FailTCcount == b && a == 0)
+                {
                     b = 0;
                 }
 
@@ -6317,2250 +6016,1343 @@ namespace Fault_Localization_SE_Lab
                     ds.Tables["SourceCode"].Rows[row]["unnecessary"] = 1;
                 }
 
-                else
+                if (algorithm.Contains("TARANTULA"))
+                {
+                    try
+                    {
+                        if ((a + b) == 0)
+                            Ldenominator = numerator = 0.0f;
+                        else
+                            Ldenominator = numerator = a / (a + b);
+                        if ((c + d) == 0)
+                            Rdenominator = 0.0f;
+                        else
+                            Rdenominator = c / (c + d);
+
+                        if ((Ldenominator + Rdenominator) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = numerator / (Ldenominator + Rdenominator);
+
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["TARANTULA"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["TARANTULA"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
+                }
+
+
+
+                if (algorithm.Contains("AMPLE"))
+                {
+                    try
+                    {
+                        if ((b + a) == 0)
+                            Ldenominator = 0.0f;
+                        else
+                            Ldenominator = a / (b + a);
+                        if ((d + c) == 0)
+                            Rdenominator = 0.0f;
+                        else
+                            Rdenominator = c / (d + c);
+
+                        folumla = Math.Abs(Ldenominator - Rdenominator);
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["AMPLE"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["AMPLE"] = folumla.ToString("#0.#####");
+
+
+                }
+
+                if (algorithm.Contains("Jaccard"))
+                {
+                    try
+                    {
+                        if ((a + b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (double)a / (a + b + c);
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["Jaccard"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["Jaccard"] = folumla.ToString("#0.#####");
+                }
+
+
+                if (algorithm.Contains("Dice"))
                 {
 
-                    foreach (string al in split_al)
+                    try
+                    {
+                        if ((a + b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = 2 * a / (2 * a + b + c);
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["Dice"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["Dice"] = folumla.ToString("#0.#####");
+
+
+                }
+                if (algorithm.Contains("CZEKANOWSKI"))
+                {
+
+                    try
+                    {
+                        if ((2 * a + b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = 2 * a / (2 * a + b + c);
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["CZEKANOWSKI"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["CZEKANOWSKI"] = folumla.ToString("#0.#####");
+
+
+                }
+                if (algorithm.Contains("_3WJACCARD"))
+                {
+                    try
+                    {
+                        if ((3 * a + b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = 3 * a / (3 * a + b + c);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["_3WJACCARD"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["_3WJACCARD"] = folumla.ToString("#0.#####");
+                }
+                if (algorithm.Contains("NEIandLI"))
+                {
+                    try
+                    {
+                        if (((a + b) + (a + c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = 2 * a / ((a + b) + (a + c));
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["NEIandLI"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["NEIandLI"] = folumla.ToString("#0.#####");
+                }
+                if (algorithm.Contains("SOKALandSNEATH_1"))
+                {
+                    try
+                    {
+                        if ((a + 2 * b + 2 * c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / (a + 2 * b + 2 * c);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH_1"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH_1"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("SOKALandMICHENER"))
+                {
+                    try
+                    {
+                        if ((a + b + c + d) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a + d) / (a + b + c + d);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandMICHENER"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SOKALandMICHENER"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("SOKALandSNEATH2"))
+                {
+                    try
+                    {
+                        if ((2 * a + b + c + 2 * d) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = 2 * (a + d) / (2 * a + b + c + 2 * d);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH2"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH2"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("ROGERandTANIMOTO"))
+                {
+                    try
+                    {
+                        if ((a + 2 * (b + c) + d) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a + d) / (a + 2 * (b + c) + d);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["ROGERandTANIMOTO"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["ROGERandTANIMOTO"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("FAITH"))
+                {
+                    try
+                    {
+                        if ((a + b + c + d) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a + (0.5 * d)) / (a + b + c + d);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FAITH"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["FAITH"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("GOWERandLEGENDRE"))
+                {
+                    try
+                    {
+                        if ((a + 0.5 * (b + c) + d) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a + d) / (a + 0.5 * (b + c) + d);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["GOWERandLEGENDRE"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["GOWERandLEGENDRE"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("INTERSECTION"))
+                {
+                    try
+                    {
+                        folumla = a;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["INTERSECTION"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["INTERSECTION"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("INNERPRODUCT"))
+                {
+                    try
+                    {
+                        folumla = a + d;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["INNERPRODUCT"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["INNERPRODUCT"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("RUSSELLandRAO"))
+                {
+                    try
+                    {
+                        if ((a + b + c + d) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / (a + b + c + d);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["RUSSELLandRAO"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["RUSSELLandRAO"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("HAMMING"))
+                {
+                    try
+                    {
+                        folumla = b + c;
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["HAMMING"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["HAMMING"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("EUCLID"))
+                {
+                    try
+                    {
+                        folumla = Sqrt(b + c);
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["EUCLID"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["EUCLID"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("SQUARED_EUCLID"))
+                {
+                    try
+                    {
+                        folumla = Sqrt(Math.Pow((b + c), 2));
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SQUARED_EUCLID"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SQUARED_EUCLID"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("CANBERRA"))
+                {
+                    try
+                    {
+                        folumla = Math.Pow((b + c), 1);
+                        folumla = 1 / folumla;
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["CANBERRA"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["CANBERRA"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("MANHATTAN"))
+                {
+                    try
+                    {
+                        folumla = b + c;
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MANHATTAN"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["MANHATTAN"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("MEAN_MANHATTAN"))
+                {
+                    try
+                    {
+                        if ((a + b + c + d) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (b + c) / (a + b + c + d);
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MEAN_MANHATTAN"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["MEAN_MANHATTAN"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("CITYBLOCK"))
+                {
+                    try
+                    {
+                        folumla = b + c;
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["CITYBLOCK"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["CITYBLOCK"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("MINKOWSK"))
+                {
+                    try
+                    {
+                        folumla = Math.Pow((b + c), (1));
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MINKOWSK"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["MINKOWSK"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("VARI"))
+                {
+                    try
+                    {
+                        if ((4 * (a + b + c + d)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (b + c) / 4 * (a + b + c + d);
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["VARI"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["VARI"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("SIZEDIFFERENCE"))
+                {
+                    try
+                    {
+                        if (Math.Pow((a + b + c + d), 2) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = Math.Pow((b + c), 2) / Math.Pow((a + b + c + d), 2);
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SIZEDIFFERENCE"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SIZEDIFFERENCE"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("SHAPEDIFFERENCE"))
+                {
+                    try
+                    {
+                        if (Math.Pow((a + b + c + d), 2) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a + b + c + d) * (b + c) - Math.Pow((b - c), 2) / Math.Pow((a + b + c + d), 2);
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SHAPEDIFFERENCE"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SHAPEDIFFERENCE"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("PATTERNDIFFERENCE"))
+                {
+                    try
+                    {
+                        if (Math.Pow((a + b + c + d), 2) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = 4 * b * c / Math.Pow((a + b + c + d), 2);
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PATTERNDIFFERENCE"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["PATTERNDIFFERENCE"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("LANCEandWILLIAMS"))
+                {
+                    try
+                    {
+                        if ((2 * a + b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = b + c / (2 * a + b + c);
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["LANCEandWILLIAMS"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["LANCEandWILLIAMS"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("BRAYandCURTIS"))
+                {
+                    try
+                    {
+                        if ((2 * a + b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = b + c / (2 * a + b + c);
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["BRAYandCURTIS"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["BRAYandCURTIS"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("HELLINGER"))
+                {
+                    try
+                    {
+                        if (Sqrt((a + b) * (a + c)) == 0)
+                            folumla = 2 * Sqrt(1 - 0);
+                        else
+                            folumla = 2 * Sqrt(1 - (a / Sqrt((a + b) * (a + c))));
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["HELLINGER"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["HELLINGER"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("CHORD"))
+                {
+                    try
+                    {
+                        if (Sqrt((a + b) * (a + c)) == 0)
+                            folumla = Sqrt(2 * (1 - 0));
+                        else
+                            folumla = Sqrt(2 * (1 - (a / Sqrt((a + b) * (a + c)))));
+                        folumla = 1 / folumla;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["CHORD"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["CHORD"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("COSINE"))
+                {
+                    try
+                    {
+                        if (Math.Pow(Sqrt((a + b) * (a + c)), 2) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / Math.Pow(Sqrt((a + b) * (a + c)), 2);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["COSINE"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["COSINE"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("GILBERTandWELLS"))
+                {
+                    try
+                    {
+                        if (a == 0)
+                        {
+                            folumla = 0 - Math.Log((a + b + c + d)) - Math.Log((a + b) / (a + b + c + d)) - Math.Log((a + c) / (a + b + c + d));
+                        }
+                        else if ((a + b) == 0)
+                        {
+                            folumla = 0.0f;
+                        }
+                        else if ((a + c) == 0)
+                        {
+                            folumla = 0.0f;
+                        }
+                        else
+                        {
+                            folumla = Math.Log(a) - Math.Log((a + b + c + d)) - Math.Log((a + b) / (a + b + c + d)) - Math.Log((a + c) / (a + b + c + d));
+                        }
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["GILBERTandWELLS"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["GILBERTandWELLS"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("OCHIAI1"))
+                {
+                    try
+                    {
+                        if (Sqrt((a + b) * (a + c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / Sqrt((a + b) * (a + c));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["OCHIAI1"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["OCHIAI1"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("FORBESI"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a + b + c + d) * a / ((a + b) * (a + c));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FORBESI"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["FORBESI"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("FOSSUM"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = ((a + b + c + d) * (Math.Pow((a - 0.5), 2))) / ((a + b) * (a + c));
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FOSSUM"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["FOSSUM"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("SORGENFREI"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = Math.Pow(a, 2) / ((a + b) * (a + c));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SORGENFREI"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SORGENFREI"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("MOUNTFORD"))
+                {
+                    try
+                    {
+                        if (0.5 * ((a * b) + (a * c)) + b * c == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / 0.5 * ((a * b) + (a * c)) + b * c;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MOUNTFORD"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["MOUNTFORD"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("OTSUKA"))
+                {
+                    try
+                    {
+                        if (Math.Pow(((a + b) * (a + c)), 0.5) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / Math.Pow(((a + b) * (a + c)), 0.5);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["OTSUKA"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["OTSUKA"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("MCCONNAUGHEY"))
+                {
+                    try
+                    {
+                        if ((a + b) * (a + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (Math.Pow(a, 2) - (b * c)) / ((a + b) * (a + c));
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MCCONNAUGHEY"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["MCCONNAUGHEY"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("TARWID"))
+                {
+                    try
+                    {
+                        if (((a + b + c + d) * a) + (a + b) * (a + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (((a + b + c + d) * a) - (a + b) * (a + c)) / ((a + b + c + d) * a + (a + b) * (a + c));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["TARWID"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["TARWID"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("KULCZYNSK2"))
+                {
+                    try
+                    {
+                        if ((a + b) * (a + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a / 2) * (2 * a + b + c) / (a + b) * (a + c);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["KULCZYNSK2"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["KULCZYNSK2"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("DRIVERandKROEBER"))
+                {
+                    try
                     {
 
+                        if ((a + b) == 0)
+                            Ldenominator = 0.0f;
+                        else
+                            Ldenominator = 1 / (a + b);
+                        if ((a + c) == 0)
+                            Rdenominator = 0.0f;
+                        else
+                            Rdenominator = 1 / (a + c);
+
+                        if ((Ldenominator + Rdenominator) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a / 2) * (Ldenominator + Rdenominator);
 
-                        if (al == "TARANTULA")
-                        {
-                            try
-                            {
-                                if ((a + b) == 0)
-                                    Ldenominator = numerator = 0.0f;
-                                else
-                                    Ldenominator = numerator = a / (a + b);
-                                if ((c + d) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = c / (c + d);
-
-                                if ((Ldenominator + Rdenominator) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = numerator / (Ldenominator + Rdenominator);
-
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["TARANTULA"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["TARANTULA"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        }
-
-
-
-                        if (al =="AMPLE")
-                        {
-                            try
-                            {
-                                if ((b + a) == 0)
-                                    Ldenominator = 0.0f;
-                                else
-                                    Ldenominator = a / (b + a);
-                                if ((d + c) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = c / (d + c);
-
-                                folumla = Math.Abs(Ldenominator - Rdenominator);
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["AMPLE"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["AMPLE"] = folumla.ToString("#0.#####");
-
-
-                        }
-
-                        if (al =="Jaccard")
-                        {
-                            try
-                            {
-                                if ((a + b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (double)a / (a + b + c);
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["Jaccard"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["Jaccard"] = folumla.ToString("#0.#####");
-                        }
-
-
-                        if (al =="Dice")
-                        {
-
-                            try
-                            {
-                                if ((a + b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = 2 * a / (2 * a + b + c);
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["Dice"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["Dice"] = folumla.ToString("#0.#####");
-
-
-                        }
-                        if (al =="CZEKANOWSKI")
-                        {
-
-                            try
-                            {
-                                if ((2 * a + b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = 2 * a / (2 * a + b + c);
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["CZEKANOWSKI"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["CZEKANOWSKI"] = folumla.ToString("#0.#####");
-
-
-                        }
-                        if (al =="_3WJACCARD")
-                        {
-                            try
-                            {
-                                if ((3 * a + b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = 3 * a / (3 * a + b + c);
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["_3WJACCARD"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["_3WJACCARD"] = folumla.ToString("#0.#####");
-                        }
-                        if (al =="NEIandLI")
-                        {
-                            try
-                            {
-                                if (((a + b) + (a + c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = 2 * a / ((a + b) + (a + c));
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["NEIandLI"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["NEIandLI"] = folumla.ToString("#0.#####");
-                        }
-                        if (al =="SOKALandSNEATH_1")
-                        {
-                            try
-                            {
-                                if ((a + 2 * b + 2 * c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / (a + 2 * b + 2 * c);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH_1"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH_1"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="SOKALandMICHENER")
-                        {
-                            try
-                            {
-                                if ((a + b + c + d) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a + d) / (a + b + c + d);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandMICHENER"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SOKALandMICHENER"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="SOKALandSNEATH2")
-                        {
-                            try
-                            {
-                                if ((2 * a + b + c + 2 * d) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = 2 * (a + d) / (2 * a + b + c + 2 * d);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH2"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH2"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="ROGERandTANIMOTO")
-                        {
-                            try
-                            {
-                                if ((a + 2 * (b + c) + d) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a + d) / (a + 2 * (b + c) + d);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["ROGERandTANIMOTO"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["ROGERandTANIMOTO"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="FAITH")
-                        {
-                            try
-                            {
-                                if ((a + b + c + d) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a + (0.5 * d)) / (a + b + c + d);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FAITH"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["FAITH"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="GOWERandLEGENDRE")
-                        {
-                            try
-                            {
-                                if ((a + 0.5 * (b + c) + d) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a + d) / (a + 0.5 * (b + c) + d);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["GOWERandLEGENDRE"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["GOWERandLEGENDRE"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="INTERSECTION")
-                        {
-                            try
-                            {
-                                folumla = a;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["INTERSECTION"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["INTERSECTION"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="INNERPRODUCT")
-                        {
-                            try
-                            {
-                                folumla = a + d;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["INNERPRODUCT"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["INNERPRODUCT"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="RUSSELLandRAO")
-                        {
-                            try
-                            {
-                                if ((a + b + c + d) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / (a + b + c + d);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["RUSSELLandRAO"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["RUSSELLandRAO"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="HAMMING")
-                        {
-                            try
-                            {
-                                folumla = b + c;
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["HAMMING"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["HAMMING"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="EUCLID")
-                        {
-                            try
-                            {
-                                folumla = Sqrt(b + c);
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["EUCLID"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["EUCLID"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="SQUARED_EUCLID")
-                        {
-                            try
-                            {
-                                folumla = Sqrt(Math.Pow((b + c), 2));
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SQUARED_EUCLID"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SQUARED_EUCLID"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="CANBERRA")
-                        {
-                            try
-                            {
-                                folumla = Math.Pow((b + c), 1);
-                                folumla = 1 / folumla;
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["CANBERRA"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["CANBERRA"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="MANHATTAN")
-                        {
-                            try
-                            {
-                                folumla = b + c;
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MANHATTAN"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["MANHATTAN"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="MEAN_MANHATTAN")
-                        {
-                            try
-                            {
-                                if ((a + b + c + d) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (b + c) / (a + b + c + d);
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MEAN_MANHATTAN"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["MEAN_MANHATTAN"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="CITYBLOCK")
-                        {
-                            try
-                            {
-                                folumla = b + c;
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["CITYBLOCK"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["CITYBLOCK"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="MINKOWSK")
-                        {
-                            try
-                            {
-                                folumla = Math.Pow((b + c), (1));
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MINKOWSK"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["MINKOWSK"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="VARI")
-                        {
-                            try
-                            {
-                                if ((4 * (a + b + c + d)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (b + c) / 4 * (a + b + c + d);
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["VARI"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["VARI"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="SIZEDIFFERENCE")
-                        {
-                            try
-                            {
-                                if (Math.Pow((a + b + c + d), 2) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = Math.Pow((b + c), 2) / Math.Pow((a + b + c + d), 2);
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SIZEDIFFERENCE"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SIZEDIFFERENCE"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="SHAPEDIFFERENCE")
-                        {
-                            try
-                            {
-                                if (Math.Pow((a + b + c + d), 2) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a + b + c + d) * (b + c) - Math.Pow((b - c), 2) / Math.Pow((a + b + c + d), 2);
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SHAPEDIFFERENCE"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SHAPEDIFFERENCE"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="PATTERNDIFFERENCE")
-                        {
-                            try
-                            {
-                                if (Math.Pow((a + b + c + d), 2) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = 4 * b * c / Math.Pow((a + b + c + d), 2);
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PATTERNDIFFERENCE"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["PATTERNDIFFERENCE"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="LANCEandWILLIAMS")
-                        {
-                            try
-                            {
-                                if ((2 * a + b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = b + c / (2 * a + b + c);
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["LANCEandWILLIAMS"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["LANCEandWILLIAMS"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="BRAYandCURTIS")
-                        {
-                            try
-                            {
-                                if ((2 * a + b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = b + c / (2 * a + b + c);
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["BRAYandCURTIS"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["BRAYandCURTIS"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="HELLINGER")
-                        {
-                            try
-                            {
-                                if (Sqrt((a + b) * (a + c)) == 0)
-                                    folumla = 2 * Sqrt(1 - 0);
-                                else
-                                    folumla = 2 * Sqrt(1 - (a / Sqrt((a + b) * (a + c))));
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["HELLINGER"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["HELLINGER"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="CHORD")
-                        {
-                            try
-                            {
-                                if (Sqrt((a + b) * (a + c)) == 0)
-                                    folumla = Sqrt(2 * (1 - 0));
-                                else
-                                    folumla = Sqrt(2 * (1 - (a / Sqrt((a + b) * (a + c)))));
-                                folumla = 1 / folumla;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["CHORD"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["CHORD"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="COSINE")
-                        {
-                            try
-                            {
-                                if (Math.Pow(Sqrt((a + b) * (a + c)), 2) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / Math.Pow(Sqrt((a + b) * (a + c)), 2);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["COSINE"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["COSINE"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="GILBERTandWELLS")
-                        {
-                            try
-                            {
-                                if (a == 0)
-                                {
-                                    folumla = 0 - Math.Log((a + b + c + d)) - Math.Log((a + b) / (a + b + c + d)) - Math.Log((a + c) / (a + b + c + d));
-                                }
-                                else if ((a + b) == 0)
-                                {
-                                    folumla = 0.0f;
-                                }
-                                else if ((a + c) == 0)
-                                {
-                                    folumla = 0.0f;
-                                }
-                                else
-                                {
-                                    folumla = Math.Log(a) - Math.Log((a + b + c + d)) - Math.Log((a + b) / (a + b + c + d)) - Math.Log((a + c) / (a + b + c + d));
-                                }
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["GILBERTandWELLS"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["GILBERTandWELLS"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="OCHIAI1")
-                        {
-                            try
-                            {
-                                if (Sqrt((a + b) * (a + c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / Sqrt((a + b) * (a + c));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["OCHIAI1"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["OCHIAI1"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="FORBESI")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a + b + c + d) * a / ((a + b) * (a + c));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FORBESI"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["FORBESI"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="FOSSUM")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = ((a + b + c + d) * (Math.Pow((a - 0.5), 2))) / ((a + b) * (a + c));
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FOSSUM"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["FOSSUM"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="SORGENFREI")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = Math.Pow(a, 2) / ((a + b) * (a + c));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SORGENFREI"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SORGENFREI"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="MOUNTFORD")
-                        {
-                            try
-                            {
-                                if (0.5 * ((a * b) + (a * c)) + b * c == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / 0.5 * ((a * b) + (a * c)) + b * c;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MOUNTFORD"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["MOUNTFORD"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="OTSUKA")
-                        {
-                            try
-                            {
-                                if (Math.Pow(((a + b) * (a + c)), 0.5) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / Math.Pow(((a + b) * (a + c)), 0.5);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["OTSUKA"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["OTSUKA"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="MCCONNAUGHEY")
-                        {
-                            try
-                            {
-                                if ((a + b) * (a + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (Math.Pow(a, 2) - (b * c)) / ((a + b) * (a + c));
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MCCONNAUGHEY"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["MCCONNAUGHEY"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="TARWID")
-                        {
-                            try
-                            {
-                                if (((a + b + c + d) * a) + (a + b) * (a + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (((a + b + c + d) * a) - (a + b) * (a + c)) / ((a + b + c + d) * a + (a + b) * (a + c));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["TARWID"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["TARWID"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="KULCZYNSK2")
-                        {
-                            try
-                            {
-                                if ((a + b) * (a + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a / 2) * (2 * a + b + c) / (a + b) * (a + c);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["KULCZYNSK2"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["KULCZYNSK2"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="DRIVERandKROEBER")
-                        {
-                            try
-                            {
-
-                                if ((a + b) == 0)
-                                    Ldenominator = 0.0f;
-                                else
-                                    Ldenominator = 1 / (a + b);
-                                if ((a + c) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = 1 / (a + c);
-
-                                if ((Ldenominator + Rdenominator) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a / 2) * (Ldenominator + Rdenominator);
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["DRIVERandKROEBER"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["DRIVERandKROEBER"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="JOHNSON")
-                        {
-                            try
-                            {
-                                if ((a + b) == 0)
-                                    Ldenominator = 0.0f;
-                                else
-                                    Ldenominator = a / (a + b);
-                                if ((a + c) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = a / (a + c);
-
-                                if ((Ldenominator + Rdenominator) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (Ldenominator + Rdenominator);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["JOHNSON"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["JOHNSON"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="DENNIS")
-                        {
-                            try
-                            {
-                                if (((a + b + c + d) * (a + b) * (a + c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a * d - b * c) / (Sqrt((a + b + c + d) * (a + b) * (a + c)));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["DENNIS"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["DENNIS"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="SIMPSON")
-                        {
-                            try
-                            {
-                                if (Math.Min((a + b), (a + c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / Math.Min((a + b), (a + c));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SIMPSON"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SIMPSON"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="BRAUNandBANQUET")
-                        {
-                            try
-                            {
-                                if (Math.Max((a + b), (a + c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / Math.Max((a + b), (a + c));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["BRAUNandBANQUET"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["BRAUNandBANQUET"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="FAGERandMCGOWAN")
-                        {
-                            try
-                            {
-                                if (Sqrt((a + b) * (a + c)) == 0)
-                                    folumla = 0 - (Math.Max((a + b), (a + c)) / 2);
-                                else
-                                    folumla = (a / Sqrt((a + b) * (a + c))) - (Math.Max((a + b), (a + c)) / 2);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FAGERandMCGOWAN"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["FAGERandMCGOWAN"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="FORBES2")
-                        {
-                            try
-                            {
-                                if ((((a + b + c + d) * Math.Min((a + b), (a + c))) - (a + b) * (a + c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (((a + b + c + d) * a) - ((a + b) * (a + c))) / (((a + b + c + d) * Math.Min((a + b), (a + c))) - (a + b) * (a + c));
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FORBES2"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["FORBES2"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="SOKALandSNEATH4")
-                        {
-                            double one = 0;
-                            double two = 0;
-                            double three = 0;
-                            try
-                            {
-                                if ((a + b) == 0)
-                                {
-                                    one = 0;
-                                }
-                                else
-                                {
-                                    one = (a / (a + b));
-                                }
-
-                                if ((a + c) == 0)
-                                {
-                                    two = 0;
-                                }
-                                else
-                                {
-                                    two = (a / (a + c));
-                                }
-
-                                if ((b + d) == 0)
-                                {
-                                    three = 0;
-                                }
-                                else
-                                {
-                                    three = (d / (b + d));
-                                }
-
-                                folumla = (one + two + three + three) / 4;
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH4"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH4"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="GOWER")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a + d) / Sqrt((a + b) * (a + c) * (b + d) * (c + d));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["GOWER"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["GOWER"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="PEARSON1")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c) * (c + d) * (b + d)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (((a + b + c + d) * Math.Pow((a * d - b * c), 2)) / ((a + b) * (a + c) * (c + d) * (b + d)));
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSON1"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["PEARSON1"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="PEARSON2")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c) * (c + d) * (b + d)) == 0)
-                                    folumla = 0.0f;
-                                else if ((a * d - b * c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = Math.Pow((((a + b + c + d) * Math.Pow((a * d - b * c), 2)) / ((a + b) * (a + c) * (c + d) * (b + d))) / ((a + b + c + d) + (((a + b + c + d) * Math.Pow((a * d - b * c), 2)) / ((a + b) * (a + c) * (c + d) * (b + d)))), (1 / 2));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSON2"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["PEARSON2"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="PEARSON3")
-                        {
-
-                            try
-                            {
-                                if (((a + b) * (a + c) * (c + d) * (b + d)) == 0)
-                                {
-                                    folumla = 0.0f;
-                                }
-                                else if (Sqrt(a + b) * (a + c) * (b + d) * (c + d) == 0)
-                                {
-                                    folumla = 0.0f;
-                                }
-                                else if ((a * d - b * c) == 0)
-                                {
-                                    folumla = 0.0f;
-                                }
-                                else
-                                {
-                                    if (((((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d)))) / ((a + b + c + d) + (((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d)))))) < 0)
-                                    {
-                                        double temp = -((((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d)))) / ((a + b + c + d) + (((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d))))));
-                                        // Logger.WriteLine("temp:" + temp);
-
-                                        folumla = Math.Pow(temp, 0.5);
-                                        // Logger.WriteLine("PEARSON3folumla:" + PEARSON3folumla);
-                                        folumla = -folumla;
-                                        // Logger.WriteLine("PEARSON3folumla2:" + PEARSON3folumla);
-                                    }
-                                    else
-                                    {
-                                        folumla = Math.Pow((((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d)))) / ((a + b + c + d) + (((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d))))), 0.5);
-                                    }
-
-                                }
-
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSON3"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["PEARSON3"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="PEARSONandHERON1")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d))));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSONandHERON1"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["PEARSONandHERON1"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="PEARSONandHERON2")
-                        {
-                            try
-                            {
-                                if ((a * d) == 0)
-                                    folumla = 0.0f;
-                                else if ((b * c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = Math.Cos((Math.PI * Sqrt(b * c)) / (Sqrt(a * d) + Sqrt(b * c)));
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSONandHERON2"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["PEARSONandHERON2"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="SOKALandSNEATH3")
-                        {
-                            try
-                            {
-                                if ((b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a + d) / (b + c);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH3"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH3"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="SOKALandSNEATH5")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a * d / ((a + b) * (a + c) * (b + d) * Math.Pow((c + d), 0.5));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH5"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH5"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="COLE")
-                        {
-                            try
-                            {
-                                if ((Math.Pow((a * d - b * c), 2) - ((a + b) * (a + c) * (b + d) * (c + d))) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (Sqrt(2) * ((a * d - b * c))) / (Sqrt(Math.Pow((a * d - b * c), 2) - ((a + b) * (a + c) * (b + d) * (c + d))));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["COLE"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["COLE"] = folumla.ToString("#0.#####");
-                        }
-
-
-                        if (al =="STILES")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
-                                    folumla = 0.0f;
-                                else if (Math.Pow((Math.Abs(a * d - b * c) - ((a + b + c + d) / 2)), 2) / ((a + b) * (a + c) * (b + d) * (c + d)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = Math.Log10(((a + b + c + d) * Math.Pow((Math.Abs(a * d - b * c) - ((a + b + c + d) / 2)), 2)) / ((a + b) * (a + c) * (b + d) * (c + d)));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["STILES"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["STILES"] = folumla.ToString("#0.#####");
-                        }
-
-
-                        if (al =="OCHIAI2")
-                        {
-                            try
-                            {
-                                if ((a * d + b * c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a * d - b * c) / (a * d + b * c);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["OCHIAI2"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["OCHIAI2"] = folumla.ToString("#0.#####");
-                        }
-
-
-                        if (al =="YULEQ")
-                        {
-                            try
-                            {
-                                if ((a * d + b * c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a * d - b * c) / (a * d + b * c);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["YULEQ"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["YULEQ"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="D_YULEQ")
-                        {
-                            try
-                            {
-                                if ((a * d + b * c) == 0)
-                                    folumla = 0.0f;
-                                else if (b * c == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = 2 * b * c / (a * d + b * c);
-                                folumla = 1 / folumla;
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["D_YULEQ"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["D_YULEQ"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-                        if (al =="YULEw")
-                        {
-                            try
-                            {
-                                if ((Sqrt(a * d) + Sqrt(b * c)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (Sqrt(a * d) - Sqrt(b * c)) / (Sqrt(a * d) + Sqrt(b * c));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["YULEw"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["YULEw"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="KULCZYNSKI1")
-                        {
-                            try
-                            {
-                                if ((b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / (b + c);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["KULCZYNSKI1"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["KULCZYNSKI1"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="TANIMOTO")
-                        {
-                            try
-                            {
-                                if (((a + b) + (a + c) - a) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = a / ((a + b) + (a + c) - a);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["TANIMOTO"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["TANIMOTO"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="DISPERSON")
-                        {
-                            try
-                            {
-                                if ((Math.Pow((a + b + c + d), 2)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a * d - b * c) / (Math.Pow((a + b + c + d), 2));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["DISPERSON"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["DISPERSON"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="HAMANN")
-                        {
-                            try
-                            {
-                                if ((a + b + c + d) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = ((a + d) - (b + c)) / (a + b + c + d);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["HAMANN"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["HAMANN"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="MICHAEL")
-                        {
-                            try
-                            {
-                                if ((Math.Pow((a + d), 2) + Math.Pow((b + c), 2)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = 4 * (a * d - b * c) / (Math.Pow((a + d), 2) + Math.Pow((b + c), 2));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MICHAEL"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["MICHAEL"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="GOODMANandKRUSKAL")
-                        {
-                            try
-                            {
-                                if ((2 * (a + b + c + d) - (Math.Max(a + c, b + d) + Math.Max(a + b, c + d))) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = ((Math.Max(a, b) + Math.Max(c, d) + Math.Max(a, c) + Math.Max(b, d)) - (Math.Max(a + c, b + d) + Math.Max(a + b, c + d))) / (2 * (a + b + c + d) - (Math.Max(a + c, b + d) + Math.Max(a + b, c + d)));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["GOODMANandKRUSKAL"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["GOODMANandKRUSKAL"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="ANDERBERG")
-                        {
-                            try
-                            {
-                                if ((2 * (a + b + c + d)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = ((Math.Max(a, b) + Math.Max(c, d) + Math.Max(a, c) + Math.Max(b, d)) - (Math.Max(a + c, b + d) + Math.Max(a + b, c + d))) / (2 * (a + b + c + d));
-
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["ANDERBERG"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["ANDERBERG"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="BARONI_URBANIandBUSER1")
-                        {
-                            try
-                            {
-                                if ((Sqrt(a * d) + a + b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (Sqrt(a * d) + a) / (Sqrt(a * d) + a + b + c);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["BARONI_URBANIandBUSER1"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["BARONI_URBANIandBUSER1"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (al =="BARONI_URBANIandBUSER2")
-                        {
-                            try
-                            {
-                                if ((Sqrt(a * d) + a + b + c) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (Sqrt(a * d) + a - (b + c)) / (Sqrt(a * d) + a + b + c);
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["BARONI_URBANIandBUSER2"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["BARONI_URBANIandBUSER2"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="PEIRCE")
-                        {
-                            try
-                            {
-                                if (((a * b) + (2 * b * c) + (c * d)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (a * b + b * c) / ((a * b) + (2 * b * c) + (c * d));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEIRCE"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["PEIRCE"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-                        if (al =="EYRAUD")
-                        {
-                            try
-                            {
-                                if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
-                                    folumla = 0.0f;
-                                else
-                                    folumla = (Math.Pow((a + b + c + d), 2) * ((a + b + c + d) * a - (a + b) * (a + c))) / ((a + b) * (a + c) * (b + d) * (c + d));
-                            }
-                            catch (System.Exception ex) { folumla = 0.0f; }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["EYRAUD"] = " ";
-                            else ds.Tables["SourceCode"].Rows[row]["EYRAUD"] = folumla.ToString("#0.#####");
-                        }
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-                        //algorithms
-
-                        //if (al =="Tarantula")
-                        //{
-                        //    try
-                        //    {
-                        //        if ((a + b) == 0)
-                        //            Ldenominator = numerator = 0.0f;
-                        //        else
-                        //            Ldenominator = numerator = (double)a / (a + b);
-                        //        if ((c + d) == 0)
-                        //            Rdenominator = 0.0f;
-                        //        else
-                        //            Rdenominator = (double)c / (c + d);
-
-                        //        if ((Ldenominator + Rdenominator) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)numerator / (Ldenominator + Rdenominator);
-
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Tarantula"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Tarantula"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
-                        //}
-
-
-
-                        //if (al =="AMPLE")
-                        //{
-                        //    try
-                        //    {
-                        //        if ((b + a) == 0)
-                        //            Ldenominator = 0.0f;
-                        //        else
-                        //            Ldenominator = (double)a / (b + a);
-                        //        if ((d + c) == 0)
-                        //            Rdenominator = 0.0f;
-                        //        else
-                        //            Rdenominator = (double)c / (d + c);
-
-                        //        folumla = Math.Abs(Ldenominator - Rdenominator);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["AMPLE"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["AMPLE"] = folumla.ToString("#0.#####");
-
-
-                        //}
-
-
-                        //if (al =="Jaccard")
-                        //{
-
-                        //    try
-                        //    {
-                        //        if ((a + b + c) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)a / (a + b + c);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Jaccard"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Jaccard"] = folumla.ToString("#0.#####");
-
-
-                        //}
-
-
-
-
-                        if (al =="SEM1")
-                        {
-                            try
-                            {
-
-
-                                if ((b + a) == 0)
-                                    Ldenominator = 0.0f;
-                                else
-                                    Ldenominator = (double)a / (b + a);
-                                if ((d + c) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = (double)c / (d + c);
-                                if ((a + c) == 0)
-                                    temp1 = 0.0f;
-                                else
-                                    temp1 = a / (a + c);
-
-                                folumla = temp1 * (Math.Abs(Ldenominator - Rdenominator));
-
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["SEM1"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["SEM1"] = folumla.ToString("#0.#####");
-                        }
-
-
-                        if (al =="SEM2")
-
-                        {
-                            try
-                            {
-                                if ((b + a) == 0)
-                                    Ldenominator = 0.0f;
-                                else
-                                    Ldenominator = (double)a / (b + a);
-                                if ((d + c) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = (double)c / (d + c);
-
-                                folumla = Ldenominator - Rdenominator;
-
-                                if (folumla <= 0)
-                                {
-                                    folumla = 0.0f;
-                                }
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["SEM2"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["SEM2"] = folumla.ToString("#0.#####");
-                        }
-
-                        if (al =="SEM3")
-                        {
-                            try
-                            {
-
-                                if ((b + a) == 0)
-                                    Ldenominator = 0.0f;
-                                else
-                                    Ldenominator = (double)a / (b + a);
-                                if ((d + c) == 0)
-                                    Rdenominator = 0.0f;
-                                else
-                                    Rdenominator = (double)c / (d + c);
-                                if ((a + c) == 0)
-                                    temp2 = 0.0f;
-                                else
-                                    temp2 = a / (a + c);
-
-
-                                folumla = temp2 * (Ldenominator - Rdenominator);
-
-
-                                if (folumla <= 0 || a == 0)
-                                {
-                                    folumla = 0.0f;
-                                }
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["SEM3"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["SEM3"] = folumla.ToString("#0.#####");
-                        }
-                        if (al =="Naish")
-
-                        {
-                            try
-                            {
-
-                                folumla = (double)a - ((double)c / (c + d + 1));
-
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["Naish"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["Naish"] = folumla.ToString("#0.#####"); //(double)Math.Round(folumla, 5);
-
-
-                        }
-                        //if (al =="Ochiai")
-
-                        //{
-                        //    try
-                        //    {
-                        //        if ((Math.Sqrt((a + b) * (a + c))) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)a / Math.Sqrt((a + b) * (a + c));
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Ochiai"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Ochiai"] = folumla.ToString("#0.#####");
-                        //}
-
-                        //if (al =="Zoltar")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((double)(a + b + c + ((10000 * b * c) / a)) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)a / (a + b + c + ((10000 * b * c) / a));
-
-
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Zoltar"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Zoltar"] = folumla.ToString("#0.#####");
-                        //}
-                        //if (al =="Kulczynski2")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((b + a) == 0)
-                        //            Ldenominator = 0.0f;
-                        //        else
-                        //            Ldenominator = (double)a / (b + a);
-
-                        //        if ((a + c) == 0)
-                        //            Rdenominator = 0.0f;
-                        //        else
-                        //            Rdenominator = (double)a / (a + c);
-
-                        //        folumla = (double)(Ldenominator + Rdenominator) / 2;
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Kulczynski2"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Kulczynski2"] = folumla.ToString("#0.#####");
-                        //}
-
-                        //if (al =="Anderberg")
-
-                        //{
-                        //    try
-                        //    {
-                        //        if ((a + 2 * (b + c)) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)a / (a + 2 * (b + c));
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Anderberg"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Anderberg"] = folumla.ToString("#0.#####");
-                        //}
-
-                        //if (al =="M1")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((b + c) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(a + d) / (b + c);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["M1"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["M1"] = folumla.ToString("#0.#####");
-                        //}
-
-                        //if (al =="M2")
-
-                        //{
-                        //    try
-                        //    {
-                        //        if ((a + d + 2 * (b + c)) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)a / (a + d + 2 * (b + c));
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["M2"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["M2"] = folumla.ToString("#0.#####");
-                        //}
-                        //if (al =="Dice")
-
-                        //{
-                        //    try
-                        //    {
-                        //        if ((a + b + c) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(2 * a) / (a + b + c);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Dice"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Dice"] = folumla.ToString("#0.#####");
-                        //}
-                        //if (al =="PS")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        if (((a + c + b + d)) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)-((4 * c * b) / ((a + c + b + d) * (a + c + b + d)));
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["PS"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["PS"] = folumla.ToString("#0.#####");
-                        //}
-
-                        //if (al =="Wong1")
-
-                        //{
-                        //    try
-                        //    {
-                        //        folumla = a;
-
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Wong1"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Wong1"] = folumla.ToString("#0.#####");
-                        //}
-
-                        if (al =="Wong2")
-
-                        {
-                            try
-                            {
-
-                                folumla = (double)a - c;
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["Wong2"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["Wong2"] = folumla.ToString("#0.#####");
-                        }
-
-                        if (al =="Wong3")
-
-                        {
-                            try
-                            {
-                                if (c <= 2)
-                                {
-                                    folumla = (double)(a - c);
-                                }
-                                else if (2 < c && c <= 10)
-                                {
-                                    folumla = (double)a - (2 + (0.1 * (c - 2)));
-                                }
-                                else if (c > 10)
-                                {
-                                    folumla = (double)a - (2.8 + (0.001 * (c - 10)));
-                                }
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["Wong3"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["Wong3"] = folumla.ToString("#0.#####");
-                        }
-
-
-                        if (al =="GP08")
-
-                        {
-                            try
-                            {
-                                folumla = (double)a * a * ((2 * c) + (2 * a) + (3 * d));
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["GP08"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["GP08"] = folumla.ToString("#0.#####");
-                        }
-                        if (al =="GP10")
-
-                        {
-                            try
-                            {
-                                folumla = (double)Math.Sqrt(Math.Abs(a - (1 / d)));
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["GP10"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["GP10"] = folumla.ToString("#0.#####");
-                        }
-
-                        if (al =="GP11")
-
-                        {
-                            try
-                            {
-                                folumla = (double)(a * a) * ((a * a) + (Math.Sqrt(d)));
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["GP11"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["GP11"] = folumla.ToString("#0.#####");
-                        }
-                        if (al =="GP13")
-
-                        {
-                            try
-                            {
-                                folumla = (double)a * (1 + (1 / ((2 * c) + a)));
-
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["GP13"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["GP13"] = folumla.ToString("#0.#####");
-                        }
-
-                        if (al =="GP20")
-
-                        {
-                            try
-                            {
-                                if ((c + d) == 0)
-                                    folumla = (double)2 * (a + 0);
-                                else
-                                    folumla = (double)2 * (a + (d / (c + d)));
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["GP20"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["GP20"] = folumla.ToString("#0.#####");
-                        }
-
-                        if (al =="GP26")
-
-                        {
-                            try
-                            {
-
-                                folumla = (double)(2 * a) * (2 * a) + (Math.Sqrt(d));
-
-                            }
-                            catch (System.Exception ex)
-                            {
-                                folumla = 0.0f;
-                            }
-                            if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                                ds.Tables["SourceCode"].Rows[row]["GP26"] = " ";
-                            else
-                                ds.Tables["SourceCode"].Rows[row]["GP26"] = folumla.ToString("#0.#####");
-                        }
-
-
-                        //if (al =="SorensenDice")
-
-                        //{
-                        //    try
-                        //    {
-                        //        if ((2 * a + b + c) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)2 * a / (2 * a + b + c);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["SorensenDice"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["SorensenDice"] = folumla.ToString("#0.#####");
-                        //}
-
-
-
-
-
-
-
-                        //if (al =="SimpleMatching")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((a + b + c + d) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(a + d) / (a + b + c + d);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["SimpleMatching"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["SimpleMatching"] = folumla.ToString("#0.#####");
-                        //}
-
-                        //if (al =="Sokal")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((2 * (a + d) + b + c) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)2 * (a + d) / (2 * (a + d) + b + c);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Sokal"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Sokal"] = folumla.ToString("#0.#####");
-                        //}
-                        //if (al =="RogersTanimoto")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((a + d + 2 * (b + c) == 0))
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(a + d) / (a + d + 2 * (b + c));
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["RogersTanimoto"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["RogersTanimoto"] = folumla.ToString("#0.#####");
-                        //}
-
-                        //if (al =="Goodman")
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((2 * a + b + c) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(2 * a - b - c) / (2 * a + b + c);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Goodman"] = " ";
-                        //    else
-                        //    {
-                        //        folumla = folumla + 1;
-                        //        ds.Tables["SourceCode"].Rows[row]["Goodman"] = folumla.ToString("#0.#####");
-                        //    }
-
-                        //}
-
-
-                        //if (al =="Hammingetc")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        folumla = (double)a + d;
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Hammingetc"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Hammingetc"] = folumla.ToString("#0.#####");
-                        //}
-
-
-                        //if (al =="Euclid")
-                        //{
-                        //    try
-                        //    {
-                        //        folumla = (double)Math.Sqrt(a + d);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Euclid"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Euclid"] = folumla.ToString("#0.#####");
-                        //}
-
-
-
-
-
-                        //if (al =="Hamann")
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((a + b + c + d) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(a + d - b - c) / (a + b + c + d);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Hamann"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Hamann"] = folumla.ToString("#0.#####");
-                        //}
-
-
-
-
-                        //if (al =="RussellandRao")
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((a + b + c + d) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)a / (a + b + c + d);
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["RussellandRao"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["RussellandRao"] = folumla.ToString("#0.#####");
-                        //}
-                        //if (al =="Cohen")
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((((a + c) * (d + c)) + ((a + b) * (b + d))) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(2 * a * d) - (2 * b * c) / (((a + c) * (d + c)) + ((a + b) * (b + d)));
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Cohen"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Cohen"] = folumla.ToString("#0.#####");
-                        //}
-
-
-                        //if (al =="GeometricMean")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        if (Math.Sqrt((a + c) * (d + b) * (a + b) * (c + d)) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(a * d) - (b * c) / Math.Sqrt((a + c) * (d + b) * (a + b) * (c + d));
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["GeometricMean"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["GeometricMean"] = folumla.ToString("#0.#####");
-                        //}
-
-                        //if (al =="HarmonicMean")
-
-                        //{
-                        //    try
-                        //    {
-
-                        //        if (((a + c) * (d + b) * (a + b) * (c + d)) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(a * d - b * c) * (((a + c) * (d + b) + (a + b) * (c + d))) / ((a + c) * (d + b) * (a + b) * (c + d));
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["HarmonicMean"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["HarmonicMean"] = folumla.ToString("#0.#####");
-                        //}
-                        //if (al =="ArithmeticMean")
-                        //{
-                        //    try
-                        //    {
-
-                        //        if (((a + c) * (d + b) + (a + b) * (c + d)) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(2 * a * d - 2 * b * c) / ((a + c) * (d + b) + (a + b) * (c + d));
-
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["ArithmeticMean"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["ArithmeticMean"] = folumla.ToString("#0.#####");
-                        //}
-
-
-                        //if (al =="Rogot1")
-                        //{
-                        //    try
-                        //    {
-
-                        //        if ((2 * a + b + c) == 0)
-                        //            Ldenominator = 0.0f;
-                        //        else
-                        //            Ldenominator = (double)a / (2 * a + b + c);
-                        //        if ((2 * d + b + c) == 0)
-                        //            Rdenominator = 0.0f;
-                        //        else
-                        //            Rdenominator = (double)d / (2 * d + b + c);
-
-                        //        if ((Ldenominator + Rdenominator) == 0)
-                        //            folumla = 0.0f;
-                        //        else
-                        //            folumla = (double)(Ldenominator + Rdenominator) / 2;
-
-
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        folumla = 0.0f;
-                        //    }
-                        //    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
-                        //        ds.Tables["SourceCode"].Rows[row]["Rogot1"] = " ";
-                        //    else
-                        //        ds.Tables["SourceCode"].Rows[row]["Rogot1"] = folumla.ToString("#0.#####");
-                        //}
                     }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["DRIVERandKROEBER"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["DRIVERandKROEBER"] = folumla.ToString("#0.#####");
                 }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("JOHNSON"))
+                {
+                    try
+                    {
+                        if ((a + b) == 0)
+                            Ldenominator = 0.0f;
+                        else
+                            Ldenominator = a / (a + b);
+                        if ((a + c) == 0)
+                            Rdenominator = 0.0f;
+                        else
+                            Rdenominator = a / (a + c);
+
+                        if ((Ldenominator + Rdenominator) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (Ldenominator + Rdenominator);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["JOHNSON"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["JOHNSON"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("DENNIS"))
+                {
+                    try
+                    {
+                        if (((a + b + c + d) * (a + b) * (a + c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a * d - b * c) / (Sqrt((a + b + c + d) * (a + b) * (a + c)));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["DENNIS"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["DENNIS"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("SIMPSON"))
+                {
+                    try
+                    {
+                        if (Math.Min((a + b), (a + c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / Math.Min((a + b), (a + c));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SIMPSON"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SIMPSON"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("BRAUNandBANQUET"))
+                {
+                    try
+                    {
+                        if (Math.Max((a + b), (a + c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / Math.Max((a + b), (a + c));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["BRAUNandBANQUET"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["BRAUNandBANQUET"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("FAGERandMCGOWAN"))
+                {
+                    try
+                    {
+                        if (Sqrt((a + b) * (a + c)) == 0)
+                            folumla = 0 - (Math.Max((a + b), (a + c)) / 2);
+                        else
+                            folumla = (a / Sqrt((a + b) * (a + c))) - (Math.Max((a + b), (a + c)) / 2);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FAGERandMCGOWAN"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["FAGERandMCGOWAN"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("FORBES2"))
+                {
+                    try
+                    {
+                        if ((((a + b + c + d) * Math.Min((a + b), (a + c))) - (a + b) * (a + c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (((a + b + c + d) * a) - ((a + b) * (a + c))) / (((a + b + c + d) * Math.Min((a + b), (a + c))) - (a + b) * (a + c));
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["FORBES2"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["FORBES2"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("SOKALandSNEATH4"))
+                {
+                    double one = 0;
+                    double two = 0;
+                    double three = 0;
+                    try
+                    {
+                        if ((a + b) == 0)
+                        {
+                            one = 0;
+                        }
+                        else
+                        {
+                            one = (a / (a + b));
+                        }
+
+                        if ((a + c) == 0)
+                        {
+                            two = 0;
+                        }
+                        else
+                        {
+                            two = (a / (a + c));
+                        }
+
+                        if ((b + d) == 0)
+                        {
+                            three = 0;
+                        }
+                        else
+                        {
+                            three = (d / (b + d));
+                        }
+
+                        folumla = (one + two + three + three) / 4;
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH4"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH4"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("GOWER"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a + d) / Sqrt((a + b) * (a + c) * (b + d) * (c + d));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["GOWER"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["GOWER"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("PEARSON1"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c) * (c + d) * (b + d)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (((a + b + c + d) * Math.Pow((a * d - b * c), 2)) / ((a + b) * (a + c) * (c + d) * (b + d)));
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSON1"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["PEARSON1"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("PEARSON2"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c) * (c + d) * (b + d)) == 0)
+                            folumla = 0.0f;
+                        else if ((a * d - b * c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = Math.Pow((((a + b + c + d) * Math.Pow((a * d - b * c), 2)) / ((a + b) * (a + c) * (c + d) * (b + d))) / ((a + b + c + d) + (((a + b + c + d) * Math.Pow((a * d - b * c), 2)) / ((a + b) * (a + c) * (c + d) * (b + d)))), (1 / 2));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSON2"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["PEARSON2"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("PEARSON3"))
+                {
+
+                    try
+                    {
+                        if (((a + b) * (a + c) * (c + d) * (b + d)) == 0)
+                        {
+                            folumla = 0.0f;
+                        }
+                        else if (Sqrt(a + b) * (a + c) * (b + d) * (c + d) == 0)
+                        {
+                            folumla = 0.0f;
+                        }
+                        else if ((a * d - b * c) == 0)
+                        {
+                            folumla = 0.0f;
+                        }
+                        else
+                        {
+                            if (((((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d)))) / ((a + b + c + d) + (((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d)))))) < 0)
+                            {
+                                double temp = -((((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d)))) / ((a + b + c + d) + (((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d))))));
+                                // Logger.WriteLine("temp:" + temp);
+
+                                folumla = Math.Pow(temp, 0.5);
+                                // Logger.WriteLine("PEARSON3folumla:" + PEARSON3folumla);
+                                folumla = -folumla;
+                                // Logger.WriteLine("PEARSON3folumla2:" + PEARSON3folumla);
+                            }
+                            else
+                            {
+                                folumla = Math.Pow((((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d)))) / ((a + b + c + d) + (((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d))))), 0.5);
+                            }
+
+                        }
+
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSON3"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["PEARSON3"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("PEARSONandHERON1"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (((a * d - b * c) / Sqrt((a + b) * (a + c) * (b + d) * (c + d))));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSONandHERON1"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["PEARSONandHERON1"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("PEARSONandHERON2"))
+                {
+                    try
+                    {
+                        if ((a * d) == 0)
+                            folumla = 0.0f;
+                        else if ((b * c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = Math.Cos((Math.PI * Sqrt(b * c)) / (Sqrt(a * d) + Sqrt(b * c)));
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEARSONandHERON2"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["PEARSONandHERON2"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("SOKALandSNEATH3"))
+                {
+                    try
+                    {
+                        if ((b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a + d) / (b + c);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH3"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH3"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("SOKALandSNEATH5"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a * d / ((a + b) * (a + c) * (b + d) * Math.Pow((c + d), 0.5));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH5"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["SOKALandSNEATH5"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("COLE"))
+                {
+                    try
+                    {
+                        if ((Math.Pow((a * d - b * c), 2) - ((a + b) * (a + c) * (b + d) * (c + d))) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (Sqrt(2) * ((a * d - b * c))) / (Sqrt(Math.Pow((a * d - b * c), 2) - ((a + b) * (a + c) * (b + d) * (c + d))));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["COLE"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["COLE"] = folumla.ToString("#0.#####");
+                }
+
+
+                if (algorithm.Contains("STILES"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
+                            folumla = 0.0f;
+                        else if (Math.Pow((Math.Abs(a * d - b * c) - ((a + b + c + d) / 2)), 2) / ((a + b) * (a + c) * (b + d) * (c + d)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = Math.Log10(((a + b + c + d) * Math.Pow((Math.Abs(a * d - b * c) - ((a + b + c + d) / 2)), 2)) / ((a + b) * (a + c) * (b + d) * (c + d)));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["STILES"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["STILES"] = folumla.ToString("#0.#####");
+                }
+
+
+                if (algorithm.Contains("OCHIAI2"))
+                {
+                    try
+                    {
+                        if ((a * d + b * c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a * d - b * c) / (a * d + b * c);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["OCHIAI2"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["OCHIAI2"] = folumla.ToString("#0.#####");
+                }
+
+
+                if (algorithm.Contains("YULEQ"))
+                {
+                    try
+                    {
+                        if ((a * d + b * c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a * d - b * c) / (a * d + b * c);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["YULEQ"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["YULEQ"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("D_YULEQ"))
+                {
+                    try
+                    {
+                        if ((a * d + b * c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = 2 * b * c / (a * d + b * c);
+                        folumla = 1 / folumla;
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["D_YULEQ"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["D_YULEQ"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+                if (algorithm.Contains("YULEw"))
+                {
+                    try
+                    {
+                        if ((Sqrt(a * d) + Sqrt(b * c)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (Sqrt(a * d) - Sqrt(b * c)) / (Sqrt(a * d) + Sqrt(b * c));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["YULEw"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["YULEw"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("KULCZYNSKI1"))
+                {
+                    try
+                    {
+                        if ((b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / (b + c);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["KULCZYNSKI1"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["KULCZYNSKI1"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("TANIMOTO"))
+                {
+                    try
+                    {
+                        if (((a + b) + (a + c) - a) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = a / ((a + b) + (a + c) - a);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["TANIMOTO"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["TANIMOTO"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("DISPERSON"))
+                {
+                    try
+                    {
+                        if ((Math.Pow((a + b + c + d), 2)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a * d - b * c) / (Math.Pow((a + b + c + d), 2));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["DISPERSON"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["DISPERSON"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("HAMANN"))
+                {
+                    try
+                    {
+                        if ((a + b + c + d) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = ((a + d) - (b + c)) / (a + b + c + d);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["HAMANN"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["HAMANN"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("MICHAEL"))
+                {
+                    try
+                    {
+                        if ((Math.Pow((a + d), 2) + Math.Pow((b + c), 2)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = 4 * (a * d - b * c) / (Math.Pow((a + d), 2) + Math.Pow((b + c), 2));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["MICHAEL"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["MICHAEL"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("GOODMANandKRUSKAL"))
+                {
+                    try
+                    {
+                        if ((2 * (a + b + c + d) - (Math.Max(a + c, b + d) + Math.Max(a + b, c + d))) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = ((Math.Max(a, b) + Math.Max(c, d) + Math.Max(a, c) + Math.Max(b, d)) - (Math.Max(a + c, b + d) + Math.Max(a + b, c + d))) / (2 * (a + b + c + d) - (Math.Max(a + c, b + d) + Math.Max(a + b, c + d)));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["GOODMANandKRUSKAL"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["GOODMANandKRUSKAL"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("ANDERBERG"))
+                {
+                    try
+                    {
+                        if ((2 * (a + b + c + d)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = ((Math.Max(a, b) + Math.Max(c, d) + Math.Max(a, c) + Math.Max(b, d)) - (Math.Max(a + c, b + d) + Math.Max(a + b, c + d))) / (2 * (a + b + c + d));
+
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["ANDERBERG"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["ANDERBERG"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("BARONI_URBANIandBUSER1"))
+                {
+                    try
+                    {
+                        if ((Sqrt(a * d) + a + b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (Sqrt(a * d) + a) / (Sqrt(a * d) + a + b + c);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["BARONI_URBANIandBUSER1"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["BARONI_URBANIandBUSER1"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("BARONI_URBANIandBUSER2"))
+                {
+                    try
+                    {
+                        if ((Sqrt(a * d) + a + b + c) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (Sqrt(a * d) + a - (b + c)) / (Sqrt(a * d) + a + b + c);
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["BARONI_URBANIandBUSER2"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["BARONI_URBANIandBUSER2"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("PEIRCE"))
+                {
+                    try
+                    {
+                        if (((a * b) + (2 * b * c) + (c * d)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (a * b + b * c) / ((a * b) + (2 * b * c) + (c * d));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["PEIRCE"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["PEIRCE"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                if (algorithm.Contains("EYRAUD"))
+                {
+                    try
+                    {
+                        if (((a + b) * (a + c) * (b + d) * (c + d)) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (Math.Pow((a + b + c + d), 2) * ((a + b + c + d) * a - (a + b) * (a + c))) / ((a + b) * (a + c) * (b + d) * (c + d));
+                    }
+                    catch (System.Exception ex) { folumla = 0.0f; }
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1") ds.Tables["SourceCode"].Rows[row]["EYRAUD"] = " ";
+                    else ds.Tables["SourceCode"].Rows[row]["EYRAUD"] = folumla.ToString("#0.#####");
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
             }
 
 
@@ -8594,28 +7386,10 @@ namespace Fault_Localization_SE_Lab
                 ds.Tables["SourceCode"].Columns.Add("a");
                 ds.Tables["SourceCode"].Columns.Add("unnecessary");
 
-
-                /*        for (int i = 1; i < failcount+1; i++)
-                        {
-                              foreach (string al in split_al)
-                              {
-
-                              ds.Tables["SourceCode"].Columns.Add(al, typeof(string));
-                              ds.Tables["SourceCode"].Columns.Add(al + "_Rank", typeof(string));
-
-                                 }
-                      }
-
-                  }
-
-      */
-
                 foreach (string al in split_al)
                 {
                     ds.Tables["SourceCode"].Columns.Add(al, typeof(string));
                     ds.Tables["SourceCode"].Columns.Add(al + "_Rank", typeof(string));
-                    //col_idx_fld = ds.Tables["SourceCode"].Columns[al].Ordinal;
-                    //ds.Tables["SourceCode"].Columns[al + "_Rank"].SetOrdinal(col_idx_fld);
 
                 }
 
@@ -8634,18 +7408,6 @@ namespace Fault_Localization_SE_Lab
                 //ds.Tables["SourceCode"].Columns["Ns"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
                 ds.Tables["SourceCode"].Columns["unnecessary"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
 
-
-                /*   for (int i = 1; i < failcount+1; i++)
-                  {
-                        foreach (string al in split_al)
-                        {
-                            ds.Tables["SourceCode"].Columns[al].SetOrdinal(ds.Tables["SourceCode"].Columns.Count- 1);
-                            ds.Tables["SourceCode"].Columns[al + "_Rank"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count- 1);
-                     }
-                    }
-                }
-
-                */
 
                 foreach (string al in split_al)
                 {
@@ -8824,10 +7586,17 @@ namespace Fault_Localization_SE_Lab
                         ds.Tables["SourceCode"].Rows[row]["Reinforce"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
 
                 }
+
             }
+
 
         }
 
+
+
+
+
+      
 
 
         void ColoringBySuspicious(DataSet ds, double threshold1, double threshold2)
@@ -8999,6 +7768,7 @@ namespace Fault_Localization_SE_Lab
                 strTestResultFilename = TestInfo.strResultPath + @"TestResult_" + strSourceCodeFilename + "_" + strTestSuiteFilename + "_" + strProgramName + "_" + TestInfo.strFaultyVersion + "_" + strAnswerSheet + ".xlsx";
             }
 
+
             if (File.Exists(strTestResultFilename))
                 File.Delete(strTestResultFilename);
 
@@ -9010,8 +7780,13 @@ namespace Fault_Localization_SE_Lab
                 //}
                 //else
 
+
+                WriteToExcelSheet(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsDistinct.Tables[0], dsResult.Tables[0]);
+
+
+
                 //WriteToExcelSheet(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsFSourceCode.Tables["FSourceCode"], dsPSourceCode.Tables["PSourceCode"], dsDistinct.Tables[0], dsResult.Tables[0]);
-                WriteToExcelSheet2(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsResult.Tables[0]);
+                // WriteToExcelSheet2(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsResult.Tables[0]);
                 //WriteToExcelSheet3(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsFSourceCode.Tables["FSourceCode"], dsPSourceCode.Tables["PSourceCode"], dsResult.Tables[0]);
 
             }
@@ -9021,9 +7796,9 @@ namespace Fault_Localization_SE_Lab
                 //    WriteToExcelSheet(strTestResultFilename, dsTestCase.Tables[0], dsSourceCode.Tables["SourceCode"], dsDistinct.Tables[0], null);
                 //else
                 //WriteToExcelSheet(strTestResultFilename, dsTestCase.Tables[0], dsSourceCode.Tables["SourceCode"], dsFSourceCode.Tables["FSourceCode"], dsPSourceCode.Tables["PSourceCode"], dsDistinct.Tables[0], dsResult.Tables[0]);
-                WriteToExcelSheet2(strTestResultFilename, dsTestCase.Tables[0], dsSourceCode.Tables["SourceCode"], dsResult.Tables[0]);
+                // WriteToExcelSheet2(strTestResultFilename, dsTestCase.Tables[0], dsSourceCode.Tables["SourceCode"], dsResult.Tables[0]);
                 //WriteToExcelSheet3(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsFSourceCode.Tables["FSourceCode"], dsPSourceCode.Tables["PSourceCode"], dsResult.Tables[0]);
-
+                WriteToExcelSheet(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsDistinct.Tables[0], dsResult.Tables[0]);
             }
 
             // FInal Report
@@ -9110,8 +7885,8 @@ namespace Fault_Localization_SE_Lab
                 workBook = new FileInfo(path);
                 using (ExcelPackage xlPackage = new ExcelPackage(workBook))
                 {
-                    ExcelWorksheet wsTestCase = xlPackage.Workbook.Worksheets.Add("SourceCode");
-                    wsTestCase.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
+                    //ExcelWorksheet wsTestCase = xlPackage.Workbook.Worksheets.Add("SourceCode");
+                    //wsTestCase.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
 
                     // ExcelWorksheet wsFTestCase = xlPackage.Workbook.Worksheets.Add("FSourceCode");
                     // wsFTestCase.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
@@ -9144,7 +7919,7 @@ namespace Fault_Localization_SE_Lab
             }
         }
 
-        public void WriteToExcelSheet(string path, DataTable dtTestCase, DataTable dtSourceCode, DataTable dtFSourceCode, DataTable dtPSourceCode, DataTable dtDistinct, DataTable dtResult)
+        public void WriteToExcelSheet(string path, DataTable dtTestCase, DataTable dtSourceCode, DataTable dtDistinct, DataTable dtResult)
         {
             try
             {
@@ -9170,14 +7945,21 @@ namespace Fault_Localization_SE_Lab
                     ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("SourceCode");
                     wsSourceCode.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
 
-                    ExcelWorksheet wsFSourceCode = xlPackage.Workbook.Worksheets.Add("FSourceCode");
-                    wsFSourceCode.Cells["A1"].LoadFromDataTable(dtFSourceCode, true);
 
-                    ExcelWorksheet wsPSourceCode = xlPackage.Workbook.Worksheets.Add("PSourceCode");
-                    wsPSourceCode.Cells["A1"].LoadFromDataTable(dtPSourceCode, true);
 
-                    //   ExcelWorksheet wsSourceCode2 = xlPackage.Workbook.Worksheets.Add("Distinct");
-                    //    wsSourceCode2.Cells["A1"].LoadFromDataTable(dtDistinct, true);
+
+
+                    //ExcelWorksheet wsFSourceCode = xlPackage.Workbook.Worksheets.Add("FSourceCode");
+                    //wsFSourceCode.Cells["A1"].LoadFromDataTable(dtFSourceCode, true);
+
+                    //ExcelWorksheet wsPSourceCode = xlPackage.Workbook.Worksheets.Add("PSourceCode");
+                    //wsPSourceCode.Cells["A1"].LoadFromDataTable(dtPSourceCode, true);
+
+
+
+
+                    ExcelWorksheet wsSourceCode2 = xlPackage.Workbook.Worksheets.Add("Distinct");
+                    wsSourceCode2.Cells["A1"].LoadFromDataTable(dtDistinct, true);
 
                     ExcelWorksheet wsSourceCode3 = xlPackage.Workbook.Worksheets.Add("Result");
                     wsSourceCode3.Cells["A1"].LoadFromDataTable(dtResult, true);
@@ -9221,13 +8003,22 @@ namespace Fault_Localization_SE_Lab
                         wsTestCase.Cells["A1"].LoadFromDataTable(dtTestCase, true);
                     }
 
-                    //ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("SourceCode");
-                    //wsSourceCode.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
+                    ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("SourceCode");
+                    wsSourceCode.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
+
+
+
+
+
                     //ExcelWorksheet wsFSourceCode = xlPackage.Workbook.Worksheets.Add("FSourceCode");
                     //wsFSourceCode.Cells["A1"].LoadFromDataTable(dtFSourceCode, true);
 
                     //ExcelWorksheet wsPSourceCode = xlPackage.Workbook.Worksheets.Add("PSourceCode");
                     //wsPSourceCode.Cells["A1"].LoadFromDataTable(dtPSourceCode, true);
+
+
+
+
                     //   ExcelWorksheet wsSourceCode2 = xlPackage.Workbook.Worksheets.Add("Distinct");
                     //    wsSourceCode2.Cells["A1"].LoadFromDataTable(dtDistinct, true);
 
@@ -9273,11 +8064,11 @@ namespace Fault_Localization_SE_Lab
                         wsTestCase.Cells["A1"].LoadFromDataTable(dtTestCase, true);
                     }
 
-                    ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("SourceCode");
-                    wsSourceCode.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
+                    //ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("SourceCode");
+                    //wsSourceCode.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
 
-                    ExcelWorksheet wsFSourceCode = xlPackage.Workbook.Worksheets.Add("FSourceCode");
-                    wsFSourceCode.Cells["A1"].LoadFromDataTable(dtFSourceCode, true);
+                    //ExcelWorksheet wsFSourceCode = xlPackage.Workbook.Worksheets.Add("FSourceCode");
+                    //wsFSourceCode.Cells["A1"].LoadFromDataTable(dtFSourceCode, true);
 
                     ExcelWorksheet wsPSourceCode = xlPackage.Workbook.Worksheets.Add("PSourceCode");
                     wsPSourceCode.Cells["A1"].LoadFromDataTable(dtPSourceCode, true);
@@ -9364,6 +8155,7 @@ namespace Fault_Localization_SE_Lab
             SelectAllTC();
         }
 
+
         private void btnDBFile_Click(object sender, RoutedEventArgs e)
         {
             tbDBFile.Text = NativeMethod.getFileFullName("xls;xlsx");
@@ -9415,9 +8207,150 @@ namespace Fault_Localization_SE_Lab
             IniFile.SetIniValue("Database", "FaultyVersion", tbFaultyVer.Text, Environment.CurrentDirectory + @"\Setting.ini");
         }
 
+        private void chkSemiAuto_Checked(object sender, RoutedEventArgs e)
+        {
 
+        }
 
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TC_selection_Checked(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void TC_selection_Unchecked(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }
+//Jaccard
+//SEM1
+//SEM2
+//SEM3
+//Naish
+//Ochiai
+//Zoltar
+//Kulczynski2
+//Anderberg
+//M2
+//Dice
+//PS
+//Wong3
+//GP08
+//GP10
+//GP11
+//GP13
+//GP20
+//GP26
 
+//SorensenDice
+//Wong1
+//SimpleMatching
+//Sokal
+//RogersTanimoto
+//Goodman
+//Hammingetc
+//Euclid
+//M1
+//Hamann
+//Wong2
+//RussellandRao
+//Cohen
+//GeometricMean
+//HarmonicMean
+//ArithmeticMean
+//Rogot1
+
+
+
+
+
+
+
+
+
+//TARANTULA
+//AMPLE
+//Jaccard
+//Dice
+//CZEKANOWSKI
+//_3WJACCARD
+//NEIandLI
+//SOKALandSNEATH_1
+//SOKALandMICHENER
+//SOKALandSNEATH2
+//ROGERandTANIMOTO
+//FAITH
+//GOWERandLEGENDRE
+//INTERSECTION
+//INNERPRODUCT
+//RUSSELLandRAO
+//HAMMING
+//EUCLID
+//SQUARED_EUCLID
+//CANBERRA
+//MANHATTAN
+//MEAN_MANHATTAN
+//CITYBLOCK
+//MINKOWSK
+//VARI
+//SIZEDIFFERENCE
+//SHAPEDIFFERENCE
+//PATTERNDIFFERENCE
+//LANCEandWILLIAMS
+//BRAYandCURTIS
+//HELLINGER
+//CHORD
+//COSINE
+//GILBERTandWELLS
+//OCHIAI1
+//FORBESI
+//FOSSUM
+//SORGENFREI
+//MOUNTFORD
+//OTSUKA
+//MCCONNAUGHEY
+//TARWID
+//KULCZYNSK2
+//DRIVERandKROEBER
+//JOHNSON
+//DENNIS
+//SIMPSON
+//BRAUNandBANQUET
+//FAGERandMCGOWAN
+//FORBES2
+//SOKALandSNEATH4
+//GOWER
+//PEARSON1
+//PEARSON2
+//PEARSON3
+//PEARSONandHERON1
+//PEARSONandHERON2
+//SOKALandSNEATH3
+//SOKALandSNEATH5
+//COLE
+//STILES
+//OCHIAI2
+//YULEQ
+//YULEw
+//KULCZYNSKI1
+//TANIMOTO
+//DISPERSON
+//HAMANN
+//MICHAEL
+//GOODMANandKRUSKAL
+//ANDERBERG
+//BARONI_URBANIandBUSER1
+//BARONI_URBANIandBUSER2
+//PEIRCE
+//EYRAUD

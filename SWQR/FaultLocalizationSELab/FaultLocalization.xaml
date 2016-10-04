@@ -1,10 +1,10 @@
-﻿      <Window x:Class="Fault_Localization_SE_Lab.MainWindow"
+﻿<Window x:Class="Fault_Localization_SE_Lab.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
                 xmlns:controls="clr-namespace:Controls"
-        Title="SKKU FaultLocalization" Height="652" Width="800" Background="White">
+        Title="v3.0 ISES(Integrated Support Environment for SFL)" Height="652" Width="800" Background="White">
     <Grid Height="658">
         <Grid.RowDefinitions>
             <RowDefinition  Height="10"/>
@@ -29,11 +29,19 @@
             <ColumnDefinition Width="145*" />
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
-        
-        <GroupBox Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="5">
-            <Grid>
+
+        <GroupBox Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="5">
+            <Grid Margin="2,0,-2,-6" Height="284" VerticalAlignment="Top">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -42,27 +50,42 @@
                     <RowDefinition Height="10"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="176"/>
+                    <ColumnDefinition Width="375*" />
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Source Code : " Grid.Row="1" Grid.Column="0"></TextBlock>
-                <TextBlock Text="Test Suite : " Grid.Row="2" Grid.Column="0"></TextBlock>
-                <CheckBox Name="chkDBFile" Content="DB File : " Grid.Row="3" Grid.Column="0" Checked="chkDBFile_Checked" Unchecked="chkDBFile_Unchecked"></CheckBox >
-                <CheckBox Name="chkAnswerSheet" Content="AnswerSheet : " Grid.Row="4" Grid.Column="0" Checked="chkAnswerSheet_Checked" Unchecked="chkAnswerSheet_Unchecked" IsChecked="False"></CheckBox >
-                <TextBlock Text="Faulty Version : " Grid.Row="5" Grid.Column="0"></TextBlock>
+                <TextBlock Text="1. Source code : " Grid.Row="1" FontWeight="Bold" Margin="0,0,26,0"></TextBlock>
+                <TextBlock Text="2. Trace " Grid.Row="2" FontWeight="Bold" Margin="0,0,26,0"></TextBlock>
 
-                <TextBox Name="tbSourceCode" Grid.Row="1" Grid.Column="1"></TextBox>
-                <TextBox Name="tbTestSuite" Grid.Row="2" Grid.Column="1"></TextBox>
-                <TextBox Name="tbDBFile" Grid.Row="3" Grid.Column="1"></TextBox>
-                <TextBox Name="tbAnswerSheet" Grid.Row="4" Grid.Column="1"></TextBox>
-                <TextBox Name="tbFaultyVer" Grid.Row="5" Grid.Column="1" TextChanged="tbFaultyVer_TextChanged"></TextBox>
-                
-                <Button Name="btnSourceCode"  Content="..." Grid.Row="1" Grid.Column="2" Click="btnSourceCode_Click"></Button>
-                <Button Name="btnTestSuite" Content="..." Grid.Row="2" Grid.Column="2" Click="btnTestSuite_Click"></Button>
-                <Button Name="btnDBFile" Content="..." Grid.Row="3" Grid.Column="2" Click="btnDBFile_Click" Height="23" VerticalAlignment="Top"></Button>
-                <Button Name="btnAnswerSheet" Content="..." Grid.Row="4" Grid.Column="2" Click="btnAnswerSheet_Click"></Button>
-   
+                <TextBlock Text="    2-1. Test suite (run) : " Grid.Row="3" Margin="0,0,26,0"></TextBlock>
+                <CheckBox Name="chkDBFile" Content="2-2. Database : " Grid.Row="4" Checked="chkDBFile_Checked" Unchecked="chkDBFile_Unchecked" Margin="19,0,18,0"></CheckBox >
+
+                <TextBlock Text="Faulty version : " Grid.Row="5" Margin="37,0,0,0"></TextBlock>
+
+
+                <TextBlock Text="3. Test case management " Grid.Row="6" FontWeight="Bold" Margin="0,0,26,0"></TextBlock>
+                <CheckBox Name="TC_selection" Content="3-1. TC Selection" Grid.Row="7" Checked="chkSemiAuto_Checked" Unchecked="chkSemiAuto_Checked" Margin="18,0,19,0"></CheckBox >
+                <CheckBox Name="TC_reduction" Content="3-2. TC Reconstrunction" Grid.Row="8" Checked="chkAnswerSheet_Checked" Unchecked="chkAnswerSheet_Unchecked" Margin="18,0,373,0" Grid.ColumnSpan="2"></CheckBox >
+                <CheckBox Name="TC_prioritization" Content="3-2. TC Prioritization" Grid.Row="9" Checked="chkAnswerSheet_Checked" Unchecked="chkAnswerSheet_Unchecked" Margin="18,0,19,0"></CheckBox >
+
+
+                <TextBlock Text="4. Evaluation" Grid.Row="10" FontWeight="Bold" Margin="0,0,26,0"></TextBlock>
+                <CheckBox Name="chkAnswerSheet" Content="Answer sheet : " Grid.Row="11" Checked="chkAnswerSheet_Checked" Unchecked="chkAnswerSheet_Unchecked" IsChecked="False" Margin="18,0,19,0"/>
+
+                <TextBlock Text="5. Algorithms" Grid.Row="12" FontWeight="Bold" Margin="0,0,26,0"></TextBlock>
+
+
+                <TextBox Name="tbSourceCode" Grid.Row="1" Grid.ColumnSpan="2" Margin="150,0,0,0"></TextBox>
+                <TextBox Name="tbTestSuite" Grid.Row="3" Grid.ColumnSpan="2" Margin="150,0,0,0"></TextBox>
+                <TextBox Name="tbDBFile" Grid.Row="4" Grid.ColumnSpan="2" Margin="150,0,0,0"></TextBox>
+                <TextBox Name="tbAnswerSheet" Grid.Row="11" Grid.ColumnSpan="2" Margin="150,0,0,0" />
+                <TextBox Name="tbFaultyVer" Grid.Row="5" TextChanged="tbFaultyVer_TextChanged" Grid.ColumnSpan="2" Margin="150,0,0,0"></TextBox>
+
+                <Button Name="btnSourceCode"  Content="select" Grid.Row="1" Grid.Column="2" Click="btnSourceCode_Click" Height="22" VerticalAlignment="Bottom"></Button>
+                <Button Name="btnTestSuite" Content="select" Grid.Row="3" Grid.Column="2" Click="btnTestSuite_Click"></Button>
+                <Button Name="btnDBFile" Content="select" Grid.Row="4" Grid.Column="2" Click="btnDBFile_Click"/>
+                <Button Name="btnAnswerSheet" Content="select" Grid.Row="11" Grid.Column="2" Click="btnAnswerSheet_Click" Height="21" VerticalAlignment="Top"></Button>
+
 
             </Grid>
         </GroupBox>
@@ -91,32 +114,35 @@
 
 
 
-        <GroupBox Grid.Row="4" Grid.Column="6" Grid.RowSpan="2">
-            <Grid>
+        <GroupBox Grid.Row="4" BorderBrush="Transparent" Grid.Column="6" Grid.RowSpan="2" >
+            <Grid Margin="-480,27,147,86" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5"/>
                     <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+
+
                     <RowDefinition Height="5"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="131*"/>
+                    <ColumnDefinition Width="77*"/>
+                    <ColumnDefinition Width="76*"/>
+                    <ColumnDefinition Width="153*"/>
                     <ColumnDefinition Width="5"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox Name="cbAlgorithm" Text="Tarantula" Grid.Row="4" Grid.Column="1" Visibility="Hidden" >
+                <ComboBox Name="cbAlgorithm" Text="Tarantula" Grid.Row="2" Grid.Column="1" Visibility="Hidden" Grid.ColumnSpan="3" >
                     <ComboBoxItem Content="Tarantula" IsSelected="True"></ComboBoxItem>
                     <ComboBoxItem Content="AMPLE"></ComboBoxItem>
                     <ComboBoxItem Content="Jaccard"></ComboBoxItem>
 
                 </ComboBox>
-                <CheckBox Name="chkSemiAuto" Content="Semi Auto" Grid.Row="2" Grid.Column="1"></CheckBox>
-                <CheckBox Name="chkShowTC" Content="Hide TC" Grid.Row="3" Grid.Column="1" Checked="chkShowTC_Checked" Unchecked="chkShowTC_Unchecked"></CheckBox>
+                <CheckBox Name="chkSemiAuto" Content="Semi Auto" Grid.Row="1" Grid.Column="4" Checked="chkSemiAuto_Checked" Grid.ColumnSpan="3" HorizontalAlignment="Right" Width="153" Height="69" VerticalAlignment="Top" Margin="0,0,108,-51" Grid.RowSpan="2"/>
+                <CheckBox Name="chkShowTC" Content="Hide TC" Grid.Column="6" Checked="chkShowTC_Checked" Unchecked="chkShowTC_Unchecked" Margin="17,0,-7,0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
 
-                <controls:ComboWithCheckboxes x:Name="cmbAlgorithm"  Width="Auto"  Height="22" DefaultText="Tarantula"  ItemsSource="{Binding}" Grid.Row="1" Grid.Column="1"></controls:ComboWithCheckboxes>
+                <controls:ComboWithCheckboxes x:Name="cmbAlgorithm"  Width="Auto"  Height="Auto" DefaultText="Tarantula"  ItemsSource="{Binding}" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Column="2" Margin="8,0,67,0"/>
 
 
             </Grid>
@@ -146,7 +172,7 @@
             </Grid>
         </GroupBox>
 
-        <TabControl Grid.Row="3" Grid.Column="1" Grid.RowSpan="6" Grid.ColumnSpan="5" Margin="0,47,0,0">
+        <TabControl Grid.Row="5" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="6" Margin="10,0,138,45" SelectionChanged="TabControl_SelectionChanged">
             <TabItem Name="TestCaseTabItem" Header="Test Case">
                 <TabItem.ContextMenu>
                     <ContextMenu MenuItem.Click="ContextMenuClickEventHandler">
@@ -155,7 +181,7 @@
                         <MenuItem Header="Orange" Name="OrangeMenuItem"/>
                     </ContextMenu>
                 </TabItem.ContextMenu>
-                
+
                 <TabItem.Content>
                     <wfi:WindowsFormsHost Grid.Row="4" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="5">
                         <wf:DataGridView x:Name="dgvMain" ReadOnly="False" AllowUserToAddRows="False" AllowUserToDeleteRows="False" TabIndex="0" CellValueChanged="dgvMain_CellValueChanged" Scroll="dgvMain_Scroll">
