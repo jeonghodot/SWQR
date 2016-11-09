@@ -1,0 +1,2015 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.IO;
+using System.Windows.Forms;
+using System.Data;
+using Fault_Localization_SE_Lab.Utility;
+using Fault_Localization_SE_Lab.Instrument;
+using Fault_Localization_SE_Lab.Test;
+using OfficeOpenXml;
+using Controls;
+using System.Collections;
+
+namespace Fault_Localization_SE_Lab
+{
+    /// <summary>
+    /// MainWindow.xaml에 대한 상호 작용 논리
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        DataSet dsTestCase = new DataSet();
+        DataSet dsSourceCode = new DataSet();
+        DataSet dsResult = new DataSet();
+        DataSet dsDistinct = new DataSet();
+        bool flag_firstrun = true;
+        Dictionary<int,string> dicArgument = new Dictionary<int,string>();
+
+        System.Windows.Forms.CheckBox cb_dgvMain = new System.Windows.Forms.CheckBox();
+        int cnt_selectedTC = 0;
+        int nScroll_dgvMain = 0;
+        bool flag_loadTC = false;
+        bool flag_cb_dgvMain = false;
+        string SOURCE_CODE_TYPE = string.Empty;
+        string result;
+        string mark;
+        int failcount = 0;
+        
+        public MainWindow()
+        {
+            InitializeComponent();
+            this.Left = 0;
+            this.Top = 0;
+            dgvMain.CurrentCellDirtyStateChanged += new EventHandler(dgvMain_CurrentCellDirtyStateChanged);
+
+            dsSourceCode.Tables.Add("SourceCode");
+            dsSourceCode.Tables["SourceCode"].Columns.Add("Line", typeof(Int32));
+            dsSourceCode.Tables["SourceCode"].Columns.Add("SourceCode", typeof(string));
+
+            TestInfo.strResultPath = Environment.CurrentDirectory + "\\Result\\";
+            TestInfo.strCurrentDirectory = Environment.CurrentDirectory + "\\";
+            TestInfo.strInstrumentEditor = "InstrumentEditor.cs";
+            TestInfo.strCoveragefile = "file.coverage";
+            TestInfo.strCloverfile = "clover.xml";
+            TestInfo.strTestResult = "temp_result.txt";//"TestResult.txt";
+            string now = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+            //MainLogger = new Logger("MainLogger");
+            Logger.CreateLogger("MainLogger");
+
+            TestInfo.strResultPath = TestInfo.strResultPath + now + "\\";
+            TestInfo.strCoveragefile = TestInfo.strResultPath + @"\" + TestInfo.strCoveragefile;
+            TestInfo.strCloverfile = TestInfo.strResultPath + @"\" + TestInfo.strCloverfile;
+            string PROCESSOR_ARCHITECTURE = System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
+            Logger.WriteLine("PROCESSOR_ARCHITECTURE : " + PROCESSOR_ARCHITECTURE);
+            TestInfo.OS_ARCH_TYPE = IniFile.GetIniValue("VisualStudioPrompt", PROCESSOR_ARCHITECTURE, Environment.CurrentDirectory + @"\Setting.ini");
+            TestInfo.CODE_COVERAGE = IniFile.GetIniValue("Coverage", "Method", Environment.CurrentDirectory + @"\Setting.ini");
+
+            //debug + database
+            TestInfo.AutoRun = IniFile.GetIniValue("AutoRun", "AutoRun", Environment.CurrentDirectory + @"\Setting.ini");
+            TestInfo.SourceCode = IniFile.GetIniValue("AutoRun", "SourceCode", Environment.CurrentDirectory + @"\Setting.ini");
+            TestInfo.TestSuite = IniFile.GetIniValue("AutoRun", "TestSuite", Environment.CurrentDirectory + @"\Setting.ini");
+            TestInfo.strProgramFilename = IniFile.GetIniValue("Database", "ProgramFilename", Environment.CurrentDirectory + @"\Setting.ini");
+            TestInfo.strFaultyVersion = IniFile.GetIniValue("Database", "FaultyVersion", Environment.CurrentDirectory + @"\Setting.ini");
+            TestInfo.strAnswerSheet = IniFile.GetIniValue("Database", "AnswerSheet", Environment.CurrentDirectory + @"\Setting.ini");
+
+            if (!string.IsNullOrEmpty(TestInfo.SourceCode))
+            {
+                tbSourceCode.Text = TestInfo.SourceCode;
+            }
+
+            if (!string.IsNullOrEmpty(TestInfo.TestSuite))
+            {
+                tbTestSuite.Text = TestInfo.TestSuite;
+            }
+
+            if (!string.IsNullOrEmpty(TestInfo.strProgramFilename))
+            {
+                tbAnswerSheet.Text = TestInfo.strAnswerSheet;
+                chkAnswerSheet.IsChecked = true;
+            }
+
+            if (!string.IsNullOrEmpty(TestInfo.strProgramFilename))
+            {
+                tbDBFile.Text = TestInfo.strProgramFilename;
+                chkDBFile.IsChecked = true;
+            }
+
+            if (!string.IsNullOrEmpty(TestInfo.strProgramFilename))
+            {
+                tbFaultyVer.Text = TestInfo.strFaultyVersion;
+            }
+
+            DataGridViewCheckBoxColumn CheckboxColumn = new DataGridViewCheckBoxColumn();
+            CheckboxColumn.DisplayIndex = 0;
+            CheckboxColumn.Width = 100;
+            CheckboxColumn.Name = "Select";
+            CheckboxColumn.HeaderText = "";
+            dgvMain.Columns.Add(CheckboxColumn);
+
+            ObservableNodeList itemSource = new ObservableNodeList();
+
+            Node Tarantula = new Node("Tarantula");
+            Tarantula.IsSelected = true;
+            itemSource.Add(Tarantula);
+            Node AMPLE = new Node("AMPLE");
+            AMPLE.IsSelected = false;
+            itemSource.Add(AMPLE);
+            Node Jaccard = new Node("Jaccard");
+            Jaccard.IsSelected = false;
+            itemSource.Add(Jaccard);
+
+            Node Heuristic3 = new Node("Heuristic3_c_");
+            Heuristic3.IsSelected = false;
+            itemSource.Add(Heuristic3);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node Hybrid = new Node("Hybrid");
+            Hybrid.IsSelected = false;
+            itemSource.Add(Hybrid);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            Node Reinforce = new Node("Reinforce");
+            Reinforce.IsSelected = true;
+            itemSource.Add(Reinforce);
+            cmbAlgorithm.ItemsSource = itemSource;
+
+            SourceCodeTabItem.IsSelected = true;
+
+            this.Title = this.Title + " " + IniFile.GetIniValue("Info", "Version", Environment.CurrentDirectory + @"\Setting.ini");
+
+            //dgvSourceCode.AutoGenerateColumns = false;
+
+            if (TestInfo.AutoRun == "True")
+            {
+                if (chkDBFile.IsChecked == true)
+                {
+                    //Start Test
+                    Logger.WriteLine("Auto Run Started(Database) >> "+  TestInfo.strProgramFilename + " " + TestInfo.strFaultyVersion + " " +TestInfo.strAnswerSheet);
+                    StartTest();
+                    Logger.WriteLine("Auto Run Done(Database) >> " + TestInfo.strProgramFilename + " " + TestInfo.strFaultyVersion + " " + TestInfo.strAnswerSheet);
+
+                }
+                else
+                {
+                    //Load and Select TC and Start Test
+                    Logger.WriteLine("Auto Run Started(SourceCode) >> " + TestInfo.SourceCode + " " + TestInfo.TestSuite);
+                    LoadTestSuite();
+                    SelectAllTC();
+                    SourCodeType();
+                    StartTest();
+                    Logger.WriteLine("Auto Run Done(SourceCode) >> " + TestInfo.SourceCode + " " + TestInfo.TestSuite);
+                }
+            }
+
+        }
+
+        public void SourCodeType()
+        {
+            SOURCE_CODE_TYPE = System.IO.Path.GetExtension(tbSourceCode.Text);
+
+            TestInfo.SOURCE_CODE_TYPE = SOURCE_CODE_TYPE;
+            if (SOURCE_CODE_TYPE.ToLower().Equals(".cs"))
+            {
+                TestInfo.strInstrumentEditor = "InstrumentEditor.cs";
+            }
+            else if (SOURCE_CODE_TYPE.ToLower().Equals(".c"))
+            {
+                TestInfo.strInstrumentEditor = "InstrumentEditor.h";
+                TestInfo.strInstrumentEditorCpp = "InstrumentEditor.c";
+            }
+            else if (SOURCE_CODE_TYPE.ToLower().Equals(".cpp"))
+            {
+                TestInfo.strInstrumentEditor = "InstrumentEditor_cpp.h";
+                TestInfo.strInstrumentEditorCpp = "InstrumentEditor_cpp.cpp";
+            }
+        }
+        private void btnSourceCode_Click(object sender, RoutedEventArgs e)
+        {
+            tbSourceCode.Text = NativeMethod.getFileFullName("cs;c;cpp");
+            SourCodeType();
+            IniFile.SetIniValue("AutoRun", "SourceCode", tbSourceCode.Text, Environment.CurrentDirectory + @"\Setting.ini");         
+        }
+
+        private void btnTestSuite_Click(object sender, RoutedEventArgs e)
+        {
+            tbTestSuite.Text = NativeMethod.getFileFullName("xls");
+            IniFile.SetIniValue("AutoRun", "TestSuite",tbTestSuite.Text, Environment.CurrentDirectory + @"\Setting.ini");
+        }
+
+        public void LoadTestSuite()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(tbTestSuite.Text) || tbTestSuite.Text.Equals("Select file..."))
+                {
+                    System.Windows.Forms.MessageBox.Show("Select test suite");
+                    return;
+                }
+
+                flag_loadTC = true;
+
+                dsTestCase.Clear();
+                dsSourceCode.Clear();
+                dsDistinct.Clear();
+                int col_TC_ID = dsSourceCode.Tables["SourceCode"].Columns["SourceCode"].Ordinal + 1;
+                for (int i = col_TC_ID; i < dsSourceCode.Tables["SourceCode"].Columns.Count; i++)
+                {
+                    dsSourceCode.Tables["SourceCode"].Columns.RemoveAt(col_TC_ID);
+                }
+
+                dsTestCase = NativeMethod.GetDataFromExcel(tbTestSuite.Text);
+                tbTotalTC.Text = dsTestCase.Tables[0].Rows.Count.ToString();
+                dgvMain.DataSource = dsTestCase.Tables[0];
+
+
+                for (int i = 0; i < dgvMain.Columns.Count; i++)
+                {
+                    dgvMain.Columns[i].Width = 70;
+
+                    if (dgvMain.Columns[i].Name.Equals("Expected value") || dgvMain.Columns[i].Name.Equals("Actual value"))
+                        dgvMain.Columns[i].Width = 100;
+                }
+
+                TestInfo.bInstrument = false;
+                TestCaseTabItem.IsSelected = true;
+
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("ex", "btnLoadTestSuite_Click exception : " + ex.ToString());
+                System.Windows.Forms.MessageBox.Show("btnLoadTestSuite_Click exception : " + ex.ToString());
+
+            }    
+          
+        }
+
+        private void btnLoadTestSuite_Click(object sender, RoutedEventArgs e)
+        {
+            LoadTestSuite();
+        }
+
+        public void InstrumentSourceCode(string fileExtension)
+        {
+            Instrumentor inst = new Instrumentor();
+            string  strFileNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(tbSourceCode.Text);
+
+            string dirName = string.Empty;
+            dirName = System.IO.Path.GetDirectoryName(tbSourceCode.Text);
+            try
+            {
+                if (fileExtension.Equals(".cs"))
+                {
+                    TestInfo.strOriginalSourceFile = TestInfo.strResultPath + @"\" + strFileNameWithoutExtension + ".cs";
+                    TestInfo.strInstrumentedBinaryFile = TestInfo.strResultPath + @"\" + strFileNameWithoutExtension + "_inst" + ".exe";
+
+                    Directory.CreateDirectory(TestInfo.strResultPath);
+                    //NativeMethod.CopyFolder(dirName, TestInfo.strResultPath);
+
+                    File.Copy(tbSourceCode.Text, TestInfo.strOriginalSourceFile, true);
+                    //File.Copy(Environment.CurrentDirectory + @"\Tools\" + TestInfo.strInstrumentEditor, TestInfo.strResultPath + TestInfo.strInstrumentEditor, true);
+
+                    TestInfo.strInstrumentedSourceFile = inst.GenInstrumentedCode(TestInfo.strOriginalSourceFile, dsSourceCode, fileExtension);
+
+                    inst.GetReflectionInfo(TestInfo.strOriginalSourceFile);
+                }
+                else if (fileExtension.Equals(".cpp") || fileExtension.Equals(".c"))
+                {
+                    TestInfo.strOriginalSourceFile = TestInfo.strResultPath + @"\" + strFileNameWithoutExtension + fileExtension;
+                    TestInfo.strInstrumentedBinaryFile = TestInfo.strResultPath + @"\" + strFileNameWithoutExtension + "_inst" + ".exe";
+
+                    Directory.CreateDirectory(TestInfo.strResultPath);
+                    NativeMethod.CopyFolder(dirName, TestInfo.strResultPath);
+
+                    //File.Copy(tbSourceCode.Text, TestInfo.strOriginalSourceFile, true);
+                    File.Copy(Environment.CurrentDirectory + @"\Tools\" + TestInfo.strInstrumentEditor, TestInfo.strResultPath + TestInfo.strInstrumentEditor, true);
+                    File.Copy(Environment.CurrentDirectory + @"\Tools\" + TestInfo.strInstrumentEditorCpp, TestInfo.strResultPath + TestInfo.strInstrumentEditorCpp, true);
+
+                    TestInfo.strInstrumentedSourceFile = inst.GenInstrumentedCode(TestInfo.strOriginalSourceFile, dsSourceCode,fileExtension);
+
+                    //inst.GetReflectionInfo(TestInfo.strOriginalSourceFile);
+                }
+
+                TestInfo.bInstrument = true;          
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("InstrumentSourceCode Exception : " + ex.ToString());
+            }
+        }
+
+        public bool RunTestCase(int index, string TC_ID,DataSet ds,string table_name)
+        {
+            Logger.WriteLine("[TC_ID] : " + TC_ID);
+            string arguments = string.Empty;
+
+            try
+            {
+                dsSourceCode.Tables["SourceCode"].Columns.Add(TC_ID, typeof(string));
+                //DataGridViewTextBoxColumn subTitleColumn = new DataGridViewTextBoxColumn();
+
+                //dsSourceCode.auto
+                //subTitleColumn.HeaderText = TC_ID;
+                //subTitleColumn.MinimumWidth = 60;
+                //subTitleColumn.FillWeight = 1;
+                //dsSourceCode.Tables["SourceCode"].Columns.Add(subTitleColumn);
+
+            }
+            catch (System.Exception ex)
+            {
+            	
+            }               
+    
+            int col = ds.Tables[table_name].Columns[TC_ID].Ordinal; 
+
+            try
+            {
+                try
+                {
+                    if(File.Exists(TestInfo.strResultPath + @"temp_result.txt"))
+                        File.Delete(TestInfo.strResultPath + @"temp_result.txt");
+                    
+                    if(File.Exists(TestInfo.strCoveragefile))
+                        File.Delete(TestInfo.strCoveragefile);
+
+                    if(File.Exists(TestInfo.strCloverfile))
+                        File.Delete(TestInfo.strCloverfile);
+
+                }
+                catch (System.Exception ex)
+                {
+                    //System.Windows.Forms.MessageBox.Show(ex.ToString());
+                }
+
+                int sleepCnt = 0;
+                if (flag_firstrun)
+                {
+                    flag_firstrun = false;
+
+                    StreamWriter file = new StreamWriter(TestInfo.strResultPath + @"\information.txt");
+                    file.WriteLine(tbSourceCode.Text);
+                    file.WriteLine(tbTestSuite.Text);
+                    file.Close();
+
+                    //Instrument
+                    if (SOURCE_CODE_TYPE.ToLower().Equals(".cs"))
+                    {
+                        //NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strCurrentDirectory + @"\Tools\csc.exe " + @"""", @"/debug " + TestInfo.strInstrumentedSourceFile + @" " + TestInfo.strResultPath + TestInfo.strInstrumentEditor, TestInfo.strResultPath);
+                        NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"csc.exe /debug:full " + @"""" + TestInfo.strInstrumentedSourceFile + @"""", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+                    }
+                    else if (SOURCE_CODE_TYPE.ToLower().Equals(".c") || SOURCE_CODE_TYPE.ToLower().Equals(".cpp"))
+                    {
+                        if (TestInfo.CODE_COVERAGE.Equals("VisualCoverage"))
+                        {
+                            //link + profile
+                            NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"cl.exe /Zi " + @"""" + TestInfo.strInstrumentedSourceFile + @"""" + @" /link /profile", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+   
+                        }
+                        else if (TestInfo.CODE_COVERAGE.Equals("CodeCoverage"))
+                        {
+                            //debug
+                            NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"cl.exe /Zi " + @"""" + TestInfo.strInstrumentedSourceFile + @"""", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+   
+                        }
+                        //NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"cl.exe /Zi " + @"""" + TestInfo.strInstrumentedSourceFile + @"""" + @" """ + TestInfo.strResultPath + TestInfo.strInstrumentEditorCpp + @"""" + @" /link /profile", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+                        //NativeMethod.RunCommandLine(TestInfo.strCurrentDirectory + @"\Tools\cl.exe", @"/I ""C:\Program Files\Microsoft Visual Studio 10.0\VC\include"" /Zi " + TestInfo.strInstrumentedSourceFile + @" /link /LIBPATH:" + TestInfo.strCurrentDirectory + @"\Tools\lib /profile", TestInfo.strResultPath);     
+                    }
+
+                    sleepCnt = 0;
+                    while (true)
+                    {
+                        if (sleepCnt > 5)
+                            break;
+
+                        if (File.Exists(TestInfo.strInstrumentedBinaryFile))
+                            break;
+
+                        if (SOURCE_CODE_TYPE.ToLower().Equals(".cs"))
+                        {
+                            //NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strCurrentDirectory + @"\Tools\csc.exe " + @"""", @"/debug " + TestInfo.strInstrumentedSourceFile + @" " + TestInfo.strResultPath + TestInfo.strInstrumentEditor, TestInfo.strResultPath);
+                            NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"csc /debug " + @"""" + TestInfo.strInstrumentedSourceFile + @"""", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+                        }
+                        else if(SOURCE_CODE_TYPE.ToLower().Equals(".c") || SOURCE_CODE_TYPE.ToLower().Equals(".cpp"))
+                        {
+                            if (TestInfo.CODE_COVERAGE.Equals("VisualCoverage"))
+                            {
+                                //link + profile
+                                NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"cl.exe /Zi " + @"""" + TestInfo.strInstrumentedSourceFile + @"""" + @" /link /profile", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+
+                            }
+                            else if (TestInfo.CODE_COVERAGE.Equals("CodeCoverage"))
+                            {
+                                //debug
+                                NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"cl.exe /Zi " + @"""" + TestInfo.strInstrumentedSourceFile + @"""", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+
+                            }
+                        }
+    
+                        System.Threading.Thread.Sleep(1000);
+                        sleepCnt++;
+                    }
+
+                    if (!File.Exists(TestInfo.strInstrumentedBinaryFile))
+                    {
+                        System.Windows.Forms.MessageBox.Show(TestInfo.strInstrumentedBinaryFile + " is not created");
+                        return false;
+                    }
+
+                    if (TestInfo.CODE_COVERAGE.Equals("VisualCoverage"))
+                    {
+                        NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strCurrentDirectory + @"\Tools\vsinstr.exe" + @"""" + " " + @"/coverage " + @"""" + TestInfo.strInstrumentedBinaryFile + @"""", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+                    }
+                     //NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strCurrentDirectory + @"\Tools\vsperfcmd.exe" + @"""" + " " + @"/start:Coverage /Output:" + @"""" + TestInfo.strCoveragefile + @"""", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+
+                    //NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\vsinstr.exe" + @"""", @"/coverage " + @"""" + TestInfo.strInstrumentedBinaryFile + @"""", TestInfo.strResultPath);
+  
+                }
+
+                //argument injection is required              
+                foreach (int key in dicArgument.Keys)
+                {
+                    arguments += dicArgument[key] + " ";
+                }
+
+                int LastIdxSpace = arguments.LastIndexOf(" ");
+                arguments = arguments.Remove(LastIdxSpace, 1);
+                ds.Tables[table_name].Rows[0][col] = arguments;
+
+
+                if (TestInfo.CODE_COVERAGE.Equals("VisualCoverage"))
+                {
+                    NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\vsperfcmd.exe" + @"""", @"/start:Coverage /Output:" + @"""" + TestInfo.strCoveragefile + @"""", TestInfo.strResultPath);
+                    NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strInstrumentedBinaryFile + @"""" + " " + arguments + " > temp_result.txt", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+                    //NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strInstrumentedBinaryFile + @"""" + " " + arguments, TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+
+                    NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\vsperfcmd.exe" + @"""", @"/Shutdown", TestInfo.strResultPath);
+                    //NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strCurrentDirectory + @"\Tools\vsperfcmd.exe" + @"""" + " " + @"/Shutdown", TestInfo.OS_ARCH_TYPE,TestInfo.strResultPath);
+
+                }
+                else if (TestInfo.CODE_COVERAGE.Equals("CodeCoverage"))
+                {
+                     NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strInstrumentedBinaryFile + @"""" + " " + arguments + " > temp_result.txt", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+                     NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strCurrentDirectory + @"\Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" + @"""" + @" collect /output:" + @"""" + TestInfo.strCoveragefile + @"""" + @" " + @"""" + TestInfo.strInstrumentedBinaryFile + @"""" + " " + arguments, TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+                     //NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" + @"""", @"collect /output:" + @"""" + TestInfo.strCoveragefile + @"""" + @" " + @"""" + TestInfo.strInstrumentedBinaryFile + @"""" + " " + arguments , TestInfo.strResultPath);
+                }                    
+        
+                if (!File.Exists(TestInfo.strResultPath + TestInfo.strTestResult))
+                {
+                    //System.Windows.Forms.MessageBox.Show(TestInfo.strResultPath + TestInfo.strTestResult + " is not created");
+                    Logger.WriteLine("[ERROR] " + TestInfo.strResultPath + TestInfo.strTestResult + " is not created");
+                    dgvMain.Rows[index].Cells["Reason"].Value = (TestInfo.strResultPath + TestInfo.strTestResult + " is not created").ToString();
+                    //return false;
+                }
+
+                sleepCnt = 0;
+                while (true)
+                {
+                    if (sleepCnt > 5)
+                        break;
+
+                    if (File.Exists(TestInfo.strCoveragefile))
+                        break;
+                    System.Threading.Thread.Sleep(1000);
+                    sleepCnt++;
+                    Logger.WriteLine("strCoveragefile_cnt : " + sleepCnt.ToString());
+                }
+
+                if (TestInfo.CODE_COVERAGE.Equals("VisualCoverage"))
+                {
+                    //NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strCurrentDirectory + @"\Tools\visualcoverage.exe" + @"""" + " " + @"--input " + @"""" + TestInfo.strCoveragefile + @"""" + " --clover " + @"""" + TestInfo.strCloverfile + @"""", TestInfo.OS_ARCH_TYPE,TestInfo.strResultPath);
+                    NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\visualcoverage.exe" + @"""", @"--input " + @"""" + TestInfo.strCoveragefile + @"""" + " --clover " + @"""" + TestInfo.strCloverfile + @"""", TestInfo.strResultPath);
+                }
+                else if (TestInfo.CODE_COVERAGE.Equals("CodeCoverage"))
+                {
+                    NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" + @"""", @"analyze /output:" + @"""" + TestInfo.strCloverfile + @"""" + @" " + @"""" + TestInfo.strCoveragefile + @"""", TestInfo.strResultPath);
+                }
+            
+                sleepCnt = 0;
+                while (true)
+                {
+                    if (sleepCnt > 5)
+                        break;
+
+                    if (File.Exists(TestInfo.strCloverfile))
+                    {
+                        if(sleepCnt>0)
+                            Logger.WriteLine("Data was recovered");
+                        break;
+                    }
+                    System.Threading.Thread.Sleep(1000);
+                    if (TestInfo.CODE_COVERAGE.Equals("VisualCoverage"))
+                    {
+                        NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\vsperfcmd.exe" + @"""", @"/start:Coverage /Output:" + @"""" + TestInfo.strCoveragefile + @"""", TestInfo.strResultPath);
+                        NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strInstrumentedBinaryFile + @"""" + " " + arguments + " > temp_result.txt", TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+                        NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\vsperfcmd.exe" + @"""", @"/Shutdown", TestInfo.strResultPath);
+                        NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\visualcoverage.exe" + @"""", @"--input " + @"""" + TestInfo.strCoveragefile + @"""" + " --clover " + @"""" + TestInfo.strCloverfile + @"""", TestInfo.strResultPath);
+                    }
+                    else if (TestInfo.CODE_COVERAGE.Equals("CodeCoverage"))
+                    {
+                        NativeMethod.RunCommandLineWIthVisualStudioPrompt(@"""" + TestInfo.strCurrentDirectory + @"\Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" + @"""" + @" collect /output:" + @"""" + TestInfo.strCoveragefile + @"""" + @" " + @"""" + TestInfo.strInstrumentedBinaryFile + @"""" + " " + arguments, TestInfo.OS_ARCH_TYPE, TestInfo.strResultPath);
+                        NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\Dynamic Code Coverage Tools\CodeCoverage.exe" + @"""", @"analyze /output:" + @"""" + TestInfo.strCloverfile + @"""" + @" " + @"""" + TestInfo.strCoveragefile + @"""", TestInfo.strResultPath);
+                    }
+               
+                    sleepCnt++;
+                    Logger.WriteLine("strCloverfile_cnt : " + sleepCnt.ToString());
+                }
+
+                if (!File.Exists(TestInfo.strCloverfile))
+                {
+                    //System.Windows.Forms.MessageBox.Show(TestInfo.strCloverfile + " is not created");
+                    Logger.WriteLine("[ERROR] " + TestInfo.strCloverfile + " is not created");
+                    dgvMain.Rows[index].Cells["Reason"].Value = (TestInfo.strCloverfile  + " is not created").ToString();
+                    //return false;
+                }
+                //NativeMethod.RunCommandLine(@"""" + TestInfo.strInstrumentedBinaryFile + @"""", arguments, TestInfo.strResultPath);
+                //NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\vsperfcmd.exe" + @"""", @"/Shutdown", TestInfo.strResultPath);
+                //NativeMethod.RunCommandLine(@"""" + TestInfo.strCurrentDirectory + @"\Tools\visualcoverage.exe" + @"""", @"--input " + @"""" + TestInfo.strCoveragefile + @"""" + " --clover " + @"""" + TestInfo.strCloverfile + @"""", TestInfo.strResultPath);
+ 
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.ToString());
+                return false;
+            }
+
+            return true;
+
+        }
+
+        public void StartTest()
+        {
+            try
+            {
+                try
+                {
+                    string algorithm = cmbAlgorithm.Text;
+                    string[] split_al = algorithm.Split(',');
+
+                    dsResult.Tables.Add("Result");
+                    dsResult.Tables["Result"].Columns.Add("ProgramName", typeof(string));
+                    dsResult.Tables["Result"].Columns.Add("FaultyVersion", typeof(string));
+                    dsResult.Tables["Result"].Columns.Add("Type", typeof(string));
+                    foreach (string str in split_al)
+                    {
+
+                        dsResult.Tables["Result"].Columns.Add(str + "_Best", typeof(string));
+                        dsResult.Tables["Result"].Columns.Add(str + "_Worst", typeof(string));
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                if ((bool)chkDBFile.IsChecked) //DB Use
+                {
+                    if (string.IsNullOrEmpty(tbDBFile.Text) || tbDBFile.Text.Equals("Select file..."))
+                    {
+                        System.Windows.Forms.MessageBox.Show("Select DBFile");
+                        return;
+                    }
+
+                    dsTestCase.Clear();
+                    dsSourceCode.Clear();
+                    dsDistinct.Clear();
+                    dsResult.Clear();
+
+
+
+                    dsSourceCode = NativeMethod.GetDataFromExcel(tbDBFile.Text, TestInfo.strFaultyVersion);
+                    dsSourceCode.Tables[TestInfo.strFaultyVersion].TableName = "SourceCode";
+
+                    try
+                    {
+                        ArrayList al = new ArrayList();
+                        for (int col = 2; col < dsSourceCode.Tables["SourceCode"].Columns.Count; col++)
+                        {
+                            if (dsSourceCode.Tables["SourceCode"].Columns[col].ToString().Contains("TC"))
+                                continue;
+                            else
+                                al.Add(dsSourceCode.Tables["SourceCode"].Columns[col].ToString());
+
+                        }
+                        for (int i = 0; i < al.Count; i++)
+                        {
+                            dsSourceCode.Tables["SourceCode"].Columns.Remove(al[i].ToString());
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                }
+                else //No DB
+                {
+                    if (string.IsNullOrEmpty(tbSourceCode.Text) || tbSourceCode.Text.Equals("Select file..."))
+                    {
+                        System.Windows.Forms.MessageBox.Show("Select source code");
+                        return;
+                    }
+
+                    if (tbSelectedTC.Text.Equals("0"))
+                    {
+                        System.Windows.Forms.MessageBox.Show("Select TC");
+                        return;
+                    }
+
+                    string arg_value = string.Empty;
+                    int cnt_running = 0;
+                    int ndicIndex = 0;
+                    flag_loadTC = false;
+
+                    if (TestInfo.bInstrument == false)
+                    {
+                        SourCodeType();
+                        InstrumentSourceCode(SOURCE_CODE_TYPE);
+                    }
+
+                    int nArgColumn = dgvMain.Columns["arg1"].Index;
+                    int row = dsSourceCode.Tables["SourceCode"].Rows.Count - 1;
+                    int col = 0;
+
+                    for (int i = 0; i < dgvMain.Rows.Count; i++)
+                    {
+                        dicArgument.Clear();
+                        if (dgvMain.Rows[i].Cells["Select"].Value == null)
+                        {
+                            continue;
+                        }
+
+                        if ((bool)dgvMain.Rows[i].Cells["Select"].Value)
+                        {
+                            TestInfo.TC_ID = dgvMain.Rows[i].Cells["TC_ID"].Value.ToString();
+                            for (int j = nArgColumn; j < dgvMain.ColumnCount; j++)
+                            {
+                                if (dgvMain.Columns[j].Name.Contains("arg"))
+                                {
+                                    arg_value = dgvMain.Rows[i].Cells[j].Value.ToString();
+
+                                    if (!string.IsNullOrEmpty(arg_value) && !arg_value.Equals("-"))
+                                    {
+                                        dicArgument.Add(ndicIndex++, arg_value);
+                                    }
+                                }
+                            }
+
+                            //Run Current TC
+                            if (!RunTestCase(i, TestInfo.TC_ID, dsSourceCode, "SourceCode"))
+                                return;
+
+                            if (File.Exists(TestInfo.strCloverfile))
+                            {
+                                XmlParser xpCoverage = new XmlParser(TestInfo.strCloverfile);
+
+                                if (TestInfo.CODE_COVERAGE.Equals("VisualCoverage"))
+                                {
+                                    xpCoverage.SetCountInformation(dsSourceCode, TestInfo.TC_ID);
+                                }
+                                else if (TestInfo.CODE_COVERAGE.Equals("CodeCoverage"))
+                                {
+                                    xpCoverage.SetCountInformation_CodeCoverage(dsSourceCode, TestInfo.TC_ID);
+                                }
+                            }
+
+                            col = dsSourceCode.Tables["SourceCode"].Columns[TestInfo.TC_ID].Ordinal;
+
+
+                            string result_value = NativeMethod.GetTestResultFromTXT(TestInfo.strResultPath + TestInfo.strTestResult);
+
+
+                            result_value = result_value.Replace("\r", "");
+                            result_value = @"""" + result_value + @"""";
+                            
+                            /*
+                            // for printtoken
+                            result_value = result_value.Replace("\r", "");
+                            
+                            if (result_value.Length - result_value.LastIndexOf("\n") == 1 && result_value.LastIndexOf("\n") != -1)
+                                result_value = result_value.Remove(result_value.LastIndexOf("\n"), 1);
+                            result_value = result_value.Replace("eof.\n", "eof.");
+                           */
+
+                            dgvMain.Rows[i].Cells["Actual value"].Value = result_value;
+
+                            //if (dgvMain.Rows[i].Cells["Expected value"].Value.ToString().Length - dgvMain.Rows[i].Cells["Expected value"].Value.ToString().LastIndexOf("\n") == 1 && dgvMain.Rows[i].Cells["Expected value"].Value.ToString().LastIndexOf("\n") != -1)
+                            //    dgvMain.Rows[i].Cells["Expected value"].Value = dgvMain.Rows[i].Cells["Expected value"].Value.ToString().Remove(dgvMain.Rows[i].Cells["Expected value"].Value.ToString().LastIndexOf("\n"), 1);
+                       
+                            if (dgvMain.Rows[i].Cells["Actual value"].Value.ToString().Equals(dgvMain.Rows[i].Cells["Expected value"].Value.ToString()))
+                            {
+                                dgvMain.Rows[i].Cells["Test Result"].Value = "PASS";
+                                dsSourceCode.Tables["SourceCode"].Rows[row][col] = "PASS";
+                            }
+                            else
+                            {
+                                dgvMain.Rows[i].Cells["Test Result"].Value = "FAIL";
+                                dsSourceCode.Tables["SourceCode"].Rows[row][col] = "FAIL";
+                            }
+                            DataGridViewCheckBoxCell chkbox = new DataGridViewCheckBoxCell();
+                            chkbox = (DataGridViewCheckBoxCell)dgvMain.Rows[i].Cells["Select"];
+                            chkbox.Value = false;
+
+                            cnt_running++;
+                        }
+
+                    }
+                }
+
+                DataTable dtDistinct = new DataTable("SourceCode");
+                dtDistinct = MakeDistinctTable(dsSourceCode);
+
+                dsDistinct.Tables.Add(dtDistinct);
+                dsDistinct.Tables[0].TableName = "SourceCode";
+
+                ComputeSuspiciousValue(dsSourceCode);
+                ComputeRank(dsSourceCode, dsResult, "SourceCode_CodeCoverage");
+                if (chkAnswerSheet.IsChecked == true)
+                    ComputeExamScore(dsSourceCode, dsResult, "SourceCodeExam");
+                //ComputeReadingCodeCoverage(dsSourceCode, dsResult, "SourceCodeExam");
+
+                ComputeSuspiciousValue(dsDistinct);
+                ComputeRank(dsDistinct, dsResult, "Distinct_CodeCoverage");
+                if (chkAnswerSheet.IsChecked == true)
+                    ComputeExamScore(dsDistinct, dsResult, "DistinctExam");
+                //ComputeReadingCodeCoverage(dsDistinct, dsResult, "DistinctExam");
+
+                try
+                {
+                    dgvSourceCode.DataSource = null;
+                    dgvSourceCode.Columns.Clear();
+
+                    dgvSourceCode.DataSource = dsSourceCode.Tables["SourceCode"];
+
+                    dgvSourceCode.Columns["Line"].Width = 50;
+                    dgvSourceCode.Columns["SourceCode"].Width = 400;
+
+                    int col_TC_ID = dsSourceCode.Tables["SourceCode"].Columns["SourceCode"].Ordinal + 1;
+                    for (int i = col_TC_ID; i < dsSourceCode.Tables["SourceCode"].Columns.Count; i++)
+                    {
+                        dgvSourceCode.Columns[i].Width = 60;
+                        dgvSourceCode.Columns[i].FillWeight = 1;
+                    }
+
+                    ColoringBySuspicious(dsSourceCode, 0.8f, 1.0f);
+                    SourceCodeTabItem.IsSelected = true;
+                    chkShowTC.IsChecked = false;
+                }
+                catch (Exception error)
+                {
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("ex", "btnStartTest_Click exception : " + ex.ToString());
+                System.Windows.Forms.MessageBox.Show("btnStartTest_Click exception : " + ex.ToString());
+
+            }
+            finally
+            {
+                SaveTestResult();
+                if(!TestInfo.AutoRun.Equals("True"))
+                    System.Windows.Forms.MessageBox.Show("Test is completed");
+
+                if (TestInfo.AutoRun.Equals("True"))
+                {
+                    //System.Windows.Forms.Application.Exit();
+                    Environment.Exit(110);
+                }
+            }
+       
+
+        }
+
+        private void btnStartTest_Click(object sender, RoutedEventArgs e)
+        {
+            StartTest();
+        }
+
+
+        DataTable GenerateTransposedTable(DataTable inputTable)
+        {
+            DataTable outputTable = new DataTable();
+
+            // Add columns by looping rows
+
+            // Header row's first column is same as in inputTable
+            outputTable.Columns.Add(inputTable.Columns[0].ColumnName.ToString());
+
+            // Header row's second column onwards, 'inputTable's first column taken
+            foreach (DataRow inRow in inputTable.Rows)
+            {
+                string newColName = inRow[0].ToString();
+                outputTable.Columns.Add(newColName);
+            }
+
+            // Add rows by looping columns        
+            for (int rCount = 1; rCount <= inputTable.Columns.Count - 1; rCount++)
+            {
+                DataRow newRow = outputTable.NewRow();
+
+                // First column is inputTable's Header row's second column
+                newRow[0] = inputTable.Columns[rCount].ColumnName.ToString();
+                for (int cCount = 0; cCount <= inputTable.Rows.Count - 1; cCount++)
+                {
+                    string colValue = inputTable.Rows[cCount][rCount].ToString();
+                    newRow[cCount + 1] = colValue;
+                }
+                outputTable.Rows.Add(newRow);
+            }
+
+            return outputTable;
+        }
+
+        DataTable GetTransposeTable(DataTable dtOld)
+        {
+            DataTable dtNew = new DataTable();
+
+            dtNew.Columns.Add(new DataColumn("0", typeof(string)));
+            for (int i = 0; i < dtOld.Columns.Count; i++)
+            {
+                DataRow newRow = dtNew.NewRow();
+                newRow[0] = dtOld.Columns[i].ColumnName;
+                for (int j = 1; j <= dtOld.Rows.Count; j++)
+                {
+                    if (dtNew.Columns.Count < dtOld.Rows.Count + 1)
+                        dtNew.Columns.Add(new DataColumn(j.ToString(), typeof(string)));
+                    newRow[j] = dtOld.Rows[j - 1][i];
+                }
+                dtNew.Rows.Add(newRow);
+            }
+            return dtNew;
+        }
+
+        DataTable MakeDistinctTable(DataSet ds)
+        {
+            DataTable transposeTable = GenerateTransposedTable(ds.Tables["SourceCode"]); //GetTransposeTable(ds.Tables["SourceCode"]);
+            //Distinct TC
+
+            transposeTable.Columns.Remove("Line");
+            transposeTable.Columns.Remove("0");
+
+            var UniqueRows = transposeTable.AsEnumerable().Distinct(DataRowComparer.Default);
+            DataTable dt2 = UniqueRows.CopyToDataTable();
+
+            dt2.Columns.Add("Line");
+            dt2.Columns.Add("0");
+
+            dt2.Columns["0"].SetOrdinal(0);
+            dt2.Columns["Line"].SetOrdinal(0);
+
+
+            dt2.Rows[0]["Line"] = "SourceCode";
+
+            DataTable transposeTable2 = GenerateTransposedTable(dt2);//GetTransposeTable(dt2);
+
+            transposeTable2.Columns[0].ColumnName = "Line";
+            transposeTable2.Columns[1].ColumnName = "SourceCode";
+
+            for (int i = 2; i < transposeTable2.Columns.Count; i++)
+            {
+                transposeTable2.Columns[i].ColumnName = string.Format("TC_NEW_{0:0000}", i - 1);
+            }
+
+            ChangeColumnDataType(transposeTable2, "Line", typeof(int));
+            transposeTable2.Columns["Line"].SetOrdinal(0);
+            return transposeTable2;
+
+        }
+
+        bool ChangeColumnDataType(DataTable table, string columnname, Type newtype)
+        {
+            if (table.Columns.Contains(columnname) == false)
+                return false;
+
+            DataColumn column = table.Columns[columnname];
+            if (column.DataType == newtype)
+                return true;
+
+            try
+            {
+                DataColumn newcolumn = new DataColumn("temperary", newtype);
+                table.Columns.Add(newcolumn);
+                foreach (DataRow row in table.Rows)
+                {
+                    try
+                    {
+                        row["temperary"] = Convert.ChangeType(row[columnname], newtype);
+                    }
+                    catch
+                    {
+                    }
+                }
+                table.Columns.Remove(columnname);
+                newcolumn.ColumnName = columnname;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        void CopyColumns(DataTable source, DataTable dest, params string[] columns)
+        {
+             for(int row=0; row<source.Rows.Count ; row++)
+             {
+                foreach(string colname in columns)
+                {
+                    dest.Rows[row][colname] = source.Rows[row][colname];
+                }
+              }
+        }
+
+        void ComputeReadingCodeCoverage(DataSet ds, DataSet dsExam, string Type)
+        {
+            string algorithm = cmbAlgorithm.Text;
+            string[] split_al = algorithm.Split(',');
+            try
+            {
+
+                DataRow workRow = dsExam.Tables[0].NewRow();
+                foreach (string al in split_al)
+                {
+                    string fld = al;//"Tarantula";
+                    string fld_rank = al + "_Rank";
+                    string query = string.Empty;
+
+                    //Count lines more than 0
+
+                    DataTable dtNumberOfLines = ds.Tables["SourceCode"].Select(fld + " > 0 ").CopyToDataTable();
+
+                    int ReadingCodeCoverage = dtNumberOfLines.Rows.Count - 1;
+
+
+                }
+                dsExam.Tables[0].Rows.Add(workRow);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("ex", "ComputeRankAndExamScore exception : " + ex.ToString());
+                System.Windows.Forms.MessageBox.Show("ComputeRankAndExamScore exception : " + ex.ToString());
+
+            }   
+
+        }
+
+        void ComputeRank(DataSet ds, DataSet dsExam, string Type)
+        {
+            string algorithm = cmbAlgorithm.Text;
+            string[] split_al = algorithm.Split(',');
+            try
+            {
+
+
+                //Add READING CODE COVERAGE
+                DataRow workRow = dsExam.Tables[0].NewRow();
+                int nNumberOfLinesMoreThanZero = 0;
+
+                string fld;
+                foreach (string al in split_al)
+                {
+                    fld = al;//"Tarantula";
+                   
+                    DataTable rankDt = (from data in ds.Tables["SourceCode"].AsEnumerable()
+                                        orderby data.Field<string>(fld) descending
+                                        select data).CopyToDataTable();
+   
+                    int col_idx_fld = ds.Tables["SourceCode"].Columns[al].Ordinal;
+
+                    try
+                    {
+                        rankDt.Columns.Add(fld + "_Rank");
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    rankDt.Columns[fld + "_Rank"].SetOrdinal(col_idx_fld);
+
+                    //Add READING CODE COVERAGE
+                    nNumberOfLinesMoreThanZero = 0;
+                    int rank = 1;
+                    for (int i = 0; i < rankDt.Rows.Count - 1 - 1; i++)
+                    {
+                        if(rankDt.Rows[i + 1][fld].ToString() != "" && rankDt.Rows[i + 1][fld].ToString()!= " ")
+                            rankDt.Rows[i][fld + "_Rank"] = rank;
+
+                        if (rankDt.Rows[i][fld].ToString() != rankDt.Rows[i + 1][fld].ToString() && rankDt.Rows[i + 1][fld].ToString() != "" && rankDt.Rows[i + 1][fld].ToString()!= " ")
+                            rank++;
+
+                        if (rankDt.Rows[i][fld].ToString() != "0" && rankDt.Rows[i + 1][fld].ToString() != "" && rankDt.Rows[i + 1][fld].ToString() != " ")
+                        {
+                            nNumberOfLinesMoreThanZero++;
+                        }
+                    }
+
+                    string strProgramName = System.IO.Path.GetFileNameWithoutExtension(TestInfo.strProgramFilename);
+                    string strFaultyVersion = System.IO.Path.GetFileNameWithoutExtension(TestInfo.strFaultyVersion);
+
+                    workRow["ProgramName"] = strProgramName;
+                    workRow["FaultyVersion"] = strFaultyVersion;
+                    workRow["Type"] = Type;
+                    double nScore = (double)nNumberOfLinesMoreThanZero * 100 / (double)(rankDt.Rows.Count - 2);
+                    workRow[al + "_Best"] = Math.Round(nScore, 5);
+
+   
+
+                    //rankDt.Rows[rankDt.Rows.Count - 1][fld + "_Rank"] = rank;
+
+                    ChangeColumnDataType(rankDt, "Line", typeof(int));
+                    DataTable rankDt2 = (from data in rankDt.AsEnumerable()
+                              orderby data.Field<int>("Line") ascending
+                              select data).CopyToDataTable();
+
+                    CopyColumns(rankDt2, ds.Tables["SourceCode"], fld + "_Rank");
+
+                    rankDt.Clear();
+                    rankDt2.Clear();
+                }
+                dsExam.Tables[0].Rows.Add(workRow);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("ex", "ComputeRank : " + ex.ToString());
+                System.Windows.Forms.MessageBox.Show("ComputeRank exception : " + ex.ToString());
+
+            }   
+
+        }
+
+        void ComputeExamScore(DataSet ds, DataSet dsExam, string Type)
+        {
+            string algorithm = cmbAlgorithm.Text;
+            string[] split_al = algorithm.Split(',');
+            try
+            {
+
+                DataRow workRow = dsExam.Tables[0].NewRow();
+                foreach (string al in split_al)
+                {
+                    string fld = al;//"Tarantula";
+                    string fld_rank = al + "_Rank";
+                    string query = string.Empty;
+
+                    //Answersheet and check TBest and TWorst
+                    DataSet dsAnswerSheet = new DataSet();
+                    dsAnswerSheet = NativeMethod.GetDataFromExcel(tbAnswerSheet.Text);
+
+                    string strProgramName = System.IO.Path.GetFileNameWithoutExtension(TestInfo.strProgramFilename);
+                    //query = @"(ProgramName = 'printtokens') AND (FaultyVersion = 'v1')";
+                    query = @"(ProgramName = '" + strProgramName + @"') AND (FaultyVersion = '" + TestInfo.strFaultyVersion + @"')";
+                    DataTable dtAnswerSheet = dsAnswerSheet.Tables[0].Select(query).CopyToDataTable();
+
+                    string strFaultyLine = dtAnswerSheet.Rows[0]["FaultyLine"].ToString();
+                    DataTable dtRank = ds.Tables["SourceCode"].Select("Line = " + strFaultyLine).CopyToDataTable();
+
+                    string strRank = dtRank.Rows[0][fld_rank].ToString();
+                    DataTable dtNumberOfRank = ds.Tables["SourceCode"].Select(fld_rank + " = " + "'" + strRank + "'").CopyToDataTable();
+
+                    int TBest = int.Parse(strRank);
+                    int TWorst = int.Parse(strRank) + dtNumberOfRank.Rows.Count - 1;
+                    int TotalLines = int.Parse(ds.Tables["SourceCode"].Rows[ds.Tables["SourceCode"].Rows.Count-1][0].ToString());
+
+                    double TBestExamScore = (double)TBest*100 / (double)TotalLines;
+                    double TWorstExamScore = (double)TWorst*100 / (double)TotalLines;
+
+                    string strFaultyVersion = System.IO.Path.GetFileNameWithoutExtension(TestInfo.strFaultyVersion);
+
+                    workRow["ProgramName"] = strProgramName;
+                    workRow["FaultyVersion"] = strFaultyVersion;
+                    workRow["Type"] = Type;
+                    workRow[al + "_Best"] = Math.Round(TBestExamScore,5);
+                    workRow[al + "_Worst"] = Math.Round(TWorstExamScore,5);
+
+                }
+                dsExam.Tables[0].Rows.Add(workRow);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("ex", "ComputeRankAndExamScore exception : " + ex.ToString());
+                System.Windows.Forms.MessageBox.Show("ComputeRankAndExamScore exception : " + ex.ToString());
+
+            }   
+
+
+       
+        }
+
+        void ComputeSuspiciousValue(DataSet ds)
+        {
+
+            int col_TC_ID = ds.Tables["SourceCode"].Columns["SourceCode"].Ordinal + 1;
+            int row_last = ds.Tables["SourceCode"].Rows.Count;
+            int col_last = ds.Tables["SourceCode"].Columns.Count;
+            int a00, a01, a10, a11, Nf, Ns, Nf1,Nf2,Nf3,Ns1,Ns2,Ns3,blank = 0;
+            double ScaleFactor = 0.0f;
+            double RatioFailPass = 0.0f;
+            double SumOfFailGroup = 0.0f;
+            double SumOfPassGroup = 0.0f;
+
+
+
+         //   string result;
+         //   string mark;
+         
+            string algorithm = cmbAlgorithm.Text;
+            string[] split_al = algorithm.Split(',');
+            try
+            {
+                ds.Tables["SourceCode"].Columns.Add("a00");
+                ds.Tables["SourceCode"].Columns.Add("a01");
+                ds.Tables["SourceCode"].Columns.Add("a10");
+                ds.Tables["SourceCode"].Columns.Add("a11");
+                ds.Tables["SourceCode"].Columns.Add("unnecessary");
+
+
+                foreach (string al in split_al)
+                {
+                    ds.Tables["SourceCode"].Columns.Add(al, typeof(string));
+                    ds.Tables["SourceCode"].Columns.Add(al + "_Rank", typeof(string));
+
+                    //col_idx_fld = ds.Tables["SourceCode"].Columns[al].Ordinal;
+                    //ds.Tables["SourceCode"].Columns[al + "_Rank"].SetOrdinal(col_idx_fld);
+                }
+                
+            }
+            catch (System.Exception ex)
+            {
+
+            }
+            finally
+            {
+                ds.Tables["SourceCode"].Columns["a00"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
+                ds.Tables["SourceCode"].Columns["a01"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
+                ds.Tables["SourceCode"].Columns["a10"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
+                ds.Tables["SourceCode"].Columns["a11"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
+                //ds.Tables["SourceCode"].Columns["Nf"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
+                //ds.Tables["SourceCode"].Columns["Ns"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
+                ds.Tables["SourceCode"].Columns["unnecessary"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
+           
+                foreach (string al in split_al)
+                {
+                    ds.Tables["SourceCode"].Columns[al].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
+                    ds.Tables["SourceCode"].Columns[al + "_Rank"].SetOrdinal(ds.Tables["SourceCode"].Columns.Count - 1);
+                }
+            }
+            //int col_algorithm = ds.Tables["SourceCode"].Columns[algorithm].Ordinal;
+
+
+            double numerator, Ldenominator, Rdenominator;
+            double folumla = 0.0f;
+
+            double[][] array = new double[1][];
+            double[][] reinforce = new double[1][];
+
+
+                   
+
+
+
+            for (int row = 1; row < row_last - 1; row++)
+            {
+                a00 = a01 = a10 = a11 = Nf = Ns = Nf1=Nf2=Nf3=Ns1=Ns2=Ns3= blank= 0;
+                //Logger.WriteLine("Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                //Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
+                //Logger.WriteLine("a00 : " + a00 + "  a01 : " + a01 + "  a10 : " + a10 + "  a11 : " + a11);
+
+
+                 
+                ScaleFactor = SumOfFailGroup = SumOfPassGroup = 0.0f;
+                for (int col = col_TC_ID; col < col_last; col++)
+                {
+                    mark = ds.Tables["SourceCode"].Rows[row][col].ToString();
+                    result = ds.Tables["SourceCode"].Rows[row_last - 1][col].ToString();
+
+                    if (result.Equals("PASS"))
+                    {
+                        if (mark.Equals(@"1")) //●
+                            a10++;
+                        else if (mark.Equals(@"0"))
+                            a00++;
+                        else
+                            blank++;
+                    }
+                    else if (result.Equals("FAIL"))
+                    {
+                       
+                        if (mark.Equals(@"1")) //●
+                            a11++;
+                            
+                        else if (mark.Equals(@"0"))
+                            a01++;
+                        else
+                            blank++;
+
+               
+
+                       
+                    }
+
+                }
+                // add a00,a10,a01,a11
+                ds.Tables["SourceCode"].Rows[row]["a00"] = a00;
+                ds.Tables["SourceCode"].Rows[row]["a01"] = a01;
+                ds.Tables["SourceCode"].Rows[row]["a10"] = a10;
+                ds.Tables["SourceCode"].Rows[row]["a11"] = a11;
+
+                Nf = a11;
+                Ns = a10;
+
+                RatioFailPass = (double)(a01 + a11) / (double)(a00 + a10);
+
+
+                if (a00 == 0 && a01 == 0 && a10 == 0 && a11 == 0)
+                {
+                    ds.Tables["SourceCode"].Rows[row]["unnecessary"] = 1;
+                }
+
+                if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() != "1")
+                {
+                    // first fail group
+                    if (Nf == 0)
+                        Nf1 = 0;
+                    else if (Nf == 1)
+                        Nf1 = 1;
+                    else if (Nf >= 2)
+                        Nf1 = 2;
+                    else
+                    {
+                        Logger.WriteLine("Hueristic(c) Error >> Unknown Nf1 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                        Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
+                        Logger.WriteLine("a00 : " + a00 + "  a01 : " + a01 + "  a10 : " + a10 + "  a11 : " + a11);
+                        //System.Windows.Forms.MessageBox.Show("Unknown Nf1 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                    }
+                    // second fail group
+                    if (Nf <= 2)
+                        Nf2 = 0;
+                    else if (3 <= Nf && Nf <= 6)
+                        Nf2 = Nf - 2;
+                    else if (Nf > 6)
+                        Nf2 = 4;
+                    else
+                    {
+                        Logger.WriteLine("Hueristic(c) Error >> Unknown Nf2 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                        Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
+                        Logger.WriteLine("a00 : " + a00 + "  a01 : " + a01 + "  a10 : " + a10 + "  a11 : " + a11);
+                        //System.Windows.Forms.MessageBox.Show("Unknown Nf2 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                    }
+
+                    // third fail group
+                    if (Nf <= 6)
+                        Nf3 = 0;
+                    else if (Nf > 6)
+                        Nf3 = Nf - 6;
+                    else
+                    {
+                        Logger.WriteLine("Hueristic(c) Error >> Unknown Nf3 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                        Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
+                        Logger.WriteLine("a00 : " + a00 + "  a01 : " + a01 + "  a10 : " + a10 + "  a11 : " + a11);
+                        //System.Windows.Forms.MessageBox.Show("Unknown Nf3 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                    }
+
+                    // first pass group
+                    if (Nf1 ==0 || Nf1==1)
+                        Ns1 = 0;
+                    else if (Nf1 == 2 && Ns >= 1)
+                        Ns1 = 1;
+                    else
+                    {
+                        Logger.WriteLine("Hueristic(c) Error >> Unknown Ns1 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                        Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
+                        Logger.WriteLine("a00 : " + a00 + "  a01 : " + a01 + "  a10 : " + a10 + "  a11 : " + a11);
+                        //System.Windows.Forms.MessageBox.Show("Unknown Ns1 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                    }
+
+                    // second pass group
+                    if (Ns <= Ns1)
+                        Ns2 = 0;
+                    else if (Ns1 < Ns && Ns < Nf2 + Ns1)
+                        Ns2 = Ns - Ns1;
+                    else if (Ns >= Nf2 + Ns1)
+                        Ns2 = Nf2;
+                    else
+                    {
+                        Logger.WriteLine("Hueristic(c) Error >> Unknown Ns2 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                        Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
+                        Logger.WriteLine("a00 : " + a00 + "  a01 : " + a01 + "  a10 : " + a10 + "  a11 : " + a11);
+                        //System.Windows.Forms.MessageBox.Show("Unknown Ns2 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                    }
+                    // thrid pass group
+                    if (Ns < Ns1 + Ns2)
+                        Ns3 = 0;
+                    else if (Ns >= Ns1 + Ns2)
+                        Ns3 = Ns - Ns1 - Ns2;
+                    else
+                    {
+                        Logger.WriteLine("Hueristic(c) Error >> Unknown Ns3 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                        Logger.WriteLine("Nf : " + Nf + "  Nf1 : " + Nf1 + "  Nf2 : " + Nf2 + "  Nf3 : " + Nf3 + "  Ns : " + Ns + "  Ns1 : " + Ns1 + "  Ns2 : " + Ns2 + "  Ns3 : " + Ns3);
+                        Logger.WriteLine("a00 : " + a00 + "  a01 : " + a01 + "  a10 : " + a10 + "  a11 : " + a11);
+                        //System.Windows.Forms.MessageBox.Show("Unknown Ns3 / Statement No : " + ds.Tables["SourceCode"].Rows[row]["Line"].ToString());
+                    }
+
+                        
+                }
+
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (algorithm.Contains("Reinforce"))
+                {
+                    try
+                    {
+                      
+                        
+              
+
+                 /*      
+                        if (result.Equals("PASS"))
+                        {
+                            if (mark.Equals(@"1")) //●
+                                a10++;
+                            else if (mark.Equals(@"0"))
+                                a00++;
+                            else
+                                blank++;
+                        }
+                        else if (result.Equals("FAIL"))
+                        {
+                            if (mark.Equals(@"1")) //●
+                                a11++;
+                            else if (mark.Equals(@"0"))
+                                a01++;
+                            else
+                                blank++;
+                        }
+                   */   
+
+                        //  Console.WriteLine(VisualChildrenCount.Equals("FAIL"));
+
+                   /*     if (result.Equals("FAIL"))
+                        {
+                            Console.WriteLine("print");
+                        }
+                    */
+
+
+                        if ((a11 + a01) == 0)
+                            Ldenominator = numerator = 0.0f;
+                        else
+                            Ldenominator = numerator = (double)a11 / (a11 + a01);
+                        if ((a10 + a00) == 0)
+                            Rdenominator = 0.0f;
+                        else
+                            Rdenominator = (double)a10 / (a10 + a00);
+
+                        if ((Ldenominator + Rdenominator) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (double)numerator / (Ldenominator + Rdenominator);
+
+
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["Reinforce"] = " ";
+                    else
+
+                        ds.Tables["SourceCode"].Rows[row]["Reinforce"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
+                }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+                if (algorithm.Contains("Tarantula"))
+                {
+                    try
+                    {
+                        if ((a11 + a01) == 0)
+                            Ldenominator = numerator = 0.0f;
+                        else
+                            Ldenominator = numerator = (double)a11 / (a11 + a01);
+                        if ((a10 + a00) == 0)
+                            Rdenominator = 0.0f;
+                        else
+                            Rdenominator = (double)a10 / (a10 + a00);
+
+                        if ((Ldenominator + Rdenominator) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (double)numerator / (Ldenominator + Rdenominator);
+
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString()=="1")
+                        ds.Tables["SourceCode"].Rows[row]["Tarantula"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["Tarantula"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
+                }
+
+                if (algorithm.Contains("AMPLE"))
+                {
+                    try
+                    {
+                        if ((a01 + a11) == 0)
+                            Ldenominator =  0.0f;
+                        else
+                            Ldenominator = (double)a11 / (a01 + a11);
+                        if ((a00 + a10) == 0)
+                            Rdenominator = 0.0f;
+                        else
+                            Rdenominator = (double)a10 / (a00 + a10);
+
+                        folumla = Math.Abs(Ldenominator - Rdenominator);
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["AMPLE"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["AMPLE"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
+                }
+
+                if (algorithm.Contains("Jaccard"))
+                {
+                    try
+                    {
+                        if ((a11 + a01 + a10) == 0)
+                            folumla = 0.0f;
+                        else
+                            folumla = (double)a11 / (a11 + a01 + a10);
+                       
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["Jaccard"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["Jaccard"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
+                }
+
+                if (algorithm.Contains("Heuristic3_c_"))
+                {
+                    //ScaleFactor = 0.01; // a
+                    ScaleFactor = 0.0001; // c
+
+                    try
+                    {
+                        SumOfFailGroup = 1.0f * (double)Nf1 + 0.1f * (double)Nf2 + 0.01f * (double)Nf3;
+                        SumOfPassGroup = 1.0f * (double)Ns1 + 0.1f * (double)Ns2 + ScaleFactor*RatioFailPass*(double)Ns3;
+                        folumla = SumOfFailGroup - SumOfPassGroup;
+                      
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["Heuristic3_c_"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["Heuristic3_c_"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
+
+                }
+
+
+                if (algorithm.Contains("Hybrid"))
+                {
+                    try
+                    {
+                        if (ds.Tables["SourceCode"].Rows[row]["AMPLE"].ToString().Equals("0"))
+                        {
+                            folumla = 0.0f;
+                        }
+                        else
+                        {
+                            folumla = double.Parse(ds.Tables["SourceCode"].Rows[row]["Tarantula"].ToString()) + double.Parse(ds.Tables["SourceCode"].Rows[row]["Jaccard"].ToString());
+                        }
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        folumla = 0.0f;
+                    }
+
+                    if (ds.Tables["SourceCode"].Rows[row]["unnecessary"].ToString() == "1")
+                        ds.Tables["SourceCode"].Rows[row]["Hybrid"] = " ";
+                    else
+                        ds.Tables["SourceCode"].Rows[row]["Hybrid"] = folumla.ToString("#0.#####"); //Math.Round(folumla, 5);
+                }
+
+             
+
+
+
+            }
+
+         
+            if (result.Equals("FAIL"))
+
+            {   
+                failcount++;
+            }
+            Console.WriteLine("failcount:"+failcount);
+
+        }
+
+        void ColoringBySuspicious(DataSet ds, double threshold1,double threshold2)
+        {
+            string algorithm = cmbAlgorithm.Text;
+            string[] split_al = algorithm.Split(',');
+
+            foreach (string al in split_al)
+            {
+                if (al.Equals("Hybrid"))
+                {
+                    algorithm = "Hybrid";
+                }
+                else
+                    algorithm = "Tarantula";
+
+            }
+            
+            int col_algorithm = ds.Tables["SourceCode"].Columns[algorithm].Ordinal;
+
+            int row_last = ds.Tables["SourceCode"].Rows.Count;
+            string value;
+     
+            for (int row = 1; row < row_last - 1; row++)
+            {
+
+                value = ds.Tables["SourceCode"].Rows[row][algorithm].ToString();
+
+                if (!value.Equals(" ") && double.Parse(value) > threshold1)
+                {
+                    dgvSourceCode.Rows[row].DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(255, 255, 255, 0);
+                }    
+                if (!value.Equals(" ") && double.Parse(value) > threshold2)
+                {
+                    dgvSourceCode.Rows[row].DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(255, 255, 0, 0);
+                }       
+            }
+
+        }
+
+        private void dgvMain_CellPainting(object sender, System.Windows.Forms.DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.ColumnIndex == 0 && e.RowIndex == -1 && flag_loadTC)
+            {
+               
+                e.PaintBackground(e.ClipBounds, false);
+
+                System.Drawing.Point pt = e.CellBounds.Location;  // where you want the bitmap in the cell
+
+                int nChkBoxWidth = 15;
+                int nChkBoxHeight = 15;
+                int offsetx = (e.CellBounds.Width - nChkBoxWidth) / 2;
+                int offsety = (e.CellBounds.Height - nChkBoxHeight) / 2;
+
+                pt.X += offsetx;
+                pt.Y += offsety;
+
+                //System.Windows.Forms.CheckBox cb = new System.Windows.Forms.CheckBox();
+                cb_dgvMain.Size = new System.Drawing.Size(nChkBoxWidth, nChkBoxHeight);
+                cb_dgvMain.Location = pt;
+                cb_dgvMain.CheckedChanged += new EventHandler(dgvMainListCheckBox_CheckedChanged);
+
+                ((DataGridView)sender).Controls.Add(cb_dgvMain);
+
+                e.Handled = true;
+                flag_loadTC = false;
+            }
+        }
+
+
+        private void dgvMainListCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow r in dgvMain.Rows)
+            {
+                r.Cells["Select"].Value = ((System.Windows.Forms.CheckBox)sender).Checked;
+            }
+        }
+
+        private void dgvMain_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                if (dgvMain.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                {
+                    //System.Windows.Forms.MessageBox.Show(this.dgvMain.CurrentCell.Value.ToString());
+                    if ((bool)dgvMain.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == true)
+                    {
+                        cnt_selectedTC++;
+                    }
+                    else
+                    {
+                        cnt_selectedTC--;
+                    }
+
+                }                
+            }
+            tbSelectedTC.Text = cnt_selectedTC.ToString();
+     
+        }
+
+        private void dgvMain_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (this.dgvMain.IsCurrentCellDirty)
+            {
+                this.dgvMain.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void ContextMenuClickEventHandler(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void dgvMain_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (!flag_cb_dgvMain)
+            {
+                nScroll_dgvMain = e.OldValue;
+                flag_cb_dgvMain = true; 
+            }
+
+            if (e.NewValue == nScroll_dgvMain)
+            {
+                cb_dgvMain.Visible = true;
+            }
+            else
+            {
+                cb_dgvMain.Visible = false;
+            }
+        }
+
+        private void tbSelectedTC_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tbSelectedTC.Text.Equals("0"))
+                cb_dgvMain.Checked = false;
+            if(tbSelectedTC.Text.Equals(tbTotalTC.Text))
+                cb_dgvMain.Checked = true;
+
+        }
+
+        private void dgvMain_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+           
+        }
+
+        public void SaveTestResult()
+        {
+            string strSourceCodeFilename = string.Empty;
+            string strTestSuiteFilename = string.Empty;
+            
+            if(!string.IsNullOrEmpty(TestInfo.SourceCode))
+                strSourceCodeFilename = System.IO.Path.GetFileNameWithoutExtension(TestInfo.SourceCode);
+
+            if (!string.IsNullOrEmpty(TestInfo.TestSuite))
+                strTestSuiteFilename = System.IO.Path.GetFileNameWithoutExtension(TestInfo.TestSuite);
+
+            string strProgramName = System.IO.Path.GetFileNameWithoutExtension(TestInfo.strProgramFilename);
+            string strAnswerSheet = System.IO.Path.GetFileNameWithoutExtension(TestInfo.strAnswerSheet);
+
+
+            string strTestResultFilename = string.Empty;
+            if (chkDBFile.IsChecked == true)
+            {
+                strTestResultFilename = TestInfo.strResultPath + @"TestResult_" + strProgramName + "_" + TestInfo.strFaultyVersion + "_" + strAnswerSheet + ".xlsx";
+         
+            }
+            else
+            {
+                strTestResultFilename = TestInfo.strResultPath + @"TestResult_" + strSourceCodeFilename + "_" + strTestSuiteFilename + "_" + strProgramName + "_" + TestInfo.strFaultyVersion + "_" + strAnswerSheet + ".xlsx";    
+            }
+
+             
+            if (File.Exists(strTestResultFilename))
+                File.Delete(strTestResultFilename);
+
+            if (dsTestCase.Tables.Count == 0) //database case
+            {
+                //if (chkAnswerSheet.IsChecked != true)
+                //{
+                //    WriteToExcelSheet(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsDistinct.Tables[0], null);
+                //}
+                //else
+                    WriteToExcelSheet(strTestResultFilename, null, dsSourceCode.Tables["SourceCode"], dsDistinct.Tables[0], dsResult.Tables[0]);
+            }
+            else
+            {
+                //if (chkAnswerSheet.IsChecked != true)
+                //    WriteToExcelSheet(strTestResultFilename, dsTestCase.Tables[0], dsSourceCode.Tables["SourceCode"], dsDistinct.Tables[0], null);
+                //else
+                    WriteToExcelSheet(strTestResultFilename, dsTestCase.Tables[0], dsSourceCode.Tables["SourceCode"], dsDistinct.Tables[0], dsResult.Tables[0]);
+            }
+
+            // FInal Report
+            string strFinalReportPath = Environment.CurrentDirectory + @"\Result\FinalReport.xlsx";
+            if (!File.Exists(strFinalReportPath)) // no first file -> create one
+            {
+                WriteFinalReport(strFinalReportPath, dsResult.Tables[0]);
+            }
+            else
+            {
+                DataSet temp_ds = NativeMethod.GetDataFromExcel(strFinalReportPath);
+                dsResult.Tables[0].Merge(temp_ds.Tables[0]);
+                //dsResult.Merge(temp_ds);
+                WriteFinalReport(strFinalReportPath, dsResult.Tables[0]);
+            }
+
+
+
+        }
+
+        private void btnSaveTestResult_Click(object sender, RoutedEventArgs e)
+        {
+            //ExcelLibrary.DataSetHelper.CreateWorkbook(TestInfo.strResultPath + "TestResult.xls", dsTestCase);
+//            ExcelLibrary.DataSetHelper.CreateWorkbook(TestInfo.strResultPath + "TestResult.xls", dsSourceCode);
+            SaveTestResult();
+
+          
+        }
+
+        private void chkShowTC_Checked(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.CheckBox cb = sender as System.Windows.Controls.CheckBox;
+            if (cb.Name == chkShowTC.Name)
+            {
+              
+                int col_TC_ID = dsSourceCode.Tables["SourceCode"].Columns["SourceCode"].Ordinal + 1;
+
+                for (int i = col_TC_ID; i < dgvSourceCode.ColumnCount; i++)
+                {
+                    if (dgvSourceCode.Columns[i].Name.Contains("TC_"))
+                    {
+
+                        dgvSourceCode.Columns[i].Visible = false;
+
+                    }
+                }
+            }
+        }
+
+        private void chkShowTC_Unchecked(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.CheckBox cb = sender as System.Windows.Controls.CheckBox;
+            if (cb.Name == chkShowTC.Name)
+            {
+
+                int col_TC_ID = dsSourceCode.Tables["SourceCode"].Columns["SourceCode"].Ordinal + 1;
+
+                for (int i = col_TC_ID; i < dgvSourceCode.ColumnCount; i++)
+                {
+                    if (dgvSourceCode.Columns[i].Name.Contains("TC_"))
+                    {
+
+                        dgvSourceCode.Columns[i].Visible = true;
+                        
+                    }
+                }
+            }
+
+        }
+
+        public void WriteToExcelSheet(string path, DataTable dtSourceCode, DataTable dtDistinct, DataTable dtResult)
+        {
+            try
+            {
+                Directory.CreateDirectory(TestInfo.strResultPath);
+            }
+            catch (Exception e)
+            {
+            }
+            FileInfo workBook = null;
+            try
+            {
+                //create FileInfo object  to read you ExcelWorkbook
+                workBook = new FileInfo(path);
+                using (ExcelPackage xlPackage = new ExcelPackage(workBook))
+                {
+                    ExcelWorksheet wsTestCase = xlPackage.Workbook.Worksheets.Add("SourceCode");
+                    wsTestCase.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
+
+                    ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("Distinct");
+                    wsSourceCode.Cells["A1"].LoadFromDataTable(dtDistinct, true);
+
+                    if (chkAnswerSheet.IsChecked == true)
+                    {
+                        ExcelWorksheet wsSourceCode2 = xlPackage.Workbook.Worksheets.Add("Result");
+                        wsSourceCode2.Cells["A1"].LoadFromDataTable(dtResult, true);
+                    }
+
+                    xlPackage.Save();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                //set workbook object to null
+                if (workBook != null)
+                    workBook = null;
+            }
+        }
+
+        public void WriteToExcelSheet(string path, DataTable dtTestCase, DataTable dtSourceCode, DataTable dtDistinct, DataTable dtResult)
+        {
+            try
+            {
+                Directory.CreateDirectory(TestInfo.strResultPath);
+            }
+            catch (Exception e)
+            {
+            }
+                    
+            FileInfo workBook = null;
+            try
+            {
+                //create FileInfo object  to read you ExcelWorkbook
+                workBook = new FileInfo(path);
+                using (ExcelPackage xlPackage = new ExcelPackage(workBook))
+                {
+                    if (dtTestCase != null)
+                    {
+                        ExcelWorksheet wsTestCase = xlPackage.Workbook.Worksheets.Add("TestCase");
+                        wsTestCase.Cells["A1"].LoadFromDataTable(dtTestCase, true);
+                    }
+
+                    ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("SourceCode");
+                    wsSourceCode.Cells["A1"].LoadFromDataTable(dtSourceCode, true);
+
+                    ExcelWorksheet wsSourceCode2 = xlPackage.Workbook.Worksheets.Add("Distinct");
+                    wsSourceCode2.Cells["A1"].LoadFromDataTable(dtDistinct, true);
+
+                    ExcelWorksheet wsSourceCode3 = xlPackage.Workbook.Worksheets.Add("Result");
+                    wsSourceCode3.Cells["A1"].LoadFromDataTable(dtResult, true);
+
+                    xlPackage.Save();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                //set workbook object to null
+                if (workBook != null)
+                    workBook = null;
+            }
+        }
+
+
+        public void WriteFinalReport(string path, DataTable ds)
+        {
+
+            if (File.Exists(path))
+                File.Delete(path);
+        
+            FileInfo workBook = null;
+            try
+            {
+                //create FileInfo object  to read you ExcelWorkbook
+                workBook = new FileInfo(path);
+                using (ExcelPackage xlPackage = new ExcelPackage(workBook))
+                {
+         
+                    ExcelWorksheet wsSourceCode = xlPackage.Workbook.Worksheets.Add("FinalReport");
+                    wsSourceCode.Cells["A1"].LoadFromDataTable(ds, true);
+
+                    xlPackage.Save();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                //set workbook object to null
+                if (workBook != null)
+                    workBook = null;
+            }
+        }
+
+        public void SelectAllTC()
+        {
+            if (btnSelectAll.Content.Equals("Select All"))
+            {
+                btnSelectAll.Content = "Unselect All";
+
+                for (int i = 0; i < dgvMain.Rows.Count; i++)
+                {
+                    dgvMain.Rows[i].Cells["Select"].Value = true;
+                }
+            }
+            else
+            {
+                btnSelectAll.Content = "Select All";
+                for (int i = 0; i < dgvMain.Rows.Count; i++)
+                {
+                    dgvMain.Rows[i].Cells["Select"].Value = false;
+                }
+
+            }
+        }
+        private void btnSelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            SelectAllTC();            
+        }
+
+        private void btnDBFile_Click(object sender, RoutedEventArgs e)
+        {
+            tbDBFile.Text = NativeMethod.getFileFullName("xls;xlsx");
+            chkDBFile.IsChecked = true;
+            IniFile.SetIniValue("Database", "ProgramFilename", tbDBFile.Text, Environment.CurrentDirectory + @"\Setting.ini");
+            TestInfo.strProgramFilename = System.IO.Path.GetFileNameWithoutExtension(tbDBFile.Text);
+
+            //System.IO.Path.GetExtension(tbInstrumentedCode.Text);
+        }
+
+        private void chkDBFile_Checked(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.CheckBox cb = sender as System.Windows.Controls.CheckBox;
+            if (cb.Name == chkDBFile.Name)
+            {           
+
+            }
+        
+        }
+
+        private void chkDBFile_Unchecked(object sender, RoutedEventArgs e)
+        {
+            tbDBFile.Text = string.Empty;
+            IniFile.SetIniValue("Database", "ProgramFilename", tbDBFile.Text, Environment.CurrentDirectory + @"\Setting.ini");
+        }
+
+        private void chkAnswerSheet_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void chkAnswerSheet_Unchecked(object sender, RoutedEventArgs e)
+        {
+            tbAnswerSheet.Text = string.Empty;
+            IniFile.SetIniValue("Database", "AnswerSheet", tbAnswerSheet.Text, Environment.CurrentDirectory + @"\Setting.ini");
+        }
+
+        private void btnAnswerSheet_Click(object sender, RoutedEventArgs e)
+        {
+            tbAnswerSheet.Text = NativeMethod.getFileFullName("xls;xlsx");
+            chkAnswerSheet.IsChecked = true;
+            IniFile.SetIniValue("Database", "AnswerSheet", tbAnswerSheet.Text, Environment.CurrentDirectory + @"\Setting.ini");
+            TestInfo.strFaultyVersion = System.IO.Path.GetFileNameWithoutExtension(tbAnswerSheet.Text);
+        }
+
+        private void tbFaultyVer_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TestInfo.strFaultyVersion = tbFaultyVer.Text;
+            IniFile.SetIniValue("Database", "FaultyVersion", tbFaultyVer.Text, Environment.CurrentDirectory + @"\Setting.ini");
+        }
+
+        
+
+
+    }
+}
